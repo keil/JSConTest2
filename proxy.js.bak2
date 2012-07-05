@@ -1,0 +1,19 @@
+var f = function(a,b) { return a+b; }; var h = {
+		apply : function ( target , receiver , args ) { args.forEach(function(arg) { assert(Number(arg) === arg); }); return Reflect.apply(target,receiver,args);
+		},
+		construct : function ( target , args ) {
+				throw new Error('not a constructor'); }
+};
+var p = Proxy.createFunction(h, f);
+//f(1 ,2);
+//p.x
+//
+//
+//
+
+var px = Proxy.create({
+  get: function(proxy, name) {
+    return 'Hello, '+ name;
+  }
+});
+

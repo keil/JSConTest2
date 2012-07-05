@@ -1,0 +1,58 @@
+var p = Proxy.create({
+  get: function(proxy, name) {
+    return 'Hello, '+ name;
+  }
+});
+
+print(p.World);
+//p.xxx;
+
+//q = {};
+//q.xxx;
+//
+//
+//
+//
+//
+//
+
+var handler = {
+  getOwnPropertyDescriptor: function(target,name) {return target;},
+  getOwnPropertyNames:      function(target)  {return target;},
+  defineProperty:           function(target,name, desc) {return target;},
+  deleteProperty:           function(target,name)  {return target;},
+  freeze:                   function(target)  {return target;},
+  seal:                     function(target)  {return target;},
+  preventExtensions:        function(target)  {return target;},
+  has:                      function(target,name)  {return target;},
+  hasOwn:                   function(target,name) {return target;},
+  get:                      function(target,name,receiver)  {return name;},
+  set:                      function(target,name,val,receiver)  {return target;},
+  enumerate:                function(target)  {return target;},
+  iterate:                  function(target) {return target;},
+  keys:                     function(target)  {return target;},
+  apply:                    function(target,receiver,args)  {return target;},
+  construct:                function(target,args)  {return target;},
+}
+
+
+var fun = function(){};
+var proxy = Proxy(fun, handler);
+ 
+//proxy(...args); // triggers handler.apply(fun, undefined, args)
+//var obj = { m: proxy }; obj.m(...args); // triggers handler.apply(fun, obj, args)
+//Function.prototype.apply.call(proxy, rcvr, args); // triggers handler.apply(fun,rcvr,args)
+
+// var proxy = Proxy.create(handler, null);
+
+//x = Proxy.create(handler, Object);
+
+//var proxy = Proxy.createFunction({}, function(){}, function(){});
+//proxy.call(); 
+//
+//
+//
+
+
+
+Function.prototype.call.call(proxy, this) ;

@@ -1,0 +1,99 @@
+//////////////////////////////////////////////////
+// JS Proxy Demo
+//(c) University of Freiburg
+//////////////////////////////////////////////////
+
+
+//////////////////////////////////////////////////
+// HANDLER
+//////////////////////////////////////////////////
+
+function AccessHandler(object) {
+		return {
+		get: function(receiver, name) {
+				print("[PROPERTY READ] " + name);
+				return object[name];
+		}}};
+
+function handlerMaker(obj) {
+  return {
+    // Fundamental traps
+    getOwnPropertyDescriptor: function(name) {
+      var desc = Object.getOwnPropertyDescriptor(obj, name);
+      // a trapping proxy's properties must always be configurable
+      if (desc !== undefined) { desc.configurable = true; }
+      return desc;
+    },
+    getPropertyDescriptor:  function(name) {
+      var desc = Object.getPropertyDescriptor(obj, name); // not in ES5
+      // a trapping proxy's properties must always be configurable
+      if (desc !== undefined) { desc.configurable = true; }
+      return desc;
+    },
+    getOwnPropertyNames: function() {
+      return Object.getOwnPropertyNames(obj);
+    },
+    getPropertyNames: function() {
+      return Object.getPropertyNames(obj);                // not in ES5
+    },
+    defineProperty: function(name, desc) {
+      Object.defineProperty(obj, name, desc);
+    },
+    delete:       function(name) { return delete obj[name]; },   
+    fix:          function() {
+      if (Object.isFrozen(obj)) {
+        return Object.getOwnPropertyNames(obj).map(function(name) {
+          return Object.getOwnPropertyDescriptor(obj, name);
+        });
+      }
+      // As long as obj is not frozen, the proxy won't allow itself to be fixed
+      return undefined; // will cause a TypeError to be thrown
+    },
+   
+    // derived traps
+    has:          function(name) { return name in obj; },
+    hasOwn:       function(name) { return Object.prototype.hasOwnProperty.call(obj, name); },
+    get:          function(receiver, name) { return obj[name]; },
+    set:          function(receiver, name, val) { obj[name] = val; return true; }, // bad behavior when set fails in non-strict mode
+    enumerate:    function() {
+      var result = [];
+      for (name in obj) { result.push(name); };
+      return result;
+    },
+    keys: function() { return Object.keys(obj) }
+  };
+}
+
+// ...
+
+//var o = Object.create({});
+//var proxy = Proxy.create(handlerMaker(o));
+
+//proxy.blabla = 12; // Thanks to the forwarding, o now has a 'blabla' property which value is 12
+//o.blabla++; // just incrementing o.blabla
+
+//alert(proxy.blabla); // alerts 13: the getting operation is forwarded to o which returns 13.
+
+//////////////////////////////////////////////////
+// PROXY
+//////////////////////////////////////////////////
+
+var test = {
+		x: 4711,
+		y: {a:47, b:11},
+		z: 4712
+};
+
+test1 = Proxy.create(AccessHandler(test));
+test2 = Proxy.create(handlerMaker(test));
+
+
+
+
+
+//var px = Proxy.create({
+//		get: function(proxy, name) {
+//				return 'Hello, '+ name;
+//		}
+//});
+
