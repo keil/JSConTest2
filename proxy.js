@@ -40,6 +40,12 @@ function __closeHandler() {
 __ = Proxy.create(__closeHandler());
 
 
+function __dump(value) {
+		if (value === Object(value)) return "[" + typeof value + "]";
+		if (typeof value == "string") return "\"" + value + "\"";
+		return "" + value;
+}
+
 
 //////////////////////////////////////////////////
 // HANDLER
@@ -85,59 +91,83 @@ function str(x) {
 
 
 
-
+//////////////////////////////////////////////////
+// MEMBRANE
+//////////////////////////////////////////////////
 function createMembrane(init) {
 
-		function wrap(obj) {
-				print("wrap enter", str(obj));
-				var x = wrap2(obj);
-				print("wrap exit", str(obj), "as", str(x));
-				return x;
+		/*
+		 */
+		function wrap(target) {
+				/**/__logger.debug("CALL wrap for " + __dump(target));
+				var value = wrap2(target);
+				/**/__logger.debug("WRAP " + __dump(target) + " AS " + __dump(value));
+				return value;
 		}
 
-		function wrap2(obj) {
-				if (obj !== Object(obj)) {
-						return obj;
+		/*
+		 */
+		function wrap2(target) {
+
+				/* IF primitive value
+				 */
+				if (target !== Object(target)) {
+						/**/__logger.debug("RETURN primitive value " + __dump(target));
+						return target;
 				}
 
-				function wrapCall(fun, that, args) {
-						print("wrapCall enter", fun, str(that));
-						var x = wrapCall2(fun, that, args);
-						print("wrapCall exit", fun, str(that), "returning", str(x));
-						return x;
+				/* WRAP function
+				 */
+				function wrapFunction(func, base, args) {
+						/**/__logger.debug("CALL wrapFunction for " + __dump(func));
+						var value = wrapFunction2(func, base, args);
+						/**/__logger.debug("WRAP " + __dump(func) + " AS " + __dump(value));
+						return value;
 				}
 
-				function wrapCall2(fun, that, args) {
-						return wrap(fun.apply(that, Array.prototype.map.call(args, wrap)));
+				/* WRAP function
+				 */
+				function wrapFunction2(func, base, args) {
+						return wrap(func.apply(base, Array.prototype.map.call(args, wrap)));
 				}
 
-				var baseHandler = createHandler(obj);
+				var baseHandler = createHandler(target);
+				// var accessHandler = __AccessHandler((target);
+
 				var handler = Proxy.create(Object.freeze({
 						get: function(receiver, name) {
 								return function() {
-										var arg = (name === "get" || name == "set") ? arguments[1] : "";
-										print("handler enter", name, arg);
-										var x = wrapCall(baseHandler[name], baseHandler, arguments);
-										print("handler exit", name, arg, "returning", str(x));
-										return x;
+										/**/__logger.debug("CALL get ON MetaProxy " + __dump(name));
+										var value = wrapFunction(baseHandler[name], baseHandler, arguments);
+										/**/__logger.debug("RETURN FROM MetaProxy " + __dump(value));
+										return value;
 								}
 						}
 				}));
 
-				if (typeof obj === "function") {
+
+
+				// FUNCTION
+				if (typeof target === "function") {
 						function callTrap() {
-								print("call trap enter", str(obj), str(this));
-								var x = wrapCall(obj, wrap(this), arguments);
-								print("call trap exit", str(obj), str(this), "returning", str(x));
-								return x;
+								/**/__logger.debug("CALL trap ON " + __dump(target));
+								var value = wrapFunction(target, wrap(this), arguments);
+								/**/__logger.debug("RETURN FROM trap " + __dump(value));
+								return value;
 						}
 						function constructTrap() {
-								function forward(args) { return obj.apply(this, args) }
+								/**/__logger.debug("CALL constructTrap FOR " + __dump(target));
+								function forward(args) {
+										/**/__logger.debug("CALL forward ON " + __dump(args));
+										return target.apply(this, args);
+								}
 								return wrap(new forward(Array.prototype.map.call(arguments, wrap)));
 						}
+						/**/__logger.debug("CREATE FunctionProxy FOR " + __dump(target));
 						return Proxy.createFunction(handler, callTrap, constructTrap);
 				} else {
-						var prototype = wrap(Object.getPrototypeOf(obj));
+						var prototype = wrap(Object.getPrototypeOf(target));
+						/**/__logger.debug("CREATE Proxy FOR " + __dump(target));
 						return Proxy.create(handler, prototype);
 				}
 		}
