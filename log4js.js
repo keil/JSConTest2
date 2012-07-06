@@ -2,12 +2,12 @@
  * Create a new logger
  * @constructor
  * @class The main Log class.  Create a new instance of this class to send all logging events.
- * @param level The cut-off logger level.  You can adjust this level in the constructor and leave all other logging events in place.  Defaults to {@link Log#WARN}.
- * @param logger The logger to use.  The logger is a function that accepts the logging events and informs the user or developer. Defaults to {@link Log#writeLogger}.
+ * @param level The cut-off logger level.  You can adjust this level in the constructor and leave all other logging events in place.  Defaults to {@link __Log#WARN}.
+ * @param logger The logger to use.  The logger is a function that accepts the logging events and informs the user or developer. Defaults to {@link __Log#writeLogger}.
  */
-function Log(level,logger,prefix) {
-		var _currentLevel = Log.WARN;
-		var _logger = Log.writeLogger; // default to write Logger
+function __Log(level,logger,prefix) {
+		var _currentLevel = __Log.WARN;
+		var _logger = __Log.writeLogger; // default to write Logger
 		var _prefix = false;
 		/**
 		 * Sets the current logger prefix 
@@ -33,12 +33,12 @@ function Log(level,logger,prefix) {
 				if (level!='undefined' && typeof level =='number') {
 						_currentLevel = level;
 				} else if (level!='undefined') {
-						if (level=='debug') { _currentLevel = Log.DEBUG; }
-						else if (level=='info') { _currentLevel = Log.INFO; }
-						else if (level=='error') { _currentLevel = Log.ERROR; }
-						else if (level=='fatal') { _currentLevel = Log.FATAL; }
-						else if (level=='warn') { _currentLevel = Log.WARN; }
-						else { _currentLevel = Log.NONE; }
+						if (level=='debug') { _currentLevel = __Log.DEBUG; }
+						else if (level=='info') { _currentLevel = __Log.INFO; }
+						else if (level=='error') { _currentLevel = __Log.ERROR; }
+						else if (level=='fatal') { _currentLevel = __Log.FATAL; }
+						else if (level=='warn') { _currentLevel = __Log.WARN; }
+						else { _currentLevel = __Log.NONE; }
 				}
 		}
 
@@ -71,27 +71,27 @@ function Log(level,logger,prefix) {
  * Log an event with priority of "debug"
  * @param s the log message
  */
-Log.prototype.debug     = function(s) { if (this.getLevel()<=Log.DEBUG) { this._log(s,"DEBUG",this); } }
+__Log.prototype.debug     = function(s) { if (this.getLevel()<=__Log.DEBUG) { this._log(s,"DEBUG",this); } }
 /**
  * Log an event with priority of "info"
  * @param s the log message
  */
-Log.prototype.info      = function(s) { if (this.getLevel()<=Log.INFO ) { this._log(s,"INFO",this); } }
+__Log.prototype.info      = function(s) { if (this.getLevel()<=__Log.INFO ) { this._log(s,"INFO",this); } }
 /**
  * Log an event with priority of "warn"
  * @param s the log message
  */
-Log.prototype.warn      = function(s) { if (this.getLevel()<=Log.WARN ) { this._log(s,"WARN",this); } }
+__Log.prototype.warn      = function(s) { if (this.getLevel()<=__Log.WARN ) { this._log(s,"WARN",this); } }
 /**
  * Log an event with priority of "error"
  * @param s the log message
  */
-Log.prototype.error     = function(s) { if (this.getLevel()<=Log.ERROR) { this._log(s,"ERROR",this); } }
+__Log.prototype.error     = function(s) { if (this.getLevel()<=__Log.ERROR) { this._log(s,"ERROR",this); } }
 /**
  * Log an event with priority of "fatal" 
  * @param s the log message
  */
-Log.prototype.fatal     = function(s) { if (this.getLevel()<=Log.FATAL) { this._log(s,"FATAL",this); } }
+__Log.prototype.fatal     = function(s) { if (this.getLevel()<=__Log.FATAL) { this._log(s,"FATAL",this); } }
 
 /**
  * _log is the function that actually calling the configured logger function.
@@ -104,7 +104,7 @@ Log.prototype.fatal     = function(s) { if (this.getLevel()<=Log.FATAL) { this._
  * @param level The priority level of this log event
  * @param {Log} obj The originating {@link Log} object.
  */
-Log.prototype._log = function(msg,level,obj) { 
+__Log.prototype._log = function(msg,level,obj) { 
 		if (this.getPrefix()) {
 				this.getLogger()(this.getPrefix()+" - "+msg,level,obj); 
 		} else {
@@ -113,12 +113,12 @@ Log.prototype._log = function(msg,level,obj) {
 
 }
 
-Log.DEBUG       = 1;
-Log.INFO        = 2;
-Log.WARN        = 3;
-Log.ERROR       = 4;
-Log.FATAL       = 5;
-Log.NONE		= 6;
+__Log.DEBUG       = 1;
+__Log.INFO        = 2;
+__Log.WARN        = 3;
+__Log.ERROR       = 4;
+__Log.FATAL       = 5;
+__Log.NONE		= 6;
 
 /**
  * Static Safari WebKit console logger method. This logger will write messages to the Safari javascript console, if available.
@@ -127,6 +127,6 @@ Log.NONE		= 6;
  * @param level The priority level of this log event
  * @param {Log} obj The originating {@link Log} object.
  */
-Log.consoleLogger = function(msg,level,obj) {
+__Log.consoleLogger = function(msg,level,obj) {
 		__sysout(level+" - "+msg);
 }
