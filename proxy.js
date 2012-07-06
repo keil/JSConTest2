@@ -3,6 +3,9 @@
 // (c) University of Freiburg
 //////////////////////////////////////////////////
 
+// Load logging engine
+load("log4js.js");
+var logger = new Log(Log.DEBUG, Log.consoleLogger);
 
 
 //////////////////////////////////////////////////
@@ -12,118 +15,105 @@
 /* 
  * API Standard Output
  */
-function sysout(value) {
-		if(sysout.jsshell)
+function __sysout(value) {
+		if(typeof print != "undefined")
+				// JS Shell concole oputput
 				print(value);
-		else 
+		else if(typeof alert  != "undefined")
+				// Standard alert notification
 				alert(value);
 }
-
-// JS Shell concole oputput
-sysout.jsshell = true;
 
 
 
 /*
  * Wraps obj with a Proxy
  */
-function makeProxy(obj) {
-		if(obj instanceof Function) {
-				return Proxy.createFunction(AccessHandler(obj), Object.getPrototypeOf(obj));
-		} else if(obj instanceof Object) {
-				return Proxy.create(AccessHandler(obj), Object.getPrototypeOf(obj));
-		}
-}
+//function makeProxy(obj) {
+//		if(obj instanceof Function) {
+//				return Proxy.createFunction(AccessHandler(obj), Object.getPrototypeOf(obj));
+//		} else if(obj instanceof Object) {
+//				return Proxy.create(AccessHandler(obj), Object.getPrototypeOf(obj));
+//		}
+//}
 
 /*
  * Apply Proxy to base[name]
  */
-function applyProxy(base, name) {
-		obj = base[name];
-		base[name] = makeProxy(obj);
-}
-
-
-
-
-
-//function ValueWrapper(target) {
-//		return {
-//				toSource: function () {return "X";},
-//				toString: function () {return "X";}
-//		}
+//function applyProxy(base, name) {
+//		obj = base[name];
+//		base[name] = makeProxy(obj);
 //}
 
+
+function isPrimitive(arg) {
+		/**/ logger.debug("call isPrimitive");
+		var type = typeof arg;
+		return arg == null || (type != "object" && type != "function");
+}
 
 //////////////////////////////////////////////////
 // HANDLER
 //////////////////////////////////////////////////
 
+
+function makeMembrane(init) {
+
+		function wrapFunction(func) {
+				/**/ logger.debug("call wrapFunction on " + func);
+				return function() {
+						return wrap(func.apply(wrap(this), toArray(arguments).map(wrap)));	
+				}
+		}
+
+
+		function wrap(target) {
+				/**/ logger.debug("call wrap on " + target);
+
+				// Primitives
+				if(isPrimitive(target)) { return target; }
+
+				// AccessHandler
+				var accessHandler = AccessHandler(target);
+				var baseHandler = Proxy.create( {
+						get: function(receiver, name) {
+								wrapFunction(accessHandler[name]);
+						}
+
+				});
+
+				if(typeof target === "function") {
+						var wrapped = wrapFunction(target);
+						return Proxy.createFunction(basehandler, wrapped);
+				} else {
+						return Proxy.create(baseHandler, wrap(Object.getPrototypeOf(target)));
+				}
+		}
+
+//		return Object.freeze({
+//				wrapper: wrap(init)
+//		});
+
+return wrap(init);
+
+
+}
+
 function AccessHandler(target) {
 		return {
 				get: function(receiver, name) {
-						sysout("[PROPERTY READ] " + name);
+						/**/ logger.debug("call GET on Accesshandler");
+						__sysout("[PROPERTY READ] " + name);
 						value =  target[name];
 						return value; 
-						//						if(name == "toSource") {
-						//								print("CALL toSource()");
-						//								return target.toSource();
-						//						}
-
-
-						//						if(value instanceof Function) {
-						//								print("FUNCTION");
-						//								return undefinied;
-						//						}
-						//						else if(value instanceof Object) {
-						//								return Proxy.create(AccessHandler(value));
-						//						} else {
-						//								return value;
-						//
-						//						}
-						//
-
-						//						if(name == "toString") {
-						//								print("call to string");
-						//								return "XXX";
-						//						}
-
-						//						if(name == "toSource") {
-						//								print("call to source");
-						//								return target[name];
-						//						}
-
-						//						return Proxy.create(AccessHandler(value));
-
-
-
-						//						return ValueWrapper(Proxy.create(AccessHandler(value)));
-
-
-						//return Proxy.create(AccessHandler(value));
-
-						// return 
-
-
-
-
-
-						//						return receiver;
 				},
 				set: function(receiver, name, val) {
-						sysout("[PROPERTY WRITE] " + name);
+						/**/ logger.debug("call SET on Accesshandler");
+						__sysout("[PROPERTY WRITE] " + name);
 						target[name] = val;
 						return true;
-				}//`:w
-
-				,
-						//				toString: function() {return target.toString();} 
-
-
-		}}
-
-
-;
+				}
+		}};
 
 // ...
 //////////////////////////////////////////////////
@@ -151,12 +141,14 @@ var test1 = {
 //test1 = applyProxy(test1);
 
 
-applyProxy(this, "test");
-applyProxy(this, "test1");
+//applyProxy(this, "test");
+//applyProxy(this, "test1");
 
 
+test = makeMembrane(test);
 
 
+logger.warn("test :)");
 
 //var px = Proxy.create({
 //		get: function(proxy, name) {
