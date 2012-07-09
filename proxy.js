@@ -1,6 +1,8 @@
 //////////////////////////////////////////////////
 // JS Proxy API
 // (c) University of Freiburg
+// http://proglang.informatik.uni-freiburg.de/
+// Version: 0.11
 //////////////////////////////////////////////////
 
 
@@ -15,9 +17,8 @@ var __logger = new __Log(__Log.DEBUG, __Log.consoleLogger);
 // MISCELLANEOUS
 //////////////////////////////////////////////////
 
-/* 
- * API Standard Output
- */
+/* API Standard Output
+*/
 function __sysout(value) {
 		if(typeof print != "undefined")
 				// JS Shell concole oputput
@@ -27,9 +28,8 @@ function __sysout(value) {
 				alert(value);
 }
 
-/*
- * Close Handler
- */
+/* Close Handler
+*/
 function __closeHandler() {
 		return {
 				get: function(receiver, name) {
@@ -40,6 +40,8 @@ function __closeHandler() {
 __ = Proxy.create(__closeHandler());
 
 
+/* Dump Values to String Output
+*/
 function __dump(value) {
 		if (value === Object(value)) return "[" + typeof value + "]";
 		if (typeof value == "string") return "\"" + value + "\"";
@@ -47,13 +49,13 @@ function __dump(value) {
 }
 
 
+
 //////////////////////////////////////////////////
 // HANDLER
 //////////////////////////////////////////////////
 
-/*
- * Standard Access Handler
- */
+/* Standard Access Handler
+*/
 function __AccessHandler(target) {
 		return {
 				get: function(receiver, name) {
@@ -62,32 +64,14 @@ function __AccessHandler(target) {
 						value =  target[name];
 						return value; 
 				},
-						set: function(receiver, name, val) {
-								/**/__logger.debug("call SET on Accesshandler");
-								__sysout("[PROPERTY WRITE] " + name);
-								target[name] = val;
-								return true;
-						}
-		}};
-
-
-
-function createHandler(obj) {
-		return {
-				get: function(receiver, name) { print("GET " + name); return obj[name]; },
-						set: function(receiver, name, val) {
-								print("SET " + name);
-								obj[name] = val;  // bad behavior when set fails in non-strict mode
-								return true;
-						}
-		};
-}
-
-
-
-function str(x) {
-		return "";
-}
+				set: function(receiver, name, value) {
+					/**/__logger.debug("call SET on AccessHandler");
+					__sysout("[PROPERTY WRITE] " + name);
+					target[name] = value;
+					return true;
+				}
+		}
+};
 
 
 
@@ -96,56 +80,55 @@ function str(x) {
 //////////////////////////////////////////////////
 function createMembrane(init) {
 
-		/*
-		 */
+		/* wrap Target Value
+		*/
 		function wrap(target) {
 				/**/__logger.debug("CALL wrap for " + __dump(target));
-				var value = wrap2(target);
+				var value = wrapValue(target);
 				/**/__logger.debug("WRAP " + __dump(target) + " AS " + __dump(value));
 				return value;
 		}
 
-		/*
-		 */
-		function wrap2(target) {
+		/* wrap Object / Function or return Primitive Value
+		*/
+		function wrapValue(target) {
 
 				/* IF primitive value
-				 */
+				*/
 				if (target !== Object(target)) {
 						/**/__logger.debug("RETURN primitive value " + __dump(target));
 						return target;
 				}
 
 				/* WRAP function
-				 */
+				*/
 				function wrapFunction(func, base, args) {
 						/**/__logger.debug("CALL wrapFunction for " + __dump(func));
-						var value = wrapFunction2(func, base, args);
+						var value = wrapFunctionCall(func, base, args);
 						/**/__logger.debug("WRAP " + __dump(func) + " AS " + __dump(value));
 						return value;
 				}
 
 				/* WRAP function
-				 */
-				function wrapFunction2(func, base, args) {
+				*/
+				function wrapFunctionCall(func, base, args) {
+						/**/__logger.debug("CALL wrapFunctionCall for " + __dump(func));
 						return wrap(func.apply(base, Array.prototype.map.call(args, wrap)));
 				}
 
-				var baseHandler = createHandler(target);
-				// var accessHandler = __AccessHandler((target);
-
+				// create AccessHandler
+				var accessHandler = __AccessHandler(target);
+				// create MetaProxy
 				var handler = Proxy.create(Object.freeze({
 						get: function(receiver, name) {
 								return function() {
 										/**/__logger.debug("CALL get ON MetaProxy " + __dump(name));
-										var value = wrapFunction(baseHandler[name], baseHandler, arguments);
+										var value = wrapFunction(accessHandler[name], accessHandler, arguments);
 										/**/__logger.debug("RETURN FROM MetaProxy " + __dump(value));
 										return value;
 								}
 						}
 				}));
-
-
 
 				// FUNCTION
 				if (typeof target === "function") {
@@ -165,7 +148,9 @@ function createMembrane(init) {
 						}
 						/**/__logger.debug("CREATE FunctionProxy FOR " + __dump(target));
 						return Proxy.createFunction(handler, callTrap, constructTrap);
-				} else {
+				}
+				// OBJECT
+				else {
 						var prototype = wrap(Object.getPrototypeOf(target));
 						/**/__logger.debug("CREATE Proxy FOR " + __dump(target));
 						return Proxy.create(handler, prototype);
@@ -200,8 +185,8 @@ var o = {
 o[2] = {c: 7};
 var m = createMembrane(o);
 var w = m.wrapper;
-print("o =", str(o))
-print("w =", str(w));
+print("o =", __dump(o))
+print("w =", __dump(w));
 
 var f = w.f;
 var x = f(66);
