@@ -78,12 +78,17 @@ function __AccessHandler(target) {
 //////////////////////////////////////////////////
 // MEMBRANE
 //////////////////////////////////////////////////
-function createMembrane(init) {
+function __createMembrane(init, name) {
+
+		var varname = name;
+
+
 
 		/* wrap Target Value
 		*/
 		function wrap(target) {
-				/**/__logger.debug("CALL wrap for " + __dump(target));
+				__sysout(name);
+				/**/__logger.debug("CALL wrap for " + varname + __dump(target));
 				var value = wrapValue(target);
 				/**/__logger.debug("WRAP " + __dump(target) + " AS " + __dump(value));
 				return value;
@@ -160,8 +165,22 @@ function createMembrane(init) {
 		// RETURN wrapped object
 		return Object.freeze({
 				wrapper: wrap(init)
-		});
+		}).wrapper;
 }
+
+
+
+//////////////////////////////////////////////////
+// MEMBRANE
+//////////////////////////////////////////////////
+function __applyProxy(base, name) {
+		obj = base[name];
+		base[name] = __createMembrane(obj, name);
+}
+
+
+
+
 
 
 // todo encapsulate add method
@@ -177,7 +196,14 @@ function createMembrane(init) {
 
 
 
-
+var p = {
+		a: 6,
+		b: {bb: 8},
+		f: function(x) { return x },
+		g: function(x) { return x.a },
+		h: function(x) { this.q = x }
+};
+ 
 var o = {
 		a: 6,
 		b: {bb: 8},
@@ -186,8 +212,25 @@ var o = {
 		h: function(x) { this.q = x }
 };
 o[2] = {c: 7};
-var m = createMembrane(o);
-var w = m.wrapper;
+//var m = createMembrane(o, "o");
+//var w = m.wrapper;
+
+
+
+
+
+//var w = __createMembrane(o, "o");
+
+__applyProxy(this, "o");
+var w = o;
+
+__applyProxy(this, "p");
+
+
+//var t = createMembrane(this);
+//this = t.wrapper;
+
+
 print("o =", __dump(o))
 print("w =", __dump(w));
 
@@ -205,4 +248,4 @@ var wfx = w.f({a: 6});
 var wgx = w.g({a: {aa: 7}});
 var wh4 = new w.h(4);
 
-
+var pa = p.a;
