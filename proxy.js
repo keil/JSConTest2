@@ -11,6 +11,8 @@
 load("log4js.js");
 var __logger = new __Log(__Log.NONE, __Log.consoleLogger);
 
+load("path.js");
+
 
 
 //////////////////////////////////////////////////
@@ -80,15 +82,15 @@ function __AccessHandler(target) {
 //////////////////////////////////////////////////
 function __createMembrane(init, name) {
 
-		var varname = name;
-
+		//var path 
+		var tracePath = new TracePath();
 
 
 		/* wrap Target Value
 		*/
 		function wrap(target) {
-				__sysout(name);
-				/**/__logger.debug("CALL wrap for " + varname + __dump(target));
+		//		__sysout(name);
+				/**/__logger.debug("CALL wrap for " + __dump(target));
 				var value = wrapValue(target);
 				/**/__logger.debug("WRAP " + __dump(target) + " AS " + __dump(value));
 				return value;
