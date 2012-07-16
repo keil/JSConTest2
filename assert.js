@@ -14,7 +14,7 @@
  * the License.
  */
 function expectAsserts(count) {
-		jstestdriver.expectedAssertCount = count;
+//		jstestdriver.expectedAssertCount = count;
 }
 
 
@@ -36,23 +36,23 @@ function isBoolean_(bool) {
 		}
 }
 
-var isElement_ = (function () {
-		var div = document.createElement('div');
-
-		function isNode(obj) {
-				try {
-						div.appendChild(obj);
-				} catch (e) {
-						return false;
-				}
-
-				return true;
-		}
-
-		return function isElement(obj) {
-				return obj && obj.nodeType === 1 && isNode(obj);
-		};
-}());
+//var isElement_ = (function () {
+//		var div = document.createElement('div');
+//
+//		function isNode(obj) {
+//				try {
+//						div.appendChild(obj);
+//				} catch (e) {
+//						return false;
+//				}
+//
+//				return true;
+//		}
+//
+//		return function isElement(obj) {
+//				return obj && obj.nodeType === 1 && isNode(obj);
+//		};
+//}());
 
 function formatElement_(el) {
 		var tagName;
@@ -77,9 +77,9 @@ function formatElement_(el) {
 }
 
 function prettyPrintEntity_(entity) {
-		if (isElement_(entity)) {
-				return formatElement_(entity);
-		}
+//		if (isElement_(entity)) {
+//				return formatElement_(entity);
+//		}
 
 		var str;
 
@@ -122,7 +122,7 @@ function argsWithOptionalMsg_(args, length) {
 
 function assertTrue(msg, actual) {
 		var args = this.argsWithOptionalMsg_(arguments, 2);
-		jstestdriver.assertCount++;
+//		jstestdriver.assertCount++;
 
 		isBoolean_(args[1]);
 		if (args[1] != true) {
@@ -135,7 +135,7 @@ function assertTrue(msg, actual) {
 
 function assertFalse(msg, actual) {
 		var args = this.argsWithOptionalMsg_(arguments, 2);
-		jstestdriver.assertCount++;
+//		jstestdriver.assertCount++;
 
 		isBoolean_(args[1]);
 		if (args[1] != false) {
@@ -148,7 +148,7 @@ function assertFalse(msg, actual) {
 
 function assertEquals(msg, expected, actual) {
 		var args = this.argsWithOptionalMsg_(arguments, 3);
-		jstestdriver.assertCount++;
+//		jstestdriver.assertCount++;
 		msg = args[0];
 		expected = args[1];
 		actual = args[2];
@@ -183,17 +183,17 @@ function compare_(expected, actual) {
 		try {
 				// If an array is expected the length of actual should be simple to
 				// determine. If it is not it is undefined.
-				if (jstestdriver.jQuery.isArray(actual)) {
-						actualLength = actual.length;
-				} else {
-						// In case it is an object it is a little bit more complicated to
-						// get the length.
-						for (key in actual) {
-								if (actual.hasOwnProperty(key)) {
-										++actualLength;
-								}
-						}
-				}
+//				if (jstestdriver.jQuery.isArray(actual)) {
+//						actualLength = actual.length;
+//				} else {
+//						// In case it is an object it is a little bit more complicated to
+//						// get the length.
+//						for (key in actual) {
+//								if (actual.hasOwnProperty(key)) {
+//										++actualLength;
+//								}
+//						}
+//				}
 
 				// Arguments object
 				if (actualLength == 0 && typeof actual.length == "number") {
@@ -248,7 +248,7 @@ function assertNotEquals(msg, expected, actual) {
 
 function assertSame(msg, expected, actual) {
 		var args = this.argsWithOptionalMsg_(arguments, 3);
-		jstestdriver.assertCount++;
+//		jstestdriver.assertCount++;
 
 		if (!isSame_(args[2], args[1])) {
 				this.fail(args[0] + 'expected ' + this.prettyPrintEntity_(args[1]) +
@@ -260,7 +260,7 @@ function assertSame(msg, expected, actual) {
 
 function assertNotSame(msg, expected, actual) {
 		var args = this.argsWithOptionalMsg_(arguments, 3);
-		jstestdriver.assertCount++;
+//		jstestdriver.assertCount++;
 
 		if (isSame_(args[2], args[1])) {
 				this.fail(args[0] + 'expected not same as ' +
@@ -278,7 +278,7 @@ function isSame_(expected, actual) {
 
 function assertNull(msg, actual) {
 		var args = this.argsWithOptionalMsg_(arguments, 2);
-		jstestdriver.assertCount++;
+//		jstestdriver.assertCount++;
 
 		if (args[1] !== null) {
 				this.fail(args[0] + 'expected null but was ' +
@@ -302,7 +302,7 @@ function assertNotNull(msg, actual) {
 
 function assertUndefined(msg, actual) {
 		var args = this.argsWithOptionalMsg_(arguments, 2);
-		jstestdriver.assertCount++;
+//		jstestdriver.assertCount++;
 
 		if (typeof args[1] != "undefined") {
 				this.fail(args[2] + "expected undefined but was " +
@@ -314,7 +314,7 @@ function assertUndefined(msg, actual) {
 
 function assertNotUndefined(msg, actual) {
 		var args = this.argsWithOptionalMsg_(arguments, 2);
-		jstestdriver.assertCount++;
+//		jstestdriver.assertCount++;
 
 		if (typeof args[1] == "undefined") {
 				this.fail(args[0] + 'expected not undefined but was undefined');
@@ -325,7 +325,7 @@ function assertNotUndefined(msg, actual) {
 
 function assertNaN(msg, actual) {
 		var args = this.argsWithOptionalMsg_(arguments, 2);
-		jstestdriver.assertCount++;
+//		jstestdriver.assertCount++;
 
 		if (!isNaN(args[1])) {
 				this.fail(args[0] + "expected to be NaN but was " + args[1]);
@@ -337,7 +337,7 @@ function assertNaN(msg, actual) {
 
 function assertNotNaN(msg, actual) {
 		var args = this.argsWithOptionalMsg_(arguments, 2);
-		jstestdriver.assertCount++;
+//		jstestdriver.assertCount++;
 
 		if (isNaN(args[1])) {
 				this.fail(args[0] + "expected not to be NaN");
@@ -367,7 +367,7 @@ function assertException(msg, callback, error) {
 				msg += " ";
 		}
 
-		jstestdriver.assertCount++;
+//		jstestdriver.assertCount++;
 
 		try {
 				callback();
@@ -390,7 +390,7 @@ function assertException(msg, callback, error) {
 
 function assertNoException(msg, callback) {
 		var args = this.argsWithOptionalMsg_(arguments, 2);
-		jstestdriver.assertCount++;
+//		jstestdriver.assertCount++;
 
 		try {
 				args[1]();
@@ -401,20 +401,20 @@ function assertNoException(msg, callback) {
 }
 
 
-function assertArray(msg, actual) {
-		var args = this.argsWithOptionalMsg_(arguments, 2);
-		jstestdriver.assertCount++;
-
-		if (!jstestdriver.jQuery.isArray(args[1])) {
-				fail(args[0] + "expected to be array, but was " +
-								this.prettyPrintEntity_(args[1]));
-		}
-}
+//function assertArray(msg, actual) {
+//		var args = this.argsWithOptionalMsg_(arguments, 2);
+//		jstestdriver.assertCount++;
+//
+//		if (!jstestdriver.jQuery.isArray(args[1])) {
+//				fail(args[0] + "expected to be array, but was " +
+//								this.prettyPrintEntity_(args[1]));
+//		}
+//}
 
 
 function assertTypeOf(msg, expected, value) {
 		var args = this.argsWithOptionalMsg_(arguments, 3);
-		jstestdriver.assertCount++;
+//		jstestdriver.assertCount++;
 		var actual = typeof args[2];
 
 		if (actual != args[1]) {
@@ -458,7 +458,7 @@ function assertString(msg, actual) {
 function assertMatch(msg, regexp, actual) {
 		var args = this.argsWithOptionalMsg_(arguments, 3);
 		var isUndef = typeof args[2] == "undefined";
-		jstestdriver.assertCount++;
+//		jstestdriver.assertCount++;
 		var _undef;
 
 		if (isUndef || !args[1].test(args[2])) {
@@ -472,7 +472,7 @@ function assertMatch(msg, regexp, actual) {
 
 function assertNoMatch(msg, regexp, actual) {
 		var args = this.argsWithOptionalMsg_(arguments, 3);
-		jstestdriver.assertCount++;
+//		jstestdriver.assertCount++;
 
 		if (args[1].test(args[2])) {
 				this.fail(args[0] + "expected " + this.prettyPrintEntity_(args[2]) +
@@ -515,7 +515,7 @@ function assertClassName(msg, className, element) {
 function assertElementId(msg, id, element) {
 		var args = this.argsWithOptionalMsg_(arguments, 3);
 		var actual = args[2] && args[2].id;
-		jstestdriver.assertCount++;
+//		jstestdriver.assertCount++;
 
 		if (actual !== args[1]) {
 				this.fail(args[0] + "expected id to be " + args[1] + " but was " +
@@ -527,7 +527,7 @@ function assertElementId(msg, id, element) {
 
 
 function assertInstanceOf(msg, constructor, actual) {
-		jstestdriver.assertCount++;
+//		jstestdriver.assertCount++;
 		var args = this.argsWithOptionalMsg_(arguments, 3);
 		var pretty = this.prettyPrintEntity_(args[2]);
 		var expected = args[1] && args[1].name || args[1];
@@ -548,7 +548,7 @@ function assertInstanceOf(msg, constructor, actual) {
 
 function assertNotInstanceOf(msg, constructor, actual) {
 		var args = this.argsWithOptionalMsg_(arguments, 3);
-		jstestdriver.assertCount++;
+//		jstestdriver.assertCount++;
 
 		if (Object(args[2]) instanceof args[1]) {
 				var expected = args[1] && args[1].name || args[1];
