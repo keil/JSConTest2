@@ -9,7 +9,7 @@
 
 // Load logging engine
 load("log4js.js");
-var __logger = new __Log(__Log.DEBUG, __Log.consoleLogger);
+var __logger = new __Log(__Log.NONE, __Log.consoleLogger);
 
 
 
@@ -164,12 +164,15 @@ function createMembrane(init) {
 }
 
 
+// todo encapsulate add method
 
 
 
 
 
-
+//////////////////////////////////////////////////
+// TEST
+//////////////////////////////////////////////////
 
 
 
