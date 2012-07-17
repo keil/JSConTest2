@@ -59,12 +59,16 @@ function __dump(value) {
 /* Standard Access Handler
 */
 function __AccessHandler(target, path) {
+		__sysout("CREATE AccessHandler FOR " + path.toString());
+		
 		return {
 				get: function(receiver, name) {
-						path.addProperty(name);
-						__sysout(path);
+											//__sysout(path);
+						__sysout("ACCESS " + name + " ON "  + path.toString());
+							path.addProperty(name);
 
-						/**/__logger.debug("call GET on Accesshandler");
+
+						/**/__logger.debug("call GET on AccessHandler");
 						__sysout("[PROPERTY READ] " + name);
 						value =  target[name];
 						return value; 
@@ -84,10 +88,6 @@ function __AccessHandler(target, path) {
 // MEMBRANE
 //////////////////////////////////////////////////
 function __createMembrane(init, name) {
-
-		//var path 
-		var tracePath = new TracePath(name);
-
 
 		/* wrap Target Value
 		*/
@@ -126,12 +126,22 @@ function __createMembrane(init, name) {
 						return wrap(func.apply(base, Array.prototype.map.call(args, wrap)));
 				}
 
+
+
+
+				//var path 
+				var tracePath = new TracePath(name);
+
+
 				// create AccessHandler
-				var accessHandler = __AccessHandler(target, tracePath);
+				var accessHandler = __AccessHandler(target, tracePath.prefix());
 				// create MetaProxy
 				var handler = Proxy.create(Object.freeze({
 						get: function(receiver, name) {
 								return function() {
+
+										//__sysout("#" + arguments.);
+
 										/**/__logger.debug("CALL get ON MetaProxy " + __dump(name));
 										var value = wrapFunction(accessHandler[name], accessHandler, arguments);
 										/**/__logger.debug("RETURN FROM MetaProxy " + __dump(value));
@@ -239,18 +249,27 @@ __applyProxy(this, "p");
 print("o =", __dump(o))
 print("w =", __dump(w));
 
-var f = w.f;
-var x = f(66);
-var x = f({a: 1});
-var x = w.f({a: 1});
-var a = x.a;
+//var f = w.f;
+//var x = f(66);
+//var x = f({a: 1});
+//var x = w.f({a: 1});
+//var a = x.a;
 
-var wb = w.b;
-var wr = w.r;
-var wf = w.f;
-var wf3 = w.f(3);
-var wfx = w.f({a: 6});
-var wgx = w.g({a: {aa: 7}});
-var wh4 = new w.h(4);
+//var wb = w.b;
+//var wr = w.r;
+//var wf = w.f;
+//var wf3 = w.f(3);
+//var wfx = w.f({a: 6});
+//var wgx = w.g({a: {aa: 7}});
+//var wh4 = new w.h(4);
 
+__sysout("1 ##################################################");
 var pa = p.a;
+__sysout("2 ##################################################");
+var pb = p.b;
+__sysout("3 ##################################################");
+var pbbb = p.b.bb;
+__sysout("4 ##################################################");
+var pbbb2 = pb.bb;
+__sysout("5 ##################################################");
+

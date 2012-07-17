@@ -1,8 +1,8 @@
 
 
-function TracePath(name) {
+function TracePath(prefix) {
 		return {
-				variableName: name,
+				pathPrefix: prefix,
 				propertyPath: [],
 
 				addProperty : function(name) {
@@ -10,11 +10,15 @@ function TracePath(name) {
 				}, 
 
 				toString : function () {
-						str = this.variableName;
-						this.propertyPath.forEach( function(value) {
-								str += "." + value;
+						path = this.pathPrefix.toString();
+						this.propertyPath.forEach(function(value) {
+								path += "." + value;
 						});
-						return str;
+						return path;
+				},
+
+				prefix : function() {
+						return new TracePath(this.toString());
 				}
 		}
 }
