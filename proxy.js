@@ -58,20 +58,23 @@ function __dump(value) {
 
 /* Standard Access Handler
 */
-function __AccessHandler(target) {
+function __AccessHandler(target, path) {
 		return {
 				get: function(receiver, name) {
+						path.addProperty(name);
+						__sysout(path);
+
 						/**/__logger.debug("call GET on Accesshandler");
 						__sysout("[PROPERTY READ] " + name);
 						value =  target[name];
 						return value; 
 				},
-				set: function(receiver, name, value) {
-					/**/__logger.debug("call SET on AccessHandler");
-					__sysout("[PROPERTY WRITE] " + name);
-					target[name] = value;
-					return true;
-				}
+						set: function(receiver, name, value) {
+								/**/__logger.debug("call SET on AccessHandler");
+								__sysout("[PROPERTY WRITE] " + name);
+								target[name] = value;
+								return true;
+						}
 		}
 };
 
@@ -83,13 +86,13 @@ function __AccessHandler(target) {
 function __createMembrane(init, name) {
 
 		//var path 
-		var tracePath = new TracePath();
+		var tracePath = new TracePath(name);
 
 
 		/* wrap Target Value
 		*/
 		function wrap(target) {
-		//		__sysout(name);
+				//		__sysout(name);
 				/**/__logger.debug("CALL wrap for " + __dump(target));
 				var value = wrapValue(target);
 				/**/__logger.debug("WRAP " + __dump(target) + " AS " + __dump(value));
@@ -124,7 +127,7 @@ function __createMembrane(init, name) {
 				}
 
 				// create AccessHandler
-				var accessHandler = __AccessHandler(target);
+				var accessHandler = __AccessHandler(target, tracePath);
 				// create MetaProxy
 				var handler = Proxy.create(Object.freeze({
 						get: function(receiver, name) {
@@ -205,7 +208,7 @@ var p = {
 		g: function(x) { return x.a },
 		h: function(x) { this.q = x }
 };
- 
+
 var o = {
 		a: 6,
 		b: {bb: 8},
