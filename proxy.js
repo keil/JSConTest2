@@ -2,13 +2,13 @@
 // JS Proxy API
 // (c) University of Freiburg
 // http://proglang.informatik.uni-freiburg.de/
-// Version: 0.11
+// Version: 0.20
 //////////////////////////////////////////////////
 
 
 
 // Load logging engine
-load("log4js.js");
+load("__lib_log4js.js");
 var __logger = new __Log(__Log.NONE, __Log.consoleLogger);
 
 // load trace path

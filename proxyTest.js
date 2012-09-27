@@ -2,14 +2,14 @@
 // JS Proxy API - Test
 // (c) University of Freiburg
 // http://proglang.informatik.uni-freiburg.de/
-// Version: 0.01
+// Version: 0.20
 //////////////////////////////////////////////////
 
 
 // Load logging engine
 load("proxy.js");
 // load assert source file
-load("assert.js");
+load("__lib_assert.js");
 
 
 //////////////////////////////////////////////////

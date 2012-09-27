@@ -2,17 +2,17 @@
 // JS Proxy API
 // (c) University of Freiburg
 // http://proglang.informatik.uni-freiburg.de/
-// Version: 0.11
+// Version: 0.20
 //////////////////////////////////////////////////
 
 
 
 // Load waek map
-load("jsweakmap.js");
+load("__lib_jsweakmap.js");
 // load hash set
-load("jshashset.js");
+load("__lib_jshashset.js");
 // load string padding
-load("jspadding.js");
+load("__lib_jspadding.js");
 
 
 //////////////////////////////////////////////////
