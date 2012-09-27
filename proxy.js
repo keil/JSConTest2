@@ -11,6 +11,7 @@
 load("log4js.js");
 var __logger = new __Log(__Log.NONE, __Log.consoleLogger);
 
+// load trace path
 load("path.js");
 
 
@@ -25,6 +26,8 @@ function __sysout(value) {
 		if(typeof print != "undefined")
 				// JS Shell concole oputput
 				print(value);
+		else if(document.write != "undefined")
+				document.write(value);
 		else if(typeof alert  != "undefined")
 				// Standard alert notification
 				alert(value);
@@ -59,23 +62,35 @@ function __dump(value) {
 /* Standard Access Handler
 */
 function __AccessHandler(target, path) {
-		__sysout("CREATE AccessHandler FOR " + path.toString());
-		
 		return {
 				get: function(receiver, name) {
-											//__sysout(path);
-						__sysout("ACCESS " + name + " ON "  + path.toString());
-							path.addProperty(name);
+						// new path
+						tracePath = path.clone();
+						tracePath.addProperty(name);
 
+						// register at loggin engine
+						__accessLogger.set(__Type.READ, tracePath);
 
-						/**/__logger.debug("call GET on AccessHandler");
-						__sysout("[PROPERTY READ] " + name);
+						// value
 						value =  target[name];
-						return value; 
+						return __createMembrane(value, tracePath);
+
+						// TODO
+						// * check if is wrapped/ hthen extens handler
+						//
 				},
 						set: function(receiver, name, value) {
-								/**/__logger.debug("call SET on AccessHandler");
-								__sysout("[PROPERTY WRITE] " + name);
+								// new path
+								tracePath = path.clone();
+								tracePath.addProperty(name);
+
+								// register at loggin engine & return
+								__accessLogger.set(__Type.WRITE, tracePath);
+
+								// TODO		
+								// * wrap object to wwrite ?
+								//
+
 								target[name] = value;
 								return true;
 						}
@@ -89,98 +104,59 @@ function __AccessHandler(target, path) {
 //////////////////////////////////////////////////
 function __createMembrane(init, name) {
 
-		/* wrap Target Value
-		*/
-		function wrap(target) {
-				//		__sysout(name);
-				/**/__logger.debug("CALL wrap for " + __dump(target));
-				var value = wrapValue(target);
-				/**/__logger.debug("WRAP " + __dump(target) + " AS " + __dump(value));
-				return value;
-		}
+		//var path 
+		initPath = new __TracePath(name);
 
 		/* wrap Object / Function or return Primitive Value
 		*/
-		function wrapValue(target) {
+		function wrap(target) {
 
 				/* IF primitive value
 				*/
 				if (target !== Object(target)) {
-						/**/__logger.debug("RETURN primitive value " + __dump(target));
 						return target;
 				}
 
 				/* WRAP function
 				*/
 				function wrapFunction(func, base, args) {
-						/**/__logger.debug("CALL wrapFunction for " + __dump(func));
-						var value = wrapFunctionCall(func, base, args);
-						/**/__logger.debug("WRAP " + __dump(func) + " AS " + __dump(value));
-						return value;
-				}
-
-				/* WRAP function
-				*/
-				function wrapFunctionCall(func, base, args) {
-						/**/__logger.debug("CALL wrapFunctionCall for " + __dump(func));
 						return wrap(func.apply(base, Array.prototype.map.call(args, wrap)));
 				}
 
-
-
-
-				//var path 
-				var tracePath = new TracePath(name);
-
-
 				// create AccessHandler
-				var accessHandler = __AccessHandler(target, tracePath.prefix());
-				// create MetaProxy
-				var handler = Proxy.create(Object.freeze({
-						get: function(receiver, name) {
-								return function() {
-
-										//__sysout("#" + arguments.);
-
-										/**/__logger.debug("CALL get ON MetaProxy " + __dump(name));
-										var value = wrapFunction(accessHandler[name], accessHandler, arguments);
-										/**/__logger.debug("RETURN FROM MetaProxy " + __dump(value));
-										return value;
-								}
-						}
-				}));
+				var accessHandler = __AccessHandler(target, initPath);
 
 				// FUNCTION
 				if (typeof target === "function") {
 						function callTrap() {
-								/**/__logger.debug("CALL trap ON " + __dump(target));
 								var value = wrapFunction(target, wrap(this), arguments);
-								/**/__logger.debug("RETURN FROM trap " + __dump(value));
 								return value;
 						}
 						function constructTrap() {
-								/**/__logger.debug("CALL constructTrap FOR " + __dump(target));
 								function forward(args) {
-										/**/__logger.debug("CALL forward ON " + __dump(args));
 										return target.apply(this, args);
 								}
 								return wrap(new forward(Array.prototype.map.call(arguments, wrap)));
 						}
-						/**/__logger.debug("CREATE FunctionProxy FOR " + __dump(target));
-						return Proxy.createFunction(handler, callTrap, constructTrap);
+						return Proxy.createFunction(accessHandler, callTrap, constructTrap);
 				}
 				// OBJECT
 				else {
 						var prototype = wrap(Object.getPrototypeOf(target));
-						/**/__logger.debug("CREATE Proxy FOR " + __dump(target));
-						return Proxy.create(handler, prototype);
+						return Proxy.create(accessHandler, prototype);
+
+						// TODO
+						// * add access handler as property to the proxy
+						// * security reasons ???
+						// var proxy = Proxy.create(accessHandler, prototype);
+						// proxy["accesshandler"] = accessHandler;
+						// return proxy;
+
 				}
 		}
 
 		// RETURN wrapped object
-		return Object.freeze({
-				wrapper: wrap(init)
-		}).wrapper;
+		return wrap(init);
 }
 
 
@@ -198,7 +174,6 @@ function __applyProxy(base, name) {
 
 
 
-// todo encapsulate add method
 
 
 
@@ -227,49 +202,23 @@ var o = {
 		h: function(x) { this.q = x }
 };
 o[2] = {c: 7};
-//var m = createMembrane(o, "o");
-//var w = m.wrapper;
 
 
 
-
-
-//var w = __createMembrane(o, "o");
 
 __applyProxy(this, "o");
-var w = o;
-
-__applyProxy(this, "p");
-
-
-//var t = createMembrane(this);
-//this = t.wrapper;
-
-
-print("o =", __dump(o))
-print("w =", __dump(w));
-
-//var f = w.f;
-//var x = f(66);
-//var x = f({a: 1});
-//var x = w.f({a: 1});
-//var a = x.a;
-
-//var wb = w.b;
-//var wr = w.r;
-//var wf = w.f;
-//var wf3 = w.f(3);
-//var wfx = w.f({a: 6});
-//var wgx = w.g({a: {aa: 7}});
-//var wh4 = new w.h(4);
 
 __sysout("1 ##################################################");
-var pa = p.a;
+var obbb = o.b.bb;
+var obbb = o.b.bb;
 __sysout("2 ##################################################");
-var pb = p.b;
+var oa = o.a;
 __sysout("3 ##################################################");
-var pbbb = p.b.bb;
-__sysout("4 ##################################################");
-var pbbb2 = pb.bb;
-__sysout("5 ##################################################");
+var x = o;
+var y = x.b;
+var z = y.bb;
 
+
+
+// CALL EVALUATE
+__evaluate();
