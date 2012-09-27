@@ -5,53 +5,8 @@
 // Version: 0.20
 //////////////////////////////////////////////////
 
-
-
-// Load logging engine
-load("__lib_log4js.js");
-var __logger = new __Log(__Log.NONE, __Log.consoleLogger);
-
 // load trace path
 load("path.js");
-
-
-
-//////////////////////////////////////////////////
-// MISCELLANEOUS
-//////////////////////////////////////////////////
-
-/* API Standard Output
-*/
-function __sysout(value) {
-		if(typeof print != "undefined")
-				// JS Shell concole oputput
-				print(value);
-		else if(document.write != "undefined")
-				document.write(value);
-		else if(typeof alert  != "undefined")
-				// Standard alert notification
-				alert(value);
-}
-
-/* Close Handler
-*/
-function __closeHandler() {
-		return {
-				get: function(receiver, name) {
-						quit();
-				}};
-};
-// assign close handler to __
-__ = Proxy.create(__closeHandler());
-
-
-/* Dump Values to String Output
-*/
-function __dump(value) {
-		if (value === Object(value)) return "[" + typeof value + "]";
-		if (typeof value == "string") return "\"" + value + "\"";
-		return "" + value;
-}
 
 
 
@@ -168,57 +123,3 @@ function __applyProxy(base, name) {
 		obj = base[name];
 		base[name] = __createMembrane(obj, name);
 }
-
-
-
-
-
-
-
-
-
-
-
-//////////////////////////////////////////////////
-// TEST
-//////////////////////////////////////////////////
-
-
-
-
-var p = {
-		a: 6,
-		b: {bb: 8},
-		f: function(x) { return x },
-		g: function(x) { return x.a },
-		h: function(x) { this.q = x }
-};
-
-var o = {
-		a: 6,
-		b: {bb: 8},
-		f: function(x) { return x },
-		g: function(x) { return x.a },
-		h: function(x) { this.q = x }
-};
-o[2] = {c: 7};
-
-
-
-
-__applyProxy(this, "o");
-
-__sysout("1 ##################################################");
-var obbb = o.b.bb;
-var obbb = o.b.bb;
-__sysout("2 ##################################################");
-var oa = o.a;
-__sysout("3 ##################################################");
-var x = o;
-var y = x.b;
-var z = y.bb;
-
-
-
-// CALL EVALUATE
-__evaluate();
