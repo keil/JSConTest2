@@ -20,8 +20,10 @@ function __AccessHandler(target, path) {
 		return {
 				get: function(receiver, name) {
 						// new path
-						tracePath = path.clone();
-						tracePath.addProperty(name);
+						//tracePath = path.clone();
+						//tracePath.addProperty(name);
+
+						tracePath =  new __TracePath(path, name);
 
 						// register at loggin engine
 						__accessLogger.set(__Type.READ, tracePath);
@@ -36,8 +38,11 @@ function __AccessHandler(target, path) {
 				},
 						set: function(receiver, name, value) {
 								// new path
-								tracePath = path.clone();
-								tracePath.addProperty(name);
+								//tracePath = path.clone();
+								//tracePath.addProperty(name);
+
+								tracePath =  new __TracePath(path, name);
+
 
 								// register at loggin engine & return
 								__accessLogger.set(__Type.WRITE, tracePath);
@@ -60,7 +65,9 @@ function __AccessHandler(target, path) {
 function __createMembrane(init, name) {
 
 		//var path 
-		initPath = new __TracePath(name);
+		//initPath = new __TracePath(name);
+		initPath = new __TracePath(null, name);
+
 
 		/* wrap Object / Function or return Primitive Value
 		*/
