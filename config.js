@@ -3,7 +3,8 @@
 // (c) University of Freiburg
 // http://proglang.informatik.uni-freiburg.de/
 // Author: Matthias Keil
-// Version: 0.20
+// http://www.informatik.uni-freiburg.de/~keilr/
+// Version: 0.20.0
 //////////////////////////////////////////////////
 
 

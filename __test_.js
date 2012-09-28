@@ -2,7 +2,9 @@
 // JS Proxy API - TestCase
 // (c) University of Freiburg
 // http://proglang.informatik.uni-freiburg.de/
-// Version: 0.20
+// Author: Matthias Keil
+// http://www.informatik.uni-freiburg.de/~keilr/
+// Version: 0.20.0
 //////////////////////////////////////////////////
 
 var p = {
