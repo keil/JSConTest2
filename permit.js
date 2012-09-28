@@ -1,0 +1,35 @@
+//////////////////////////////////////////////////
+// JS Proxy API
+// (c) University of Freiburg
+// http://proglang.informatik.uni-freiburg.de/
+// Version: 0.20
+//////////////////////////////////////////////////
+
+
+
+////////////////////////////////////////////////////
+// PERMIT CONTRACT
+////////////////////////////////////////////////////
+
+/** Standard Access Handler
+ * @param contract Access Permission Contract to apply
+ * @param value Target value
+ */
+function __permit(contract, value) {
+	// TODO
+	// apply contract and wrap value
+}
+
+
+// TODO
+//////////////////////////////////////////////////
+// Contract
+// data structure for contracts
+// ContractElement	c = "x" | ? | "x"*
+// Contract			C = [] | C.c 
+//////////////////////////////////////////////////
+
+function __Contract() {
+
+
+}
