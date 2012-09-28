@@ -5,6 +5,8 @@
 // Version: 0.20
 //////////////////////////////////////////////////
 
+// load configuration
+load("config.js");
 
 // load logging engine
 load("__lib_log4js.js");

@@ -30,6 +30,5 @@ function __permit(contract, value) {
 //////////////////////////////////////////////////
 
 function __Contract() {
-
-
+	// TODO
 }

@@ -1,0 +1,31 @@
+//////////////////////////////////////////////////
+// JS Proxy API - Configuration File
+// (c) University of Freiburg
+// http://proglang.informatik.uni-freiburg.de/
+// Author: Matthias Keil
+// Version: 0.20
+//////////////////////////////////////////////////
+
+
+
+//////////////////////////////////////////////////
+// VIOLATION MODE
+// PROTECTOR: return undefined, if property access in not allowed
+// OBSERVER: recorded access violations
+//////////////////////////////////////////////////
+
+// Violation Mode
+var __ViolationMode {
+		PROTECTOR: "protector",
+		OBSERVER: "observer"
+}
+
+
+
+
+//////////////////////////////////////////////////
+// Properties
+//////////////////////////////////////////////////
+
+// violation mode
+__config_ViolationMode = __ViolationMode.OBSERVER;
