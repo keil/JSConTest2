@@ -66,32 +66,9 @@ function __TracePath(prefix, variable) {
 //////////////////////////////////////////////////
 
 
-var __Type = {
-		READ : {value: 0, name: "READ", toString: function() { return this.name;} }, 
-		WRITE: {value: 1, name: "WRIRE", toString: function() { return this.name;} }
-};
 
 
 
-//////////////////////////////////////////////////
-//  HANDLER REFERENCE
-//////////////////////////////////////////////////
-
-function __HandlerReference() {
-		// AccessHandler Map
-		// Proxy -> Hanler
-		var handlerMap = new WeakMap();
-
-		return {
-				set: function(proxy, handler) {
-						handlerMap.set(proxy, handler);
-						return true;
-				},
-						get: function(proxy) {
-								return handlerMap.get(proxy, undefined);
-						}
-		};
-};
 
 
 
@@ -99,6 +76,14 @@ function __HandlerReference() {
 //  ACCESS LOGGER
 //  logger for access (trace)paths
 //////////////////////////////////////////////////
+
+/* Access Type
+ */
+var __Type = {
+		READ : {value: 0, name: "READ", toString: function() { return this.name;} }, 
+		WRITE: {value: 1, name: "WRIRE", toString: function() { return this.name;} }
+};
+
 
 /* Access Logger 
 */
@@ -134,20 +119,21 @@ function __AccessLogger() {
 						entryValue = Entry(type, path);
 						accessMap.add(entryValue);
 				},
-						
-				// iterates over elements		
-				foreach: function(func) {
+
+						// iterates over elements		
+						foreach: function(func) {
 								accessMap.values().forEach(func);
 						},
 
-				// prints the list
-				print: function () {
-						accessMap.values().forEach(function(value) {
+						// prints the list
+						print: function () {
+								accessMap.values().forEach(function(value) {
 										__sysout(value.toString());
 								});
 						}
 		}
 };
+
 // current access logger
 __accessLogger = new __AccessLogger();
 
