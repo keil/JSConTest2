@@ -16,8 +16,8 @@
  * @param value Target value
  */
 function __permit(contract, value) {
-	// TODO
-	// apply contract and wrap value
+		// TODO
+		// apply contract and wrap value
 }
 
 
@@ -25,10 +25,63 @@ function __permit(contract, value) {
 //////////////////////////////////////////////////
 // Contract
 // data structure for contracts
-// ContractElement	c = "x" | ? | "x"*
-// Contract			C = [] | C.c 
+// Contract Literal	c = @ | ? | RegEx | RegEx? | RegEx*
+// Contract			C = [] | c.C 
 //////////////////////////////////////////////////
 
-function __Contract() {
-	// TODO
+var __CType = {
+		AT: "@",
+		QM: "?",
+		RegEx: "RegEx",
+		RegExQM: "RegEx?",
+		RegExS: "RegEx*"
+} 
+
+function __ContractLiteral(type, value) {
+		return {
+				type : type, 
+				value : value
+		}
+}
+
+function __Contract(literal, contract) {
+		return {
+				c : literal,
+				cp : contract,
+
+
+				readable: function() {
+				}
+				
+				writeable: function() {
+				}
+		}
+}
+
+function __Contracts() {
+		return {
+				contracts : new Array(),
+
+						  set : function(c) {
+								  this.contracts.push(c);
+						  },
+
+						  forach : function(func) {
+								  this.contracts.forach(func);
+						  }
+
+							readable : function () {
+							
+							
+									return {
+											valid: true,
+											cts: contracts
+									};
+							},
+							writeable : function () {
+							
+
+								return true;
+							}
+		}
 }

@@ -17,12 +17,14 @@ load("path.js");
 /** Standard Access Handler
  * @param target Wrapped target value
  * @param path Path of the wrapped value
+ * @return AccessHandler
  */
 function __AccessHandler(target, path) {
 		return {
 				/** function to handle read access
 				 * @param receiver Receiver of the property access
 				 * @param name Name of the property access 
+				 * @return Wrapped opbject
 				 */
 				get: function(receiver, name) {
 						// create a new path
@@ -30,8 +32,19 @@ function __AccessHandler(target, path) {
 						// register at loggin engine
 						__accessLogger.set(__Type.READ, tracePath);
 
-						// property access
-						value =  target[name];
+
+						
+
+						stat = contracts.readable(name);
+						if(stat.valid) {
+							cts = stat.cts;
+						}
+
+						if(contracts.readable(name))
+
+
+								// property access
+								value =  target[name];
 						return __createMembrane(value, tracePath);
 
 						/* TODO
@@ -51,9 +64,15 @@ function __AccessHandler(target, path) {
 								// register at loggin engine
 								__accessLogger.set(__Type.WRITE, tracePath);
 
-								/* TODO		
-								 * * wrap object to write ?
-								 */
+								// TODO: wrap object before write operation /
+
+/*								if(contract.isWriteable(name)) {
+										// TODO: write Object
+								} else {
+										// TODO: If ViolationMode = Observer ? log violation, write value
+										// TODO: If ViolationMode = Protector ? log violation
+								}
+*/
 
 								// property assignment
 								target[name] = value;
