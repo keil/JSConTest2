@@ -145,26 +145,32 @@ function __applyProxy(base, name) {
 
 
 ////////////////////////////////////////////////////
-//  HANDLER REFERENCE
-//////////////////////////////////////////////////
+// HANDLER REFERENCE
+////////////////////////////////////////////////////
 
 /** Standard Handler Reference Map
  * reference map proxy -> handler
  */
 function __HandlerReference() {
-		// AccessHandler Map
-		// Proxy -> Hanler
 		var handlerMap = new WeakMap();
 
-		// TODO
 		return {
+				/** set map entry
+				 * @param proxy Key value
+				 * @param handler Value
+				 */
 				set: function(proxy, handler) {
 						handlerMap.set(proxy, handler);
 						return true;
 				},
+						/** get map entry
+						 * @param proxy Key value
+						 */
 						get: function(proxy) {
 								return handlerMap.get(proxy, undefined);
 						}
 		};
 };
 
+// current proxy,handler map
+var __handlerReference = new  __HandlerReference();

@@ -15,11 +15,10 @@
 //////////////////////////////////////////////////
 
 // Violation Mode
-var __ViolationMode {
+var __ViolationMode = {
 		PROTECTOR: "protector",
 		OBSERVER: "observer"
 }
-
 
 
 
