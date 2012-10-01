@@ -36,8 +36,8 @@ function __ContractParser() {
 
 				parse: function(string) {
 
-						tokens = string.split(Token_DOT);
-						contract = new __Contract(null, null);
+						tokens = string.split(Token_DOT).reverse();
+						contract = null;
 
 
 

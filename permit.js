@@ -27,10 +27,14 @@ function __permit(contract, value) {
 //////////////////////////////////////////////////
 // Contract
 // data structure for contracts
+// RegEx			  = x | (x|..)	
 // Contract Literal	c = @ | ? | RegEx | RegEx? | RegEx*
 // Contract			C = [] | c.C 
 //////////////////////////////////////////////////
 
+
+/** Literal Type
+*/
 var __CType = {
 		AT: "@",
 		QM: "?",
@@ -39,66 +43,132 @@ var __CType = {
 		RegExStar: "RegEx*"
 } 
 
+/** Contract Literal
+ * @param type Literal type
+ * @param value String value
+ * @return contract literal 
+ */
 function __ContractLiteral(type, value) {
 		return {
-				type : type, 
-				value : value,
 
-				toString : function() {
-					return "[" + type + "]:" + value;
+				/** Dump
+				 * @return value:[type]
+				 */
+				dump: function () {
+						return value + ":[" + type + "]";
+				}, 
+
+				/** To string
+				 * @return value
+				 */
+				toString: function() {
+						return value!=null? value: "";
+				},
+
+				/** Match
+				 * @param name Variable name
+				 * @return true iff the literal matches to the name, false otherwise
+				 */
+				match: function() {
+						// TODO literal.match(name)
+						return true;
 				}
 		}
 }
 
+/** Access Permission Contract
+ * @param literal Contract literal
+ * @param contract Access Permission Contract
+ * @return Access Permission Contract
+ */
 function __Contract(literal, contract) {
 		return {
-				c : literal,
-				cp : contract,
 
-
-				readable: function() {
-				},
-				
-				writeable : function() {
+				/** Get Literal
+				 * @return literal
+				 */
+				getLiteral: function() {
+						return liertal;
 				},
 
-				toString : function() {
-						return literal==null ? contract==null ? "()" : contract.toString() :  contract==null ? literal.toString() : literal.toString() + "." + contract.toString();
-								
-							//	+ "." + contract.toString()
-						
-						
-						//return literal.toString() + "." + contract.toString();
+				/** Get Contract
+				 * @return contract
+				 */
+				getContract: function() {
+						return liertal;
+				},
+
+				/** Readable
+				 * @param name Variable name
+				 * @return true iff the contract allows reading, false otherwise
+				 */
+				readable: function(name) {
+						// TODO: ask literal whether reading is allowed or not
+				},
+
+				/** Writeable
+				 * @param name Variable name
+				 * @return true iff the contract allows writing, false otherwise
+				 */
+				writeable: function(name) {
+						// TODO: check if contract=null and than ask literal whether writing is allowed or not
+				},
+
+				/** Dump literal
+				 * @return value:[type]; ...
+				 */
+				dump: function() {
+						return contract!=null ? literal.dump() + "; " + contract.dump() : literal.dump();
+				},
+
+				/** To string
+				 * @return literal.contract
+				 */
+				toString: function() {
+						return  contract!=null ? literal.toString() + "." + contract.toString() : literal.toString();
 				}
-
-
 		}
 }
 
+/** List of Access Permission Contract
+ * @return List of Access Permission Contract
+ */
 function __Contracts() {
 		return {
+				// list of contracts
 				contracts : new Array(),
 
-						  set : function(c) {
+						  /** Set
+						   * @param contract Access Persmission Contract
+						   */
+						  set: function(contractc) {
 								  this.contracts.push(c);
 						  },
 
-						  forach : function(func) {
+						  /** Foreach
+						   * @param func Callback function
+						   */
+						  forach: function(func) {
 								  this.contracts.forach(func);
 						  },
 
-							readable : function () {
-							
-							
-									return {
-											valid: true,
-											cts: contracts
-									};
-							},
-							writeable : function () {
-							
+						  /** Readable
+						   * @param name Variable name
+						   * @return true iff the ONE contract allows reading, false otherwise
+						   */
+						  readable: function(name) {
+								  // TODO: ask literal whether reading is allowed or not
+								  // 	return { valid: true, cts: contracts };
+								  return true;
+						  },
 
-								return true;
-							}
+						  /** Writeable
+						   * @param name Variable name
+						   * @return true iff the ONE contract allows writing, false otherwise
+						   */
+						  writeable: function(name) {
+								  // TODO: check if contract=null and than ask literal whether writing is allowed or not
+								  return true;
+						  }
 		}
 }
