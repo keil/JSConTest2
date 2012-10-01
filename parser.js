@@ -61,7 +61,7 @@ function __ContractParser() {
 								if(RegEx_AT.test(v)) {
 										var literal = new __ContractLiteral(__CType.AT,v);
 								} else if(RegEx_QMmark.test(v)) {
-										var literal = new __ContractLiteral(__CType.QM,v);
+										var literal = new __ContractLiteral(__CType.QMark,v);
 								} else if(RegEx_Var.test(v)) {
 										var literal = new __ContractLiteral(__CType.RegEx,v);
 								} else if(RegEx_VarQMark.test(v)) {

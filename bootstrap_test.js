@@ -35,4 +35,5 @@ load("__lib_assert.js");
 // load parser test
 load("permit.js");
 load("parser.js");
-load("__test_parser.js");
+//load("__test_parser.js");
+load("__test_contract-literal.js");

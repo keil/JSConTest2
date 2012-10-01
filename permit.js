@@ -21,10 +21,9 @@ load("parser.js");
  * @param value Target value
  */
 function __permit(contract, value) {
-		parser = new __ContractParser();
-		contract = parser.parse(contract);
-
-		// TODO
+		//parser = new __ContractParser();
+		//contract = parser.parse(contract);
+		// TODO: wrap value
 		// apply contract and wrap value
 }
 
@@ -43,7 +42,7 @@ function __permit(contract, value) {
 */
 var __CType = {
 		AT: "@",
-		QM: "?",
+		QMark: "?",
 		RegEx: "RegEx",
 		RegExQMark: "RegEx?",
 		RegExStar: "RegEx*"
@@ -73,11 +72,11 @@ function __ContractLiteral(type, value) {
 
 				/** Match
 				 * @param name Variable name
-				 * @return true iff the literal matches to the name, false otherwise
+				 * @return true iff the name matches to the literal, false otherwise
 				 */
-				match: function() {
-						// TODO literal.match(name)
-						return true;
+				match: function(name) {
+						return type==__CType.AT ? false : type==__CType.QMark ? true : new RegExp("^" + value + "$").test(name); // name.match(value);
+
 				}
 		}
 }
