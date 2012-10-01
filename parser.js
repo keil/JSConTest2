@@ -10,68 +10,64 @@
 
 function __ContractParser() {
 
+		// . token
+		var Token_DOT= ".";
 
+		// @ token
+		var RegEx_AT=		/^@$/;
+		// ? token
+		var RegEx_QMmark=	/^\?$/;
+		// a token
+		var RegEx_Var=		/^\w*$/;
+		// a? token
+		var RegEx_VarQMark=	/^\w*\?$/;
+		// a* token
+		var RegEx_VarStar=	/^\w*\*$/;
+		// (a|b) token
+		var RegEx_Set=		/^\(\w*(\|\w*)*\)$/;
+		// (a|b)? token
+		var RegEx_SetQMark=	/^\(\w*(\|\w*)*\)\?$/;
+		// (a|b)* token
+		var RegEx_SetStar= 	/^\(\w*(\|\w*)*\)\*$/;
 
 
 		return {
 
-				Token_DOT: ".",
 
-				RegEx_AT:	/^@$/,
-				RegEx_QM:	/^?$/,
-				RegEx_VAR:	/^\w*$/,
-				RegEx_SET:	/^\(\w*(\|\w*)*\)\$/,
-				RegEx_QSET:	/^\(\w*(\|\w*)*\)\?$/,
-				RegEx_SSET:	/^\(\w*(\|\w*)*\)\*$/,
+				parse: function(string) {
+
+						tokens = string.split(Token_DOT);
+						contract = new __Contract(null, null);
 
 
 
+						tokens.foreach(function(k, v) {
 
-
-				function parse(string) {
-
-						tokens = string.split(this.DOT);
-
-						contract = new __Contract(null);
-
-
-						tokens.foreach(new function(k, v){
-
-// alles uuber regexp
-//
-
-
-
-
-								switch(v) {
-
-										case AT:
-												break;
-										case QM:
-												break;
-										default:
-												if(VAR_REGEX.test(v)) {
-												} else if(SET_REGEX.test(v))  {
-												} else if(QM_REGEX.test(v))  {
-												} else if(STAR_REGEX.test(v)) {}
-
-
-
-
-
-
-
+								if(RegEx_AT.test(v)) {
+										var literal = new __ContractLiteral(__CType.AT,v);
+								} else if(RegEx_QMmark.test(v)) {
+										var literal = new __ContractLiteral(__CType.QM,v);
+								} else if(RegEx_Var.test(v)) {
+										var literal = new __ContractLiteral(__CType.RegEx,v);
+								} else if(RegEx_VarQMark.test(v)) {
+										var literal = new __ContractLiteral(__CType.RegExQMark,v);
+								} else if(RegEx_VarStar.test(v)) {
+										var literal = new __ContractLiteral(__CType.RegExStar,v);
+								} else if(RegEx_Set.test(v)) {
+										var literal = new __ContractLiteral(__CType.RegEx,v);
+								} else if(RegEx_SetQMark.test(v)) {
+										var literal = new __ContractLiteral(__CType.RegExQMark,v);
+								} else if(RegEx_SetStar.test(v)) {
+										var literal = new __ContractLiteral(__CType.RegExStar,v);
 								}
 
-
-
+								contract = new __Contract(literal, contract);
 
 						});
 
+						return contract;
+
 				}
-
-
-
-
 		};
+
 }

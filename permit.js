@@ -35,14 +35,18 @@ var __CType = {
 		AT: "@",
 		QM: "?",
 		RegEx: "RegEx",
-		RegExQM: "RegEx?",
-		RegExS: "RegEx*"
+		RegExQMark: "RegEx?",
+		RegExStar: "RegEx*"
 } 
 
 function __ContractLiteral(type, value) {
 		return {
 				type : type, 
-				value : value
+				value : value,
+
+				toString : function() {
+					return "[" + type + "]:" + value;
+				}
 		}
 }
 
@@ -53,10 +57,21 @@ function __Contract(literal, contract) {
 
 
 				readable: function() {
-				}
+				},
 				
-				writeable: function() {
+				writeable : function() {
+				},
+
+				toString : function() {
+						return literal==null ? contract==null ? "()" : contract.toString() :  contract==null ? literal.toString() : literal.toString() + "." + contract.toString();
+								
+							//	+ "." + contract.toString()
+						
+						
+						//return literal.toString() + "." + contract.toString();
 				}
+
+
 		}
 }
 
@@ -70,7 +85,7 @@ function __Contracts() {
 
 						  forach : function(func) {
 								  this.contracts.forach(func);
-						  }
+						  },
 
 							readable : function () {
 							

@@ -30,4 +30,9 @@ load("proxy.js");
 load("__lib_assert.js");
 
 // load basic unittest
-load("__test_basic-unittest.js");
+// load("__test_basic-unittest.js");
+
+// load parser test
+load("permit.js");
+load("parser.js");
+load("__test_parser.js");

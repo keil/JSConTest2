@@ -37,12 +37,12 @@ function __AccessHandler(target, path) {
 
 						
 
-						stat = contracts.readable(name);
-						if(stat.valid) {
-							cts = stat.cts;
-						}
+		//				stat = contracts.readable(name);
+		//				if(stat.valid) {
+		//					cts = stat.cts;
+		//				}
 
-						if(contracts.readable(name))
+		//				if(contracts.readable(name))
 
 
 								// property access
