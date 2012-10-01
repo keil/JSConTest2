@@ -7,6 +7,18 @@
 // Version: 0.20.0
 //////////////////////////////////////////////////
 
+/* Grammar:
+ * INPUT = ""
+ *       | LITERAL "." LITERAL
+ *
+ * LITERAL = "@"
+ *         | "?"
+ *         | REGEX
+ *         | REGEX?
+ *         | REGEX*
+ *
+ * REGEX = x | (x|..)
+ */
 
 /** Contract Parser
  * @return Access Permission Contract
@@ -32,7 +44,6 @@ function __ContractParser() {
 		const RegEx_SetQMark=	/^\(\w*(\|\w*)*\)\?$/;
 		// (a|b)* token
 		const RegEx_SetStar= 	/^\(\w*(\|\w*)*\)\*$/;
-
 
 		return {
 

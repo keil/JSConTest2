@@ -7,6 +7,9 @@
 // Version: 0.20.0
 //////////////////////////////////////////////////
 
+// load trace path
+load("parser.js");
+
 
 
 ////////////////////////////////////////////////////
@@ -18,6 +21,9 @@
  * @param value Target value
  */
 function __permit(contract, value) {
+		parser = new __ContractParser();
+		contract = parser.parse(contract);
+
 		// TODO
 		// apply contract and wrap value
 }
