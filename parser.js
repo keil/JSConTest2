@@ -8,41 +8,45 @@
 //////////////////////////////////////////////////
 
 
+/** Contract Parser
+ * @return Access Permission Contract
+ */
 function __ContractParser() {
 
 		// . token
-		var Token_DOT= ".";
+		const Token_DOT= ".";
 
 		// @ token
-		var RegEx_AT=		/^@$/;
+		const RegEx_AT=		/^@$/;
 		// ? token
-		var RegEx_QMmark=	/^\?$/;
+		const RegEx_QMmark=	/^\?$/;
 		// a token
-		var RegEx_Var=		/^\w*$/;
+		const RegEx_Var=		/^\w*$/;
 		// a? token
-		var RegEx_VarQMark=	/^\w*\?$/;
+		const RegEx_VarQMark=	/^\w*\?$/;
 		// a* token
-		var RegEx_VarStar=	/^\w*\*$/;
+		const RegEx_VarStar=	/^\w*\*$/;
 		// (a|b) token
-		var RegEx_Set=		/^\(\w*(\|\w*)*\)$/;
+		const RegEx_Set=		/^\(\w*(\|\w*)*\)$/;
 		// (a|b)? token
-		var RegEx_SetQMark=	/^\(\w*(\|\w*)*\)\?$/;
+		const RegEx_SetQMark=	/^\(\w*(\|\w*)*\)\?$/;
 		// (a|b)* token
-		var RegEx_SetStar= 	/^\(\w*(\|\w*)*\)\*$/;
+		const RegEx_SetStar= 	/^\(\w*(\|\w*)*\)\*$/;
 
 
 		return {
 
-
+				/** Parse
+				 * @param string Input value
+				 * @retutn Access Permission Contract
+				 */
 				parse: function(string) {
-
+						// split and reversed input
 						tokens = string.split(Token_DOT).reverse();
+						// empty contract
 						contract = null;
 
-
-
 						tokens.foreach(function(k, v) {
-
 								if(RegEx_AT.test(v)) {
 										var literal = new __ContractLiteral(__CType.AT,v);
 								} else if(RegEx_QMmark.test(v)) {
@@ -60,14 +64,11 @@ function __ContractParser() {
 								} else if(RegEx_SetStar.test(v)) {
 										var literal = new __ContractLiteral(__CType.RegExStar,v);
 								}
-
 								contract = new __Contract(literal, contract);
 
 						});
 
 						return contract;
-
 				}
 		};
-
 }
