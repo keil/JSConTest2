@@ -75,7 +75,7 @@ function __ContractLiteral(type, value) {
 				 * @return true iff the name matches to the literal, false otherwise
 				 */
 				match: function(name) {
-						return type==__CType.AT ? false : type==__CType.QMark ? true : new RegExp("^" + value + "$").test(name); // name.match(value);
+						return type==__CType.AT ? false : type==__CType.QMark ? true : new RegExp("^" + value + "$").test(name);
 
 				}
 		}
