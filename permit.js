@@ -124,18 +124,18 @@ function __Contract(literal, contract) {
 				readable: function(name) {
 						switch (literal.getType()) {
 								case __CType.AT:
-										// readadble(@.C', name) ::= (false, {})
+										// readable(@.C', name) ::= (false, {})
 										return {
 												readable: false, contracts: new __ContractSet()
 										};
 								case __CType.QMark:
-										// readadble(?.C', name) ::= (true, {C'})
+										// readable(?.C', name) ::= (true, {C'})
 										return {
 												readable: true, contracts: new __ContractSet(contract)
 										};
 								case __CType.RegEx:
-										// readadble(RegEx.C', name) ::= (true, {C'}), RegEx.match(name)
-										// readadble(RegEx.C', name) ::= (false, {}), otherwise
+										// readable(RegEx.C', name) ::= (true, {C'}), RegEx.match(name)
+										// readable(RegEx.C', name) ::= (false, {}), otherwise
 										if(literal.match(name)) return {
 												readable: true, contracts: new __ContractSet(contract)
 										};
@@ -143,23 +143,26 @@ function __Contract(literal, contract) {
 												readable: false, contracts: new __ContractSet()
 										};
 								case __CType.RegExQMark:
-										//TODO									// readadble(RegEx?.C', name) ::= (true, {C'}), RegEx.match(name)
-										// readadble(RegEx?.C', name) ::= readable(C', name), otherwise
+										// readable(RegEx?.C', name) ::= (true, {C'})+readable(C', name), RegEx.match(name)
+										// readable(RegEx?.C', name) ::= readable(C', name), otherwise
 										if(literal.match(name)) {
-												result = contract.readable(name);											
+												result = contract.readable(name);									
 												return {
 														readable: true, contracts: new __ContractSet(contract, result.contracts)
 												};
 										} else return contract.readable(name);
 								case __CType.RegExStar:
-										// TODO										// readadble(RegEx*.C', name) ::= (true, {C+C'}), RegEx.match(name)
-										// readadble(RegEx*.C', name) ::= readable(C', name), otherwise
-										if(literal.match(name)) return {
-												readable: true, contracts: new __ContractSet(this, contract)
-										};
-										else return contract.readable(name);
+										// TODO
+										// readable(RegEx*.C', name) ::= (true, {C+C'})+readable(C', name), RegEx.match(name)
+										// readable(RegEx*.C', name) ::= readable(C', name), otherwise
+										if(literal.match(name)) {
+												result = contract.readable(name);									
+												return {
+														readable: true, contracts: new __ContractSet(this, contract, result.contracts)
+												};
+										} else return contract.readable(name);
 								default:
-										// readadble(c.C', name) ::= (false, {})
+										// readable(c.C', name) ::= (false, {})
 										return {
 												readable: false, contracts: new __ContractSet()
 										}
