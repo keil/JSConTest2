@@ -244,6 +244,7 @@ function __ContractSet() {
 
 		// list of contracts
 		var contracts = new Array();
+		// add parameters to the list
 		for (var i=0, args=arguments.length; i < args; i++) {
 				if(arguments[i] instanceof Contract) {
 						contracts.push(arguments[i]);
@@ -252,53 +253,48 @@ function __ContractSet() {
 								contracts.push(v);
 						});
 				}
+		}
 
-				return {
-						// TODO
-						// list of contracts
-						//contracts: new Array(),
+		return {
+				/** Add
+				 * @param contract Access Persmission Contract
+				 */
+				add: function(contractc) {
+						this.contracts.push(c);
+				},
 
-						/** Set
-						 * @param contract Access Persmission Contract
+						/** Foreach
+						 * @param func Callback function
 						 */
-						add: function(contractc) {
-								this.contracts.push(c);
+						forach: function(func) {
+								this.contracts.forach(func);
 						},
 
-								/** Foreach
-								 * @param func Callback function
-								 */
-								forach: function(func) {
-										this.contracts.forach(func);
-								},
+						/** Readable
+						 * @param name Variable name
+						 * @return true iff the ONE contract allows reading, false otherwise
+						 */
+						readable: function(name) {
+								var contractSet = new ContractSet();
+								var readable = false;
+								contracts.foreach(function(k,v){
+										var result = v.readable(name).readable;
+										readable |= result.readable;
+										contractSet.set(result.contracts);
+								});
+								return reult;
+						},
 
-								/** Readable
-								 * @param name Variable name
-								 * @return true iff the ONE contract allows reading, false otherwise
-								 */
-								readable: function(name) {
-										var result = false;
-										contracts.foreach(function(k,v){
-												result &= v.writeable();
-										});
-										return reult;
-
-
-										// TODO: ask literal whether reading is allowed or not
-										// 	return { valid: true, cts: contracts };
-										return true;
-								},
-
-								/** Writeable
-								 * @param name Variable name
-								 * @return true iff the ONE contract allows writing, false otherwise
-								 */
-								writeable: function(name) {
-										var result = false;
-										contracts.foreach(function(k,v){
-												result &= v.writeable();
-										});
-										return reult;
-								}
-				}
+						/** Writeable
+						 * @param name Variable name
+						 * @return true iff the ONE contract allows writing, false otherwise
+						 */
+						writeable: function(name) {
+								var writeable = false;
+								contracts.foreach(function(k,v){
+										writeable |= v.writeable();
+								});
+								return writeable;
+						}
 		}
+}
