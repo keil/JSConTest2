@@ -56,6 +56,20 @@ var __CType = {
 function __ContractLiteral(type, value) {
 		return {
 
+				/** Get Value
+				 * @return value
+				 */
+				getValue: function() {
+						return type:
+				},
+
+				/** Get Type
+				 * @return type
+				 */
+				getType: function() {
+						return type:
+				},
+
 				/** Dump
 				 * @return value:[type]
 				 */
@@ -108,8 +122,53 @@ function __Contract(literal, contract) {
 				 * @return true iff the contract allows reading, false otherwise
 				 */
 				readable: function(name) {
-						// TODO: test
-						return literal.match(name);
+						switch (literal.getType()) {
+								case __CType.AT:
+										return {
+												readable: false, contracts: new __ContractSet()
+										}
+										break;
+								case __CType.QMark:
+										return {
+												readable: true, contracts: new __ContractSet(contract)
+										}
+										break;
+								case __CType.RegEx:
+										if(literal.match(name)) {
+												return {
+														readable: true, contracts: new __ContractSet(contract)
+												}
+										} else {
+												return {
+														readable: false, contracts: new __ContractSet()
+												}
+										}
+										break;
+								case __CType.RegExQMark:
+										if(literal.match(name)) {
+												result = contract.readable(name);											
+												return {
+														readable: true, contracts: new __ContractSet(contract, result.contracts)
+												};
+										} else {
+												return contract.readable(name);
+										}
+										break;
+								case __CType.RegExStar:
+										if(literal.match(name)) {										
+												return {
+														readable: true, contracts: new __ContractSet(this, contract)
+												};
+										} else {
+												return contract.readable(name);
+										}
+										break;
+								default:
+										return {
+												readable: false, contracts: new __ContractSet()
+										}
+										break;
+						}
 				},
 
 				/** Writeable
@@ -117,6 +176,40 @@ function __Contract(literal, contract) {
 				 * @return true iff the contract allows writing, false otherwise
 				 */
 				writeable: function(name) {
+						if(contract==null){
+								switch (literal.getType()) {
+										case __CType.AT:
+												return false;
+										case __CType.QMark:
+												return true;
+										case __CType.RegEx:
+										case __CType.RegExQMark:
+										case __CType.RegExStar:
+												return literal.match(name);
+										default:
+												return false;
+
+								}
+						} else if(contract.contract==null) {
+								switch (contract.getLiteral.getType()) {
+										case __CType.AT:
+										case __CType.QMark:
+										case __CType.RegEx:
+												return false;
+										case __CType.RegExQMark:
+										case __CType.RegExStar:
+												return literal.match(name);
+										default:
+												return false;
+
+								}
+						} else {
+								return false;
+						}
+
+
+
+
 						// TODO; test
 						return contract==null ? literal.match(name) : false;
 				},
@@ -140,52 +233,65 @@ function __Contract(literal, contract) {
 /** List of Access Permission Contract
  * @return List of Access Permission Contract
  */
-function __Contracts() {
-		return {
-				// list of contracts
-				contracts : new Array(),
+function __ContractSet() {
 
-						  /** Set
-						   * @param contract Access Persmission Contract
-						   */
-						  set: function(contractc) {
-								  this.contracts.push(c);
-						  },
+		// list of contracts
+		var contracts = new Array();
+		for (var i=0, args=arguments.length; i < args; i++) {
+				if(arguments[i] instanceof Contract) {
+						contracts.push(arguments[i]);
+				} else if(arguments[i] instanceof ContractSet) {
+						arguments[i].foreach(function(k,v){
+								contracts.push(v);
+						});
+				}
 
-						  /** Foreach
-						   * @param func Callback function
-						   */
-						  forach: function(func) {
-								  this.contracts.forach(func);
-						  },
+				return {
+						// TODO
+						// list of contracts
+						//contracts: new Array(),
 
-						  /** Readable
-						   * @param name Variable name
-						   * @return true iff the ONE contract allows reading, false otherwise
-						   */
-						  readable: function(name) {
-								  var result = false;
-								  contracts.foreach(function(k,v){
-										  result &= v.writeable();
-								  });
-								  return reult;
+						/** Set
+						 * @param contract Access Persmission Contract
+						 */
+						add: function(contractc) {
+								this.contracts.push(c);
+						},
+
+								/** Foreach
+								 * @param func Callback function
+								 */
+								forach: function(func) {
+										this.contracts.forach(func);
+								},
+
+								/** Readable
+								 * @param name Variable name
+								 * @return true iff the ONE contract allows reading, false otherwise
+								 */
+								readable: function(name) {
+										var result = false;
+										contracts.foreach(function(k,v){
+												result &= v.writeable();
+										});
+										return reult;
 
 
-								  // TODO: ask literal whether reading is allowed or not
-								  // 	return { valid: true, cts: contracts };
-								  return true;
-						  },
+										// TODO: ask literal whether reading is allowed or not
+										// 	return { valid: true, cts: contracts };
+										return true;
+								},
 
-						  /** Writeable
-						   * @param name Variable name
-						   * @return true iff the ONE contract allows writing, false otherwise
-						   */
-						  writeable: function(name) {
-								  var result = false;
-								  contracts.foreach(function(k,v){
-										  result &= v.writeable();
-								  });
-								  return reult;
-						  }
+								/** Writeable
+								 * @param name Variable name
+								 * @return true iff the ONE contract allows writing, false otherwise
+								 */
+								writeable: function(name) {
+										var result = false;
+										contracts.foreach(function(k,v){
+												result &= v.writeable();
+										});
+										return reult;
+								}
+				}
 		}
-}
