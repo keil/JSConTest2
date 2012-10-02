@@ -124,50 +124,45 @@ function __Contract(literal, contract) {
 				readable: function(name) {
 						switch (literal.getType()) {
 								case __CType.AT:
+										// readadble(@.C', name) ::= (false, {})
 										return {
 												readable: false, contracts: new __ContractSet()
-										}
-										break;
+										};
 								case __CType.QMark:
+										// readadble(?.C', name) ::= (true, {C'})
 										return {
 												readable: true, contracts: new __ContractSet(contract)
-										}
-										break;
+										};
 								case __CType.RegEx:
-										if(literal.match(name)) {
-												return {
-														readable: true, contracts: new __ContractSet(contract)
-												}
-										} else {
-												return {
-														readable: false, contracts: new __ContractSet()
-												}
-										}
-										break;
+										// readadble(RegEx.C', name) ::= (true, {C'}), RegEx.match(name)
+										// readadble(RegEx.C', name) ::= (false, {}), otherwise
+										if(literal.match(name)) return {
+												readable: true, contracts: new __ContractSet(contract)
+										};
+										else return {
+												readable: false, contracts: new __ContractSet()
+										};
 								case __CType.RegExQMark:
+										//TODO									// readadble(RegEx?.C', name) ::= (true, {C'}), RegEx.match(name)
+										// readadble(RegEx?.C', name) ::= readable(C', name), otherwise
 										if(literal.match(name)) {
 												result = contract.readable(name);											
 												return {
 														readable: true, contracts: new __ContractSet(contract, result.contracts)
 												};
-										} else {
-												return contract.readable(name);
-										}
-										break;
+										} else return contract.readable(name);
 								case __CType.RegExStar:
-										if(literal.match(name)) {										
-												return {
-														readable: true, contracts: new __ContractSet(this, contract)
-												};
-										} else {
-												return contract.readable(name);
-										}
-										break;
+										// TODO										// readadble(RegEx*.C', name) ::= (true, {C+C'}), RegEx.match(name)
+										// readadble(RegEx*.C', name) ::= readable(C', name), otherwise
+										if(literal.match(name)) return {
+												readable: true, contracts: new __ContractSet(this, contract)
+										};
+										else return contract.readable(name);
 								default:
+										// readadble(c.C', name) ::= (false, {})
 										return {
 												readable: false, contracts: new __ContractSet()
 										}
-										break;
 						}
 				},
 
@@ -176,42 +171,51 @@ function __Contract(literal, contract) {
 				 * @return true iff the contract allows writing, false otherwise
 				 */
 				writeable: function(name) {
-						if(contract==null){
+						if(contract==null) {
+								// writeable(c.{}, name)
 								switch (literal.getType()) {
 										case __CType.AT:
+												// writeable(@.{}, name) ::= false
 												return false;
 										case __CType.QMark:
+												// writeable(?.{}, name) ::= true
 												return true;
 										case __CType.RegEx:
 										case __CType.RegExQMark:
 										case __CType.RegExStar:
+												// writeable(RegEx.{}, name) ::= true, RegEx.match(name)
+												// writeable(RegEx?.{}, name) ::= true, RegEx.match(name)
+												// writeable(RegEx*.{}, name) ::= true, RegEx.match(name)
 												return literal.match(name);
 										default:
+												// writeable(c.{}, name) ::= false
 												return false;
 
 								}
 						} else if(contract.contract==null) {
+								// writeable(c.c'.{}, name)
 								switch (contract.getLiteral.getType()) {
 										case __CType.AT:
 										case __CType.QMark:
 										case __CType.RegEx:
+												// writeable(c.@.{}, name) ::= false
+												// writeable(c.?.{}, name) ::= false
+												// writeable(c.RegEx.{}, name) ::= false
 												return false;
 										case __CType.RegExQMark:
 										case __CType.RegExStar:
+												// writeable(c.RegEx?.{}, name) ::= true, c.match(name)
+												// writeable(c.RegEx*.{}, name) ::= true, c.match(name)
 												return literal.match(name);
 										default:
+												// writeable(c.c'.{}, name) ::= false
 												return false;
 
 								}
 						} else {
+								// writeable(c.C', name) ::= false
 								return false;
 						}
-
-
-
-
-						// TODO; test
-						return contract==null ? literal.match(name) : false;
 				},
 
 				/** Dump literal
