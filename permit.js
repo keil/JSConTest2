@@ -108,7 +108,8 @@ function __Contract(literal, contract) {
 				 * @return true iff the contract allows reading, false otherwise
 				 */
 				readable: function(name) {
-						// TODO: ask literal whether reading is allowed or not
+						// TODO: test
+						return literal.match(name);
 				},
 
 				/** Writeable
@@ -116,7 +117,8 @@ function __Contract(literal, contract) {
 				 * @return true iff the contract allows writing, false otherwise
 				 */
 				writeable: function(name) {
-						// TODO: check if contract=null and than ask literal whether writing is allowed or not
+						// TODO; test
+						return contract==null ? literal.match(name) : false;
 				},
 
 				/** Dump literal
@@ -162,6 +164,13 @@ function __Contracts() {
 						   * @return true iff the ONE contract allows reading, false otherwise
 						   */
 						  readable: function(name) {
+								  var result = false;
+								  contracts.foreach(function(k,v){
+										  result &= v.writeable();
+								  });
+								  return reult;
+
+
 								  // TODO: ask literal whether reading is allowed or not
 								  // 	return { valid: true, cts: contracts };
 								  return true;
@@ -172,8 +181,11 @@ function __Contracts() {
 						   * @return true iff the ONE contract allows writing, false otherwise
 						   */
 						  writeable: function(name) {
-								  // TODO: check if contract=null and than ask literal whether writing is allowed or not
-								  return true;
+								  var result = false;
+								  contracts.foreach(function(k,v){
+										  result &= v.writeable();
+								  });
+								  return reult;
 						  }
 		}
 }
