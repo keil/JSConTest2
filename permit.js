@@ -60,14 +60,14 @@ function __ContractLiteral(type, value) {
 				 * @return value
 				 */
 				getValue: function() {
-						return type:
+						return type;
 				},
 
 				/** Get Type
 				 * @return type
 				 */
 				getType: function() {
-						return type:
+						return type;
 				},
 
 				/** Dump
@@ -152,7 +152,6 @@ function __Contract(literal, contract) {
 												};
 										} else return contract.readable(name);
 								case __CType.RegExStar:
-										// TODO
 										// readable(RegEx*.C', name) ::= (true, {C+C'})+readable(C', name), RegEx.match(name)
 										// readable(RegEx*.C', name) ::= readable(C', name), otherwise
 										if(literal.match(name)) {
