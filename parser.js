@@ -76,7 +76,6 @@ function __ContractParser() {
 										var literal = new __ContractLiteral(__CType.RegExStar,v);
 								}
 								contract = new __Contract(literal, contract);
-
 						});
 
 						return contract;
