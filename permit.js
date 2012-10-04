@@ -126,44 +126,46 @@ function __Contract(literal, contract) {
 								case __CType.AT:
 										// readable(@.C', name) ::= (false, {})
 										return {
-												readable: false, contracts: new __ContractSet(new Array())
+												readable: false, contracts: new __ContractSet()
 										};
 								case __CType.QMark:
 										// readable(?.C', name) ::= (true, {C'})
 										return {
-												readable: true, contracts: new __ContractSet(new Array(contract))
+												readable: true, contracts: new __ContractSet(contract)
 										};
 								case __CType.RegEx:
 										// readable(RegEx.C', name) ::= (true, {C'}), RegEx.match(name)
 										// readable(RegEx.C', name) ::= (false, {}), otherwise
 										if(literal.match(name)) return {
-												readable: true, contracts: new __ContractSet(new Array(contract))
+												readable: true, contracts: new __ContractSet(contract)
 										};
 										else return {
-												readable: false, contracts: new __ContractSet(new Array())
+												readable: false, contracts: new __ContractSet()
 										};
 								case __CType.RegExQMark:
 										// readable(RegEx?.C', name) ::= (true, {C'})+readable(C', name), RegEx.match(name)
 										// readable(RegEx?.C', name) ::= readable(C', name), otherwise
 										if(literal.match(name)) {
+												// TODO: check if contract is null ? 
 												result = contract.readable(name);									
 												return {
-														readable: true, contracts: new __ContractSet(new Array(contract, result.contracts))
+														readable: true, contracts: new __ContractSet(contract, result.contracts)
 												};
 										} else return contract.readable(name);
 								case __CType.RegExStar:
 										// readable(RegEx*.C', name) ::= (true, {C+C'})+readable(C', name), RegEx.match(name)
 										// readable(RegEx*.C', name) ::= readable(C', name), otherwise
 										if(literal.match(name)) {
+												// TODO: check if contract is null ? 
 												result = contract.readable(name);									
 												return {
-														readable: true, contracts: new __ContractSet(new Array(this, contract, result.contracts))
+														readable: true, contracts: new __ContractSet(this, new __ContractSet(contract, result.contracts))
 												};
 										} else return contract.readable(name);
 								default:
 										// readable(c.C', name) ::= (false, {})
 										return {
-												readable: false, contracts: new __ContractSet(new Array())
+												readable: false, contracts: new __ContractSet()
 										}
 						}
 				},
@@ -247,61 +249,18 @@ function __Contract(literal, contract) {
 /** List of Access Permission Contract
  * @return List of Access Permission Contract
  */
-function __ContractSet(contracts) {
-
-		// list of contracts
-		//		var contracts = new Array();
-		// add parameters to the list
-		//		for (var i=0, args=arguments.length; i < args; i++) {
-		//				contracts.push(arguments[i]);
-
-		//				__sysout(arguments[0].dump()); // TODO
-		//				__sysout(i); // TODO
-		//				__sysout(typeof arguments[i]);				
-
-		//				__sysout(arguments[i] instanceof __Contract); // TODO
-		//				__sysout(arguments[i] instanceof __ContractSet); // TODO
-		//				__sysout(arguments[i] instanceof __ContractLiteral); // TODO
-
-		//				if(arguments[i] instanceof __Contract) {
-		//						__sysout("is contract"); // TODO
-		//						contracts.push(arguments[i]);
-		//				} else if(arguments[i] instanceof __ContractSet) {
-		//						__sysout("is set"); // TODO 
-		//						arguments[i].foreach(function(k,v){
-		//								contracts.push(v);
-		//						});
-		//				}
-		//		}
-
+function __ContractSet(arg0, arg1) {
 		return {
-				/** Add
-				 * @param contract Access Persmission Contract
-				 */
-				add: function(c) {
-						contracts.push(c);
-				},
-
-				/** Foreach
-				 * @param func Callback function
-				 */
-				forach: function(func) {
-						contracts.foreach(func);
-				},
-
 				/** Readable
 				 * @param name Variable name
 				 * @return true iff the ONE contract allows reading, false otherwise
 				 */
 				readable: function(name) {
-						var contractSet = new ContractSet();
-						var readable = false;
-						contracts.foreach(function(k,v){
-								var result = v.readable(name).readable;
-								readable |= result.readable;
-								contractSet.set(result.contracts);
-						});
-						return reult;
+						result0 = arg0=!null ? arg0.readable(name) : {readable: false, contracts: new __ContractSet()};
+						result1 = arg1=!null ? arg1.readable(name) : {readable: false, contracts: new __ContractSet()};
+						return {
+								readable: result1.readable|result1.readable, contracts: new __ContractSet(result0.contracts, result1.contracts)
+						};
 				},
 
 				/** Writeable
@@ -309,34 +268,23 @@ function __ContractSet(contracts) {
 				 * @return true iff the ONE contract allows writing, false otherwise
 				 */
 				writeable: function(name) {
-						var writeable = false;
-						contracts.foreach(function(k,v){
-								writeable |= v.writeable();
-						});
-						return writeable;
+						result0 = arg0=!null ? arg0.writeable(name) : false;
+						result1 = arg1=!null ? arg1.writeable(name) : false;
+						return result0|result1
 				},
 
-				/** Dump contracts
+				/** Dump set
 				 * @return value:[type]; ...
 				 */
-				dump: function() { //TODO
-						__sysout(contracts);
-						return "{ " + contracts.foreach(function(k, v) {return v.dump()}) + " }";
-
-
-						//return "{ " + this.contracts.forach(function(k, v) {return v.dump}) + " }";
+				dump: function() {
+						return (arg0!=null ? (arg1!=null ? arg0.dump() + "; " + arg1.dump() : arg0.dump()) : (arg1!=null ? arg1.dump() : ""));
 				},
 
 				/** To string
 				 * @return 
 				 */
 				toString: function() {
-						__sysout(typeof contracts);
-						return "{ " + contracts[0].toString() + " }";
-
-						// TODO: test and remove old one
-						// return  contract!=null ? literal.toString() + "." + contract.toString() : literal.toString();
+						return (arg0!=null ? (arg1!=null ? arg0.toString() + "; " + arg1.toString() : arg0.toString()) : (arg1!=null ? arg1.toString() : ""));
 				}
-
 		}
 }
