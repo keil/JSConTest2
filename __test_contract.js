@@ -45,3 +45,32 @@ test("a?.b.c", "b");
 //test("[a-z]", "a");
 //test("a?", "a");
 //test("b?", "b");
+
+// # TEST 6 #
+test("(a|b).b.c", "a");
+test("(a|b).b.c", "b");
+test("(a|b).b.c", "c");
+test("(a|b)", "a");
+test("(a|b)", "b");
+test("(a|b)", "c");
+
+// # TEST 7 #
+test("(a|b)*.b.c", "a");
+test("(a|b)*.b.c", "b");
+test("(a|b)*.b.c", "c");
+//test("(a|b)*", "a");
+//test("(a|b)*", "b");
+//test("(a|b)*", "c");
+
+
+// # TEST 8 #
+test("(a|b)?.b.c", "a");
+test("(a|b)?.b.c", "b");
+test("(a|b)?.b.c", "c");
+//test("(a|b)?", "a");
+//test("(a|b)?", "b");
+//test("(a|b)?", "c");
+
+
+//test("(a|b*).b.c", "a");
+
