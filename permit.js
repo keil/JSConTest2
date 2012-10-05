@@ -146,7 +146,7 @@ function __Contract(literal, contract) {
 										// readable(RegEx?.C', name) ::= (true, {C'})+readable(C', name), RegEx.match(name)
 										// readable(RegEx?.C', name) ::= readable(C', name), otherwise
 										if(literal.match(name)) {
-												result = contract!=null ? contract.readable(name) : {readable: false, contracts: new __ContractSet()};							
+												result = contract!=null ? contract.readable(name) : {readable: false, contracts: new __ContractSet()};		
 												return {
 														readable: true, contracts: new __ContractSet(contract, result.contracts)
 												};
@@ -254,8 +254,8 @@ function __ContractSet(arg0, arg1) {
 				 * @return true iff the ONE contract allows reading, false otherwise
 				 */
 				readable: function(name) {
-						result0 = arg0=!null ? arg0.readable(name) : {readable: false, contracts: new __ContractSet()};
-						result1 = arg1=!null ? arg1.readable(name) : {readable: false, contracts: new __ContractSet()};
+						result0 = arg0!=null ? arg0.readable(name) : {readable: false, contracts: new __ContractSet()};
+						result1 = arg1!=null ? arg1.readable(name) : {readable: false, contracts: new __ContractSet()};
 						return {
 								readable: result1.readable|result1.readable, contracts: new __ContractSet(result0.contracts, result1.contracts)
 						};
@@ -266,8 +266,8 @@ function __ContractSet(arg0, arg1) {
 				 * @return true iff the ONE contract allows writing, false otherwise
 				 */
 				writeable: function(name) {
-						result0 = arg0=!null ? arg0.writeable(name) : false;
-						result1 = arg1=!null ? arg1.writeable(name) : false;
+						result0 = arg0!=null ? arg0.writeable(name) : false;
+						result1 = arg1!=null ? arg1.writeable(name) : false;
 						return result0|result1
 				},
 

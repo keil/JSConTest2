@@ -37,4 +37,4 @@ load("permit.js");
 load("parser.js");
 //load("__test_parser.js");
 //load("__test_contract-literal.js");
-load("__test_contract.js");
+load("__test_contractset.js");
