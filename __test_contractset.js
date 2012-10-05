@@ -1,12 +1,12 @@
 // parser
 parser = new __ContractParser();
 
-function test(string, name0, name1) {
+function test(string, name1, name2) {
 		contract = parser.parse(string);
 		var result1 = contract.readable(name1);
-		__sysout("[" + contract.toString() + "] " + name0 + ": " + result1.readable + "/ " + (result1.contracts.toString()!="" ? result1.contracts : "{}"));
-		var result2 = result1.contracts.readable(name1);
-		__sysout("[" + result1.contracts.toString() + "] " + name1 + ": " + result2.readable + "/ " + (result2.contracts.toString()!="" ? result2.contracts : "{}"));
+		__sysout("[" + contract.toString() + "] " + name1 + ": " + result1.readable + "/ " + (result1.contracts.toString()!="" ? result1.contracts : "{}"));
+		var result2 = result1.contracts.readable(name2);
+		__sysout("[" + result1.contracts.toString() + "] " + name2 + ": " + result2.readable + "/ " + (result2.contracts.toString()!="" ? result2.contracts : "{}"));
 }
 
 

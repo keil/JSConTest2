@@ -257,7 +257,7 @@ function __ContractSet(arg0, arg1) {
 						result0 = arg0!=null ? arg0.readable(name) : {readable: false, contracts: new __ContractSet()};
 						result1 = arg1!=null ? arg1.readable(name) : {readable: false, contracts: new __ContractSet()};
 						return {
-								readable: result1.readable|result1.readable, contracts: new __ContractSet(result0.contracts, result1.contracts)
+								readable: result0.readable||result1.readable, contracts: new __ContractSet(result0.contracts, result1.contracts)
 						};
 				},
 
@@ -268,13 +268,14 @@ function __ContractSet(arg0, arg1) {
 				writeable: function(name) {
 						result0 = arg0!=null ? arg0.writeable(name) : false;
 						result1 = arg1!=null ? arg1.writeable(name) : false;
-						return result0|result1
+						return result0||result1
 				},
 
 				/** Dump set
 				 * @return value:[type]; ...
 				 */
 				dump: function() {
+						// TODO: Ausgabe ist unschön
 						return (arg0!=null ? (arg1!=null ? arg0.dump() + "; " + arg1.dump() : arg0.dump()) : (arg1!=null ? arg1.dump() : ""));
 				},
 
@@ -282,6 +283,7 @@ function __ContractSet(arg0, arg1) {
 				 * @return 
 				 */
 				toString: function() {
+						// TODO: Ausgabe ist unschön
 						return (arg0!=null ? (arg1!=null ? arg0.toString() + "; " + arg1.toString() : arg0.toString()) : (arg1!=null ? arg1.toString() : ""));
 				}
 		}
