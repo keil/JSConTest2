@@ -4,7 +4,7 @@
 // http://proglang.informatik.uni-freiburg.de/
 // Author: Matthias Keil
 // http://www.informatik.uni-freiburg.de/~keilr/
-// Version: 0.20.0
+// Version: 0.20.1
 //////////////////////////////////////////////////
 
 // load trace path
@@ -146,22 +146,20 @@ function __Contract(literal, contract) {
 										// readable(RegEx?.C', name) ::= (true, {C'})+readable(C', name), RegEx.match(name)
 										// readable(RegEx?.C', name) ::= readable(C', name), otherwise
 										if(literal.match(name)) {
-												// TODO: check if contract is null ? 
-												result = contract.readable(name);									
+												result = contract!=null ? contract.readable(name) : {readable: false, contracts: new __ContractSet()};							
 												return {
 														readable: true, contracts: new __ContractSet(contract, result.contracts)
 												};
-										} else return contract.readable(name);
+										} else return contract!=null ? contract.readable(name) : {readable: false, contracts: new __ContractSet()};
 								case __CType.RegExStar:
 										// readable(RegEx*.C', name) ::= (true, {C+C'})+readable(C', name), RegEx.match(name)
 										// readable(RegEx*.C', name) ::= readable(C', name), otherwise
 										if(literal.match(name)) {
-												// TODO: check if contract is null ? 
-												result = contract.readable(name);									
+												result = contract!=null ? contract.readable(name) : {readable: false, contracts: new __ContractSet()};
 												return {
 														readable: true, contracts: new __ContractSet(this, new __ContractSet(contract, result.contracts))
 												};
-										} else return contract.readable(name);
+										} else return contract!=null ? contract.readable(name) : {readable: false, contracts: new __ContractSet()};
 								default:
 										// readable(c.C', name) ::= (false, {})
 										return {
