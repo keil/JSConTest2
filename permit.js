@@ -107,14 +107,14 @@ function __Contract(literal, contract) {
 				 * @return literal
 				 */
 				getLiteral: function() {
-						return liertal;
+						return literal;
 				},
 
 				/** Get Contract
 				 * @return contract
 				 */
 				getContract: function() {
-						return liertal;
+						return contract;
 				},
 
 				/** Readable
@@ -146,7 +146,7 @@ function __Contract(literal, contract) {
 										// readable(RegEx?.C', name) ::= (true, {C'})+readable(C', name), RegEx.match(name)
 										// readable(RegEx?.C', name) ::= readable(C', name), otherwise
 										if(literal.match(name)) {
-												result = contract!=null ? contract.readable(name) : {readable: false, contracts: new __ContractSet()};		
+												var result = contract!=null ? contract.readable(name) : {readable: false, contracts: new __ContractSet()};		
 												return {
 														readable: true, contracts: new __ContractSet(contract, result.contracts)
 												};
@@ -155,7 +155,7 @@ function __Contract(literal, contract) {
 										// readable(RegEx*.C', name) ::= (true, {C+C'})+readable(C', name), RegEx.match(name)
 										// readable(RegEx*.C', name) ::= readable(C', name), otherwise
 										if(literal.match(name)) {
-												result = contract!=null ? contract.readable(name) : {readable: false, contracts: new __ContractSet()};
+												var result = contract!=null ? contract.readable(name) : {readable: false, contracts: new __ContractSet()};
 												return {
 														readable: true, contracts: new __ContractSet(this, new __ContractSet(contract, result.contracts))
 												};
@@ -194,9 +194,9 @@ function __Contract(literal, contract) {
 												return false;
 
 								}
-						} else if(contract.contract==null) {
+						} else if(contract.getContract()==null) {
 								// writeable(c.c'.{}, name)
-								switch (contract.getLiteral.getType()) {
+								switch (contract.getLiteral().getType()) {
 										case __CType.AT:
 										case __CType.QMark:
 										case __CType.RegEx:
@@ -254,10 +254,10 @@ function __ContractSet(arg0, arg1) {
 				 * @return true iff the ONE contract allows reading, false otherwise
 				 */
 				readable: function(name) {
-						result0 = arg0!=null ? arg0.readable(name) : {readable: false, contracts: new __ContractSet()};
-						result1 = arg1!=null ? arg1.readable(name) : {readable: false, contracts: new __ContractSet()};
+						var result0 = arg0!=null ? arg0.readable(name) : {readable: false, contracts: new __ContractSet()};
+						var result1 = arg1!=null ? arg1.readable(name) : {readable: false, contracts: new __ContractSet()};
 						return {
-								readable: result0.readable||result1.readable, contracts: new __ContractSet(result0.contracts, result1.contracts)
+								readable: (result0.readable||result1.readable), contracts: new __ContractSet(result0.contracts, result1.contracts)
 						};
 				},
 
@@ -266,8 +266,9 @@ function __ContractSet(arg0, arg1) {
 				 * @return true iff the ONE contract allows writing, false otherwise
 				 */
 				writeable: function(name) {
-						result0 = arg0!=null ? arg0.writeable(name) : false;
-						result1 = arg1!=null ? arg1.writeable(name) : false;
+						// TODO: test
+						var result0 = arg0!=null ? arg0.writeable(name) : false;
+						var result1 = arg1!=null ? arg1.writeable(name) : false;
 						return result0||result1
 				},
 
