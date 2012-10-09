@@ -19,6 +19,8 @@ load("system.js");
 
 // load proxy
 load("proxy.js");
+// load permit
+load("permit.js")
 
 
 

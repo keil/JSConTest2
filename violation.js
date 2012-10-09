@@ -17,67 +17,20 @@ load("__lib_jspadding.js");
 
 
 //////////////////////////////////////////////////
-// TRACE PATH
-// data structure to log access paths
-// Property	p = "x" ...
-// Path 	P = [] | P.p 
-//////////////////////////////////////////////////
-
-
-/** Trace Property
- * @param variable Variable name
- */
-function __TraceProperty(variable) {
-		return {
-				// property value
-				property: variable,
-
-						// to string method
-						toString : function () {
-								return property;
-						}
-		}
-}
-
-/** Trace Path
- * @param prefix Path prefix
- * @param variable Path property
- */
-function __TracePath(prefix, variable) {
-		return {
-				// path prefix
-				path: prefix,
-
-				// path property
-				property: variable,
-
-				// to string method
-				toString : function () {
-						if (this.path == null)
-								return this.property.toString();
-						else
-								return this.path.toString() + "." + this.property.toString();
-				}
-		}
-}
-
-
-
-//////////////////////////////////////////////////
-//  ACCESS LOGGER
-//  logger for access (trace)paths
+//  VIOLATION LOGGER
+//  logger for access violations
 //////////////////////////////////////////////////
 
 /** Access Type
 */
-var __AccessType = {
-		READ : {value: 0, name: "READ", toString: function() { return this.name;} }, 
-		WRITE: {value: 1, name: "WRIRE", toString: function() { return this.name;} }
+var __ViolationType = {
+		READ : {value: 0, name: "READ VIOLATION", toString: function() { return this.name;} }, 
+		WRITE: {value: 1, name: "WRIRE VIOLATION", toString: function() { return this.name;} }
 };
 
-/** Access Logger 
+/** Violation Logger 
 */
-function __AccessLogger() {
+function __ViolationLogger() {
 
 		/** hash function
 		 * @param e Value
@@ -139,15 +92,15 @@ function __AccessLogger() {
 };
 
 // current access logger
-__accessLogger = new __AccessLogger();
+__violationLogger = new __ViolationLogger();
 
 /** Evaluation Function
 */
-function __evaluateAccess() {
+function __evaluateViolation() {
 		__sysout("\n\n\n\n\n");
 		__sysout("##################################################");
-		__sysout("# EVALUATION of ACCESS                           #");
+		__sysout("# EVALUATION of VIOLATIONS                       #");
 		__sysout("##################################################");
-		__accessLogger.print();
+		__violationLogger.print();
 		__sysout("##################################################");
 }

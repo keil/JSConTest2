@@ -20,9 +20,16 @@ load("parser.js");
  * @param contract Access Permission Contract to apply
  * @param value Target value
  */
-function __permit(contract, value) {
-		//parser = new __ContractParser();
-		//contract = parser.parse(contract);
+function __permit(string, base, name) {
+		parser = new __ContractParser();
+		contract = parser.parse(string);
+
+		obj = base[name];
+		base[name] = __createMembrane(obj, name, contract);
+
+// TODO, 
+// diffenretn access method ?
+		//
 		// TODO: wrap value
 		// apply contract and wrap value
 }

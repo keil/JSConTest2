@@ -9,7 +9,8 @@
 
 // load trace path
 load("path.js");
-
+// load violation
+load("violation.js")
 
 
 //////////////////////////////////////////////////
@@ -21,7 +22,7 @@ load("path.js");
  * @param path Path of the wrapped value
  * @return AccessHandler
  */
-function __AccessHandler(target, path) {
+function __AccessHandler(target, path, contract) {
 		return {
 				/** function to handle read access
 				 * @param receiver Receiver of the property access
@@ -32,55 +33,106 @@ function __AccessHandler(target, path) {
 						// create a new path
 						tracePath =  new __TracePath(path, name);
 						// register at loggin engine
-						__accessLogger.set(__Type.READ, tracePath);
+						__accessLogger.set(__AccessType.READ, tracePath);
 
+						// TODO: evtl. give function to contract
+						stat = contract.readable(name);
+						if(stat.readable) {
+								value =  target[name];
+						} else {
+								switch(__config_ViolationMode) {
+										case __ViolationMode.OBSERVER:
+												// TODO add violation to the oberserver!
+												__violationLogger.set(__ViolationType.READ, tracePath);
+												value =  target[name];
+												break;
+										case __ViolationMode.PROTECTOR:
+												// TODO add violation to the oberserver!
+												__violationLogger.set(__ViolationType.READ, tracePath);
+												value = undefined;
+										default:
+												value = undefined;
+								}
+
+						}
+			
+
+				return __createMembrane(value, tracePath, stat.contracts);
+
+
+
+					 //				stat = contracts.readable(name);
+					 //				if(stat.valid) {
+					 //					cts = stat.cts;
+					 //				}
+
+					 //				if(contracts.readable(name))
+
+
+					 // property access
+					 //value =  target[name];
+					 //return __createMembrane(value, tracePath);
+
+					 /* TODO
+					  * * check if it is already wrapped, than extend handler, otherwise create new one
+					  *
+					  */
+		},
+			   /** function to handle write access
+				* @param receiver Receiver of the property assignment
+				* @param name Name of the property assignment
+				* @param value Value to assign
+				*/
+
+			   set: function(receiver, name, value) {
+					   // create a new path
+					   tracePath =  new __TracePath(path, name);
+					   // register at loggin engine
+					   __accessLogger.set(__AccessType.WRITE, tracePath);
 
 						
-
-		//				stat = contracts.readable(name);
-		//				if(stat.valid) {
-		//					cts = stat.cts;
-		//				}
-
-		//				if(contracts.readable(name))
-
-
-								// property access
-								value =  target[name];
-						return __createMembrane(value, tracePath);
-
-						/* TODO
-						 * * check if it is already wrapped, than extend handler, otherwise create new one
-						 *
-						 */
-				},
-						/** function to handle write access
-						 * @param receiver Receiver of the property assignment
-						 * @param name Name of the property assignment
-						 * @param value Value to assign
-						 */
-
-						set: function(receiver, name, value) {
-								// create a new path
-								tracePath =  new __TracePath(path, name);
-								// register at loggin engine
-								__accessLogger.set(__Type.WRITE, tracePath);
-
-								// TODO: wrap object before write operation /
-
-/*								if(contract.isWriteable(name)) {
-										// TODO: write Object
-								} else {
-										// TODO: If ViolationMode = Observer ? log violation, write value
-										// TODO: If ViolationMode = Protector ? log violation
-								}
-*/
-
-								// property assignment
+					   if(contract.writeable(name)) {
 								target[name] = value;
-								return true;
+					   } else {
+								switch(__config_ViolationMode) {
+										case __ViolationMode.OBSERVER:
+												// TODO add violation to the oberserver!
+												__violationLogger.set(__ViolationType.WRITE, tracePath);
+												target[name] = value;
+												return true;
+												break;
+										case __ViolationMode.PROTECTOR:
+												__violationLogger.set(__ViolationType.WRITE, tracePath);
+												// TODO add violation to the oberserver!
+												return false;
+										default:
+												return false;
+								}
+
 						}
-		}
+			
+
+
+
+
+
+
+
+					   // TODO: wrap object before write operation /
+
+					   /*								if(contract.isWriteable(name)) {
+					   // TODO: write Object
+					   } else {
+					   // TODO: If ViolationMode = Observer ? log violation, write value
+					   // TODO: If ViolationMode = Protector ? log violation
+					   }
+					   */
+
+					   // property assignment
+					   //target[name] = value;
+					   //return true;
+			   }
+}
 };
 
 
@@ -93,7 +145,7 @@ function __AccessHandler(target, path) {
  * @param init Value to wrap
  * @param name Variable name (needed to trace the path)
  */
-function __createMembrane(init, name) {
+function __createMembrane(init, name, contract) {
 		// create trace path
 		initPath = new __TracePath(null, name);
 
@@ -117,7 +169,7 @@ function __createMembrane(init, name) {
 				}
 
 				// AccessHandler for <target>
-				var accessHandler = __AccessHandler(target, initPath);
+				var accessHandler = __AccessHandler(target, initPath, contract);
 
 				// If function, create function proxy
 				if (typeof target === "function") {

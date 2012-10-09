@@ -28,7 +28,7 @@ o[2] = {c: 7};
 
 
 // apply proxy
-__applyProxy(this, "o");
+__permit("b.bb", this, "o");
 
 __sysout("1 ##################################################");
 var obbb = o.b.bb;
@@ -42,4 +42,5 @@ var z = y.bb;
 
 
 // CALL EVALUATE
-__evaluate();
+__evaluateAccess();
+__evaluateViolation();
