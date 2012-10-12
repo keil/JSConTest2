@@ -104,3 +104,14 @@ function __evaluateViolation() {
 		__violationLogger.print();
 		__sysout("##################################################");
 }
+
+function __clearViolation() {
+__violationLogger = new __ViolationLogger();
+}
+
+function __dumpViolation() {
+		__sysout("##################################################");
+		__sysout("# EVALUATION of VIOLATIONS                       #");
+		__violationLogger.print();
+		__clearViolation()
+}

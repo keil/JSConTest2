@@ -151,3 +151,15 @@ function __evaluateAccess() {
 		__accessLogger.print();
 		__sysout("##################################################");
 }
+
+function __clearAccess() {
+__accessLogger = new __AccessLogger();
+}
+
+function __dumpAccess() {
+		__sysout("##################################################");
+		__sysout("# EVALUATION of ACCESS                           #");
+		__accessLogger.print();
+		__clearAccess();
+}
+
