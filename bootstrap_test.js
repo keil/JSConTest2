@@ -39,4 +39,5 @@ load("parser.js");
 //load("__test_contract_read.js");
 //load("__test_contract_write.js");
 //load("__test_set_read.js");
-load("__test_set_write.js");
+//load("__test_set_write.js");
+load("__test_permit.js");
