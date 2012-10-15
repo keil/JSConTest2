@@ -27,8 +27,8 @@ function __permit(string, base, name) {
 		obj = base[name];
 		base[name] = __createMembrane(obj, name, contract);
 
-// TODO, 
-// diffenretn access method ?
+		// TODO, 
+		// diffenretn access method ?
 		//
 		// TODO: wrap value
 		// apply contract and wrap value
@@ -52,7 +52,21 @@ var __CType = {
 		QMark: "?",
 		RegEx: "RegEx",
 		RegExQMark: "RegEx?",
-		RegExStar: "RegEx*"
+		RegExStar: "RegEx*",
+
+		isNullable: function(type) {
+				switch (type) {
+						case __CType.AT:
+						case __CType.QMark:
+						case __CType.RegEx:
+								return false;
+						case __CType.RegExQMark:
+						case __CType.RegExStar:
+								return true;
+						default:
+								return false;
+				}
+		}
 } 
 
 /** Contract Literal
@@ -89,10 +103,10 @@ function __ContractLiteral(type, value) {
 				 */
 				toString: function() {	
 						if(type==__CType.RegExQMark) {
-							return value!=null ? value + "?" : "";
+								return value!=null ? value + "?" : "";
 						} else if(type==__CType.RegExStar) {
-							return value!=null ? value + "*" : "";
-						} else return value!=null ? value + "?" : "";
+								return value!=null ? value + "*" : "";
+						} else return value!=null ? value : "";
 				},
 
 				/** Match
@@ -184,6 +198,8 @@ function __Contract(literal, contract) {
 				 * @return true iff the contract allows writing, false otherwise
 				 */
 				writeable: function(name) {
+						// TODO Bug, da ich a?.a?.a? haben könnte
+
 						if(contract==null) {
 								// writeable(c.{}, name)
 								switch (literal.getType()) {
@@ -205,9 +221,17 @@ function __Contract(literal, contract) {
 												return false;
 
 								}
-						} else if(contract.getContract()==null) {
+						} else if(__CType.isNullable(literal.getType())) {
+								return contract.writeable(name);
+						} else {
+								return false;
+						}
+							   
+							
+/*							
+								if(contract.getContract()==null) {
 								// writeable(c.c'.{}, name)
-								switch (contract.getLiteral().getType()) {
+								switch (literal.getType()) {
 										case __CType.AT:
 										case __CType.QMark:
 										case __CType.RegEx:
@@ -219,7 +243,7 @@ function __Contract(literal, contract) {
 										case __CType.RegExStar:
 												// writeable(c.RegEx?.{}, name) ::= true, c.match(name)
 												// writeable(c.RegEx*.{}, name) ::= true, c.match(name)
-												return literal.match(name);
+												return contract.writeable(name);
 										default:
 												// writeable(c.c'.{}, name) ::= false
 												return false;
@@ -229,6 +253,7 @@ function __Contract(literal, contract) {
 								// writeable(c.C', name) ::= false
 								return false;
 						}
+*/
 				},
 
 				/** Dump contract
