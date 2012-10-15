@@ -72,7 +72,7 @@ function __TracePath(prefix, variable) {
 */
 var __AccessType = {
 		READ : {value: 0, name: "READ", toString: function() { return this.name;} }, 
-		WRITE: {value: 1, name: "WRIRE", toString: function() { return this.name;} }
+		WRITE: {value: 1, name: "WRITE", toString: function() { return this.name;} }
 };
 
 /** Access Logger 

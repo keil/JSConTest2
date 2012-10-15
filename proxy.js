@@ -35,6 +35,14 @@ function __AccessHandler(target, path, contract) {
 						// register at loggin engine
 						__accessLogger.set(__AccessType.READ, tracePath);
 
+/*
+contract.readable(name, function(){
+	value = traget[name];
+}, function(){
+	value = undefined;
+});
+ */
+
 						// TODO: evtl. give function to contract
 						stat = contract.readable(name);
 						if(stat.readable) {
