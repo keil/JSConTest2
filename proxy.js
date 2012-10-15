@@ -55,84 +55,54 @@ function __AccessHandler(target, path, contract) {
 								}
 
 						}
-			
 
-				return __createMembrane(value, tracePath, stat.contracts);
+						/* TODO
+						 * check if it is already wrapped, than extend handler, otherwise create new one
+						 */
+						return __createMembrane(value, tracePath, stat.contracts);
 
+				},
+						/** function to handle write access
+						 * @param receiver Receiver of the property assignment
+						 * @param name Name of the property assignment
+						 * @param value Value to assign
+						 */
 
+						set: function(receiver, name, value) {
+								// create a new path
+								tracePath =  new __TracePath(path, name);
+								// register at loggin engine
+								__accessLogger.set(__AccessType.WRITE, tracePath);
 
-					 //				stat = contracts.readable(name);
-					 //				if(stat.valid) {
-					 //					cts = stat.cts;
-					 //				}
+								// TODO: evtl. give function to contract
+								if(contract.writeable(name)) {
+										target[name] = value;
+								} else {
+										switch(__config_ViolationMode) {
+												case __ViolationMode.OBSERVER:
+														// TODO add violation to the oberserver!
+														__violationLogger.set(__ViolationType.WRITE, tracePath);
+														target[name] = value;
+														return true;
+														break;
+												case __ViolationMode.PROTECTOR:
+														__violationLogger.set(__ViolationType.WRITE, tracePath);
+														// TODO add violation to the oberserver!
+														return false;
+												default:
+														return false;
+										}
 
-					 //				if(contracts.readable(name))
-
-
-					 // property access
-					 //value =  target[name];
-					 //return __createMembrane(value, tracePath);
-
-					 /* TODO
-					  * * check if it is already wrapped, than extend handler, otherwise create new one
-					  *
-					  */
-		},
-			   /** function to handle write access
-				* @param receiver Receiver of the property assignment
-				* @param name Name of the property assignment
-				* @param value Value to assign
-				*/
-
-			   set: function(receiver, name, value) {
-					   // create a new path
-					   tracePath =  new __TracePath(path, name);
-					   // register at loggin engine
-					   __accessLogger.set(__AccessType.WRITE, tracePath);
-
-						
-					   if(contract.writeable(name)) {
-								target[name] = value;
-					   } else {
-								switch(__config_ViolationMode) {
-										case __ViolationMode.OBSERVER:
-												// TODO add violation to the oberserver!
-												__violationLogger.set(__ViolationType.WRITE, tracePath);
-												target[name] = value;
-												return true;
-												break;
-										case __ViolationMode.PROTECTOR:
-												__violationLogger.set(__ViolationType.WRITE, tracePath);
-												// TODO add violation to the oberserver!
-												return false;
-										default:
-												return false;
 								}
 
+								// TODO
+								// return true, for success, false in fail case
+								// what to to if PROTECTORE mode
+								// property assignment
+								//target[name] = value;
+								//return true;
 						}
-			
-
-
-
-
-
-
-
-					   // TODO: wrap object before write operation /
-
-					   /*								if(contract.isWriteable(name)) {
-					   // TODO: write Object
-					   } else {
-					   // TODO: If ViolationMode = Observer ? log violation, write value
-					   // TODO: If ViolationMode = Protector ? log violation
-					   }
-					   */
-
-					   // property assignment
-					   //target[name] = value;
-					   //return true;
-			   }
-}
+		}
 };
 
 
@@ -209,10 +179,11 @@ function __createMembrane(init, name, contract) {
  * can be used to wrap an value
  * @param base Current environment <this>
  * @param name Variable name
+ * @param contract Access Permission Contract
  */
-function __applyProxy(base, name) {
+function __applyProxy(contract, base, name) {
 		obj = base[name];
-		base[name] = __createMembrane(obj, name);
+		base[name] = __createMembrane(obj, name, contract);
 }
 
 

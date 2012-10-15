@@ -25,14 +25,9 @@ function __permit(string, base, name) {
 		parser = new __ContractParser();
 		contract = parser.parse(string);
 
+		// wrap value
 		obj = base[name];
 		base[name] = __createMembrane(obj, name, contract);
-
-		// TODO, 
-		// diffenretn access method ?
-		//
-		// TODO: wrap value
-		// apply contract and wrap value
 }
 
 /**  Permit Contract
@@ -43,6 +38,8 @@ function __applay(string, base) {
 		i = string.indexOf(".");
 		obj = string.substr(0,i);
 		contract = string.substring(i+1);
+
+		// permit contract
 		__permit(contract, base, obj);
 }
 
