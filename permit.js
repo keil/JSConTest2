@@ -16,9 +16,10 @@ load("parser.js");
 // PERMIT CONTRACT
 ////////////////////////////////////////////////////
 
-/** Standard Access Handler
- * @param contract Access Permission Contract to apply
- * @param value Target value
+/** Permit Contract
+ * @param string Access Permission Contract to apply
+ * @param base Current object
+ * @param name Property name
  */
 function __permit(string, base, name) {
 		parser = new __ContractParser();
@@ -34,8 +35,19 @@ function __permit(string, base, name) {
 		// apply contract and wrap value
 }
 
+/**  Permit Contract
+ * @param string Access Permission Contract with leading property
+ * @param base Current object
+ */
+function __applay(string, base) {
+		i = string.indexOf(".");
+		obj = string.substr(0,i);
+		contract = string.substring(i+1);
+		__permit(contract, base, obj);
+}
 
-// TODO
+
+
 //////////////////////////////////////////////////
 // Contract
 // data structure for contracts
@@ -198,8 +210,6 @@ function __Contract(literal, contract) {
 				 * @return true iff the contract allows writing, false otherwise
 				 */
 				writeable: function(name) {
-						// TODO Bug, da ich a?.a?.a? haben könnte
-
 						if(contract==null) {
 								// writeable(c.{}, name)
 								switch (literal.getType()) {
@@ -226,41 +236,12 @@ function __Contract(literal, contract) {
 						} else {
 								return false;
 						}
-							   
-							
-/*							
-								if(contract.getContract()==null) {
-								// writeable(c.c'.{}, name)
-								switch (literal.getType()) {
-										case __CType.AT:
-										case __CType.QMark:
-										case __CType.RegEx:
-												// writeable(c.@.{}, name) ::= false
-												// writeable(c.?.{}, name) ::= false
-												// writeable(c.RegEx.{}, name) ::= false
-												return false;
-										case __CType.RegExQMark:
-										case __CType.RegExStar:
-												// writeable(c.RegEx?.{}, name) ::= true, c.match(name)
-												// writeable(c.RegEx*.{}, name) ::= true, c.match(name)
-												return contract.writeable(name);
-										default:
-												// writeable(c.c'.{}, name) ::= false
-												return false;
-
-								}
-						} else {
-								// writeable(c.C', name) ::= false
-								return false;
-						}
-*/
 				},
 
 				/** Dump contract
 				 * @return value:[type]; ...
 				 */
 				dump: function() {
-						// TODO
 						return contract!=null ? literal.dump() + "; " + contract.dump() : literal.dump();
 				},
 
@@ -268,7 +249,6 @@ function __Contract(literal, contract) {
 				 * @return literal.contract
 				 */
 				toString: function() {
-						// TODO
 						return  contract!=null ? literal.toString() + "." + contract.toString() : literal.toString();
 				},
 
@@ -304,7 +284,6 @@ function __ContractSet(arg0, arg1) {
 				 * @return true iff the ONE contract allows writing, false otherwise
 				 */
 				writeable: function(name) {
-						// TODO: test
 						var result0 = arg0!=null ? arg0.writeable(name) : false;
 						var result1 = arg1!=null ? arg1.writeable(name) : false;
 						return result0||result1
@@ -314,7 +293,7 @@ function __ContractSet(arg0, arg1) {
 				 * @return value:[type]; ...
 				 */
 				dump: function() {
-						// TODO: Ausgabe ist unschön
+						// TODO: output
 						return (arg0!=null ? (arg1!=null ? arg0.dump() + "; " + arg1.dump() : arg0.dump()) : (arg1!=null ? arg1.dump() : ""));
 				},
 
@@ -322,7 +301,7 @@ function __ContractSet(arg0, arg1) {
 				 * @return 
 				 */
 				toString: function() {
-						// TODO: Ausgabe ist unschön
+						// TODO: output
 						return (arg0!=null ? (arg1!=null ? arg0.toString() + "; " + arg1.toString() : arg0.toString()) : (arg1!=null ? arg1.toString() : ""));
 				}
 		}
