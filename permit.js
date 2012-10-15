@@ -87,8 +87,12 @@ function __ContractLiteral(type, value) {
 				/** To string
 				 * @return value
 				 */
-				toString: function() {
-						return value!=null? value: "";
+				toString: function() {	
+						if(type==__CType.RegExQMark) {
+							return value!=null ? value + "?" : "";
+						} else if(type==__CType.RegExStar) {
+							return value!=null ? value + "*" : "";
+						} else return value!=null ? value + "?" : "";
 				},
 
 				/** Match
@@ -231,6 +235,7 @@ function __Contract(literal, contract) {
 				 * @return value:[type]; ...
 				 */
 				dump: function() {
+						// TODO
 						return contract!=null ? literal.dump() + "; " + contract.dump() : literal.dump();
 				},
 
@@ -238,6 +243,7 @@ function __Contract(literal, contract) {
 				 * @return literal.contract
 				 */
 				toString: function() {
+						// TODO
 						return  contract!=null ? literal.toString() + "." + contract.toString() : literal.toString();
 				},
 

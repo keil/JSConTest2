@@ -7,23 +7,13 @@
 // Version: 0.20.0
 //////////////////////////////////////////////////
 
-// todo:
-// test e[e]
-// array forach
-// while
-// which
-// ...
-// create objects 
-// write nre properties
-// assign objects
-// return objects in function
-
-
 //////////////////////////////////////////////////
 //
 
 __config_ViolationMode = __ViolationMode.OBSERVER;
 //__config_ViolationMode = __ViolationMode.PROTECTOR;
+
+
 
 //////////////////////////////////////////////////
 // OBJECTS
@@ -52,13 +42,15 @@ function test(contract, exp) {
 	__dumpViolation();
 }
 
+
+
 //////////////////////////////////////////////////
-// OBJECTS
+// TESTS
+
 
 
 __sysout("## READ ##################################################");
 __sysout("##");
-
 
 // Single Read Test - @
 test("@", "obj.a");
@@ -165,15 +157,8 @@ test("(c|b)*.a", "obj.a.a");
 
 
 
-
-
-
-
-
-
 __sysout("## WRITE ##################################################");
 __sysout("##");
-
 
 // Single Write Test - @
 test("@", "obj.a = 4711");
@@ -250,6 +235,7 @@ test("(c|b).a", "obj.a.a = 4711");
 
 // Multiple Write Test - x?
 test("a.a?.a", "obj.a.a.a = 4711");
+test("a.a?.a", "obj.a.a = 4711");
 test("a?.b.a.b", "obj.b.a.b = 4711");
 test("bb.bb?", "obj.bb.bb = 4711");
 test("bb?", "obj.bb = 4711");
@@ -258,12 +244,14 @@ test("bb?", "obj.bb = 4711");
 test("a.a.(a|b)?", "obj.a.a.a = 4711");
 test("a.a.(a|b)?", "obj.a.a.b = 4711");
 test("a.a.(a|b)?", "obj.a.a.c = 4711");
+test("a.(a|b)?.a", "obj.a.a.a = 4711");
 test("(a|b)?.a", "obj.a.a = 4711");
 test("(a|b)?.b.a", "obj.b.a = 4711");
 test("(c|b)?.a", "obj.a.a = 4711");
 
 // Multiple Write Test - x*
 test("a.a*.a", "obj.a.a.a = 4711");
+test("a.a*.a", "obj.a.a = 4711");
 test("a*.b.a.b", "obj.b.a.b = 4711");
 test("bb.bb*", "obj.bb.bb = 4711");
 test("bb*", "obj.bb = 4711");
@@ -272,112 +260,7 @@ test("bb*", "obj.bb = 4711");
 test("a.a.(a|b)*", "obj.a.a.a = 4711");
 test("a.a.(a|b)*", "obj.a.a.b = 4711");
 test("a.a.(a|b)*", "obj.a.a.c = 4711");
+test("a.(a|b)*.a", "obj.a.a.a = 4711");
 test("(a|b)*.a", "obj.a.a = 4711");
 test("(a|b)*.b.a", "obj.b.a = 4711");
 test("(c|b)*.a", "obj.a.a = 4711");
-
-
-
-
-
-
-
-__sysout("## SPECIAL ##################################################");
-__sysout("##");
-
-
-test("f", "obj.f()");
-test("a", "obj.f()");
-test("g", "obj.g()");
-test("g.a", "obj.g()");
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-test("?", "obj.a");
-test("a", "obj.a");
-test("b", "obj.a");
-test("(a|b)", "obj.a");
-test("(a|c)", "obj.a");
-test("(b|c)", "obj.a");
-test("(a|c)", "obj.f()");
-test("(b|c)", "obj.g()");
-
-test("a.@", "obj.a.a");
-test("a.?", "obj.a.a");
-test("a.a", "obj.a.a");
-test("a.b", "obj.a.a");
-test("a.(a|b)", "obj.a.a");
-test("a.(a|c)", "obj.a.a");
-test("a.(b|c)", "obj.a.a");
-
-test("@.a", "obj.a.a");
-test("?.a", "obj.a.a");
-test("a.a", "obj.a.a");
-test("b.a", "obj.a.a");
-test("(a|b).a", "obj.a.a");
-test("(a|c).a", "obj.a.a");
-test("(b|c).a", "obj.a.a");
-
-test("a.a.@", "obj.a.a.a");
-test("a*", "obj.a.a.a");
-test("a.b*", "obj.a.a.a");
-test("a?.a.b", "obj.a.a.a");
-test("a.a.a", "obj.a.a.a");
-test("bb.?", "obj.bb.bb");
-test("(a|b).a", "obj.a.a");
-test("(a|c)", "obj.a");
-test("(b|c)", "obj.a");
-
-
-
-
-
-__sysout("## WRITE ##################################################");
-__sysout("##");
-
-// Single Write Test
-test("@", "obj.a = 4");
-test("?", "obj.a = 4");
-test("a", "obj.a = 4");
-test("b", "obj.a = 4");
-test("(a|b)", "obj.a = 4");
-test("(a|c)", "obj.a = 4");
-test("(b|c)", "obj.a = 4");
-test("(b|c)", "obj.h()");
-test("zzz", "obj.h()");
-
-
-
-
-
-
-
-
-// CALL EVALUATE
-//__evaluateAccess();
-//__evaluateViolation();
-
-
-
-
-

@@ -65,15 +65,15 @@ function __ContractParser() {
 								} else if(RegEx_Var.test(v)) {
 										var literal = new __ContractLiteral(__CType.RegEx,v);
 								} else if(RegEx_VarQMark.test(v)) {
-										var literal = new __ContractLiteral(__CType.RegExQMark,v);
+										var literal = new __ContractLiteral(__CType.RegExQMark, v.substr(0, v.length-1));
 								} else if(RegEx_VarStar.test(v)) {
-										var literal = new __ContractLiteral(__CType.RegExStar,v);
+										var literal = new __ContractLiteral(__CType.RegExStar,v.substr(0, v.length-1));
 								} else if(RegEx_Set.test(v)) {
 										var literal = new __ContractLiteral(__CType.RegEx,v);
 								} else if(RegEx_SetQMark.test(v)) {
-										var literal = new __ContractLiteral(__CType.RegExQMark,v);
+										var literal = new __ContractLiteral(__CType.RegExQMark,v.substr(0, v.length-1));
 								} else if(RegEx_SetStar.test(v)) {
-										var literal = new __ContractLiteral(__CType.RegExStar,v);
+										var literal = new __ContractLiteral(__CType.RegExStar,v.substr(0, v.length-1));
 								}
 								contract = new __Contract(literal, contract);
 						});

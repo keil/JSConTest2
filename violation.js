@@ -25,7 +25,7 @@ load("__lib_jspadding.js");
 */
 var __ViolationType = {
 		READ : {value: 0, name: "READ VIOLATION", toString: function() { return this.name;} }, 
-		WRITE: {value: 1, name: "WRIRE VIOLATION", toString: function() { return this.name;} }
+		WRITE: {value: 1, name: "WRITE VIOLATION", toString: function() { return this.name;} }
 };
 
 /** Violation Logger 
