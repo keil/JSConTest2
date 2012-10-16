@@ -7,49 +7,87 @@
 // Version: 0.20.0
 //////////////////////////////////////////////////
 
-var p = {
-		a: 6,
-		b: {bb: 8},
-		f: function(x) { return x },
-		g: function(x) { return x.a },
-		h: function(x) { this.q = x }
-};
+//////////////////////////////////////////////////
+//
 
-var o = {
-		a: 6,
-		b: {bb: 8},
-		f: function(x) { return x },
-		g: function(x) { return x.a },
-		h: function(x) { this.q = x }
-};
-
-o[2] = {c: 7};
+__config_ViolationMode = __ViolationMode.OBSERVER;
+//__config_ViolationMode = __ViolationMode.PROTECTOR;
 
 
 
-// apply proxy
-__permit("b.bb", this, "o");
+//////////////////////////////////////////////////
+// OBJECTS
 
-__sysout("1 ##################################################");
-var obbb = o.b.bb;
-var obbb = o.b.bb;
-__sysout("2 ##################################################");
-var oa = o.a;
-__sysout("3 ##################################################");
-var x = o;
-var y = x.b;
-var z = x.f;
-__sysout("4 ##################################################");
-o.b.bb = 7;
-__sysout("5 ##################################################");
-o.a = 7;
-__sysout("6 ##################################################");
-var x = o;
-x.b = 5;
-x.f = 3;
+function createObject() {
+		return {
+				a: {a: {a: {a: {a: {a: 4711}}}}},
+						b: {a: {b: {a: {b: {c: 4711}}}}},
+						bb: {bb: 8},
+						c: 4711,
+						x: {x: 4711},
+						y: {y: {y: {y: {y: 4711}}}},
+						zzz: 4711,
+						f: function() { return this.a },
+						g: function() { return {a: 4711} },
+						gg: function() { return this },
+						h: function() { this.zzz = 4711 }
+		};
+}
+
+function test(contract, exp) {
+		__sysout("\n\n\n");
+		obj = createObject();
+		__permit(contract, this, "obj");
+		__sysout("[" +contract+ "]: " + exp + " # " + __dump(eval(exp)));
+		__dumpAccess();
+		__dumpViolation();
+}
 
 
 
-// CALL EVALUATE
-__evaluateAccess();
-__evaluateViolation();
+//////////////////////////////////////////////////
+// TESTS
+
+// f() - this.a
+test("f", "obj.f()");
+
+// f() - this.a
+test("a", "obj.f()");
+
+// g() - {a: 4711}
+test("g", "obj.g()");
+
+// g() - {a: 4711}
+test("g", "obj.g().a");
+
+// g() - {a: 4711}
+test("g.a", "obj.g().a");
+
+// h() - this.zzz = 4711
+test("h", "obj.h()");
+
+// h() - this.zzz = 4711
+test("(h|zzz)", "obj.h()");
+
+// gg() - this
+test("gg", "obj.gg()");
+
+// gg() - this
+test("gg.a", "obj.gg().a");
+
+// gg() - this
+test("gg.c", "obj.gg().a");
+
+// gg() - this
+test("(gg|a)", "obj.gg().a");
+
+// gg() - this
+test("gg.c", "obj.gg().c = 4711");
+
+// gg() - this
+test("gg.a", "obj.gg().c = 4711");
+
+// gg() - this
+test("(gg|c)", "obj.gg().c = 4711");
+
+

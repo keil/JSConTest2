@@ -363,25 +363,3 @@ array.foreach(function(k,v) {
 });
 __dumpAccess();
 __dumpViolation();
-
-
-// WITH
-__sysout("\n\n\n");
-obj = createObject();
-__permit("a*", this, "obj");
-with(obj) {
-		__sysout(this.a);
-		__sysout(__dump(b));
-		__sysout(__dump(c));
-		__sysout(__dump(a=4711));
-		__sysout(__dump(c=4711));
-		__sysout(__dump(b=4711));
-		f();
-		g();
-		gg();
-		gg().a;
-		h();
-}
-__dumpAccess();
-__dumpViolation();
-

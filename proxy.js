@@ -24,76 +24,145 @@ load("violation.js")
  */
 function __AccessHandler(target, path, contract) {
 
-/*
-{
-  getOwnPropertyDescriptor: function(name) -> PropertyDescriptor | undefined // Object.getOwnPropertyDescriptor(proxy, name)
-  getPropertyDescriptor:    function(name) -> PropertyDescriptor | undefined // Object.getPropertyDescriptor(proxy, name)   (not in ES5)
-  getOwnPropertyNames:      function() -> [ string ]                         // Object.getOwnPropertyNames(proxy) 
-  getPropertyNames:         function() -> [ string ]                         // Object.getPropertyNames(proxy)              (not in ES5)
-  defineProperty:           function(name, propertyDescriptor) -> any        // Object.defineProperty(proxy,name,pd)
-  delete:                   function(name) -> boolean                        // delete proxy.name
-  fix:                      function() -> { string: PropertyDescriptor }     // Object.{freeze|seal|preventExtensions}(proxy)
-                                          | undefined
-}
-{
-  has:       function(name) -> boolean                  // name in proxy
-  hasOwn:    function(name) -> boolean                  // ({}).hasOwnProperty.call(proxy, name)
-  get:       function(receiver, name) -> any            // receiver.name
-  set:       function(receiver, name, val) -> boolean   // receiver.name = val
-  enumerate: function() -> [string]                     // for (name in proxy) (return array of enumerable own and inherited properties)
-  keys:      function() -> [string]                     // Object.keys(proxy)  (return array of enumerable own properties only)
-}
-*/
+		/*
+		   {
+		   getOwnPropertyDescriptor: function(name) -> PropertyDescriptor | undefined // Object.getOwnPropertyDescriptor(proxy, name)
+		   getPropertyDescriptor:    function(name) -> PropertyDescriptor | undefined // Object.getPropertyDescriptor(proxy, name)   (not in ES5)
+		   getOwnPropertyNames:      function() -> [ string ]                         // Object.getOwnPropertyNames(proxy) 
+		   getPropertyNames:         function() -> [ string ]                         // Object.getPropertyNames(proxy)              (not in ES5)
+		   defineProperty:           function(name, propertyDescriptor) -> any        // Object.defineProperty(proxy,name,pd)
+		   delete:                   function(name) -> boolean                        // delete proxy.name
+		   fix:                      function() -> { string: PropertyDescriptor }     // Object.{freeze|seal|preventExtensions}(proxy)
+		   | undefined
+		   }
+		   {
+		   has:       function(name) -> boolean                  // name in proxy
+		   hasOwn:    function(name) -> boolean                  // ({}).hasOwnProperty.call(proxy, name)
+		   get:       function(receiver, name) -> any            // receiver.name
+		   set:       function(receiver, name, val) -> boolean   // receiver.name = val
+		   enumerate: function() -> [string]                     // for (name in proxy) (return array of enumerable own and inherited properties)
+		   keys:      function() -> [string]                     // Object.keys(proxy)  (return array of enumerable own properties only)
+		   }
+		   */
 
 		return {
+				/* FUNDAMENTAL TRAPS
+				*/
+
+				/** function to get property descriptor
+				 * @param name Property name
+				 * @return Descriptor or undefined
+				 */
+				getOwnPropertyDescriptor: function(name) {
+						// create a new path
+						tracePath =  new __TracePath(path, name);
+						// register at loggin engine
+						__accessLogger.set(__AccessType.READ, tracePath);
+
+						stat = contract.readable(name);
+						if(stat.readable) {
+								var desc = Object.getOwnPropertyDescriptor(target, name);
+								if (desc !== undefined) desc.value = __createMembrane(desc, tracePath, stat.contracts);
+								return desc;
+						} else if(__config_ViolationMode == __ViolationMode.OBSERVER) {
+								__violationLogger.set(__ViolationType.READ, tracePath);
+							var desc = Object.getOwnPropertyDescriptor(target, name);
+								if (desc !== undefined) desc.value = __createMembrane(desc, tracePath, stat.contracts);
+								return desc;
+						} else {
+							__violationLogger.set(__ViolationType.READ, tracePath);
+							return undefined;
+						}
+				},
+				/** function to get property descriptor
+				 * @param name Property name
+				 * @return Descriptor or undefined
+				 */
+				getPropertyDescriptor: function(name) {
+						var desc = Object.getOwnPropertyDescriptor(obj, name);
+     					// TODO why
+						// a trapping proxy's properties must always be configurable
+     					if (desc !== undefined) { desc.configurable = true; }
+     					return desc;
 
 
-/*
-getOwnPropertyDescriptor: function(name) {
-		__sysout("@@@ " + name);
-      var desc = Object.getOwnPropertyDescriptor(target, name);
-      if (desc !== undefined) desc.configurable = true;
-      return desc;
-    },
-    getPropertyDescriptor: function(name) {
-      var desc = Object.getOwnPropertyDescriptor(target, name);
-      //var desc = Object.getPropertyDescriptor(obj, name);  // not in ES5
-      if (desc !== undefined) desc.configurable = true;
-      return desc;
-    },
-    getOwnPropertyNames: function() {
-      return Object.getOwnPropertyNames(target);
-    },
-    getPropertyNames: function() {
-      return Object.getOwnPropertyNames(target);
-      //return Object.getPropertyNames(obj);  // not in ES5
-    },
-    defineProperty: function(name, desc) {
-      Object.defineProperty(target, name, desc);
-    },
-    delete: function(name) {
-      return delete obj[name];
-    },
-    fix: function() {
-      if (Object.isFrozen(obj)) {
-        var result = {};
-        Object.getOwnPropertyNames(obj).forEach(function(name) {
-          result[name] = Object.getOwnPropertyDescriptor(obj, name);
-        });
-        return result;
-      }
-      // As long as obj is not frozen, the proxy won't allow itself to be fixed
-      return undefined; // will cause a TypeError to be thrown
-    },
-   
-*/
+						var desc = Object.getOwnPropertyDescriptor(target, name);
+						//var desc = Object.getPropertyDescriptor(obj, name); // not in ES5
+						if (desc !== undefined) desc.value = this.get(null, name);
+						return desc;
+				},
+				/** function to get property names
+				 * @return Array
+				 */
+				getOwnPropertyNames: function() {
+						return Object.getOwnPropertyNames(target);
+				},
+				/** function to get property names
+				 * @return Array
+				 */
+				getPropertyNames: function() {
+						return Object.getOwnPropertyNames(target);
+						//return Object.getPropertyNames(obj); // not in ES5
+				},
+				/** function to define properties
+				 * @param name Property name
+				 * @param value Property value
+				 */
+				defineProperty: function(name, value) {
+						// create a new path
+						tracePath =  new __TracePath(path, name);
+						// register at loggin engine
+						__accessLogger.set(__AccessType.WRITE, tracePath);
 
+						if(contract.writeable(name)) {
+								Object.defineProperty(target, name, value);
+						} else if(__config_ViolationMod == __ViolationMode.OBSERVER) {
+								__violationLogger.set(__ViolationType.WRITE, tracePath);
+								Object.defineProperty(target, name, value);
+						} else {
+								__violationLogger.set(__ViolationType.WRITE, tracePath);
+						}
+				},
+				/** function to delete properties
+				 * @return true if deleted, otheriwse false
+				 */
+				delete: function(name) {
+						// create a new path
+						tracePath =  new __TracePath(path, name);
+						// register at loggin engine
+						__accessLogger.set(__AccessType.WRITE, tracePath);
 
+						if(contract.writeable(name)) {
+								return delete target[name];
+						} else if(__config_ViolationMod == __ViolationMode.OBSERVER) {
+								__violationLogger.set(__ViolationType.WRITE, tracePath);
+								return delete target[name];
+						} else {
+								__violationLogger.set(__ViolationType.WRITE, tracePath);
+								return false;
+						}
+				},
+				/** function to handle read access
+				 * @return Wrapped object or undefined
+				 */
+				fix: function() {
+						if (Object.isFrozen(obj)) {
+								var result = {};
+								Object.getOwnPropertyNames(obj).forEach(function(name) {
+										result[name] = Object.getOwnPropertyDescriptor(obj, name);
+								});
+								return __createMembrane(result, tracePath, contract);
+						}
+						return undefined;
+				},
+
+				/* DERIVED TRAPS
+				*/
 
 				/** function to handle read access
 				 * @param receiver Receiver of the property access
 				 * @param name Name of the property access 
-				 * @return Wrapped opbject
+				 * @return Wrapped object or undefined
 				 */
 				get: function(receiver, name) {
 						// create a new path
@@ -101,32 +170,12 @@ getOwnPropertyDescriptor: function(name) {
 						// register at loggin engine
 						__accessLogger.set(__AccessType.READ, tracePath);
 
-/*
-contract.readable(name, function(){
-	value = traget[name];
-}, function(){
-	value = undefined;
-});
- */
-
-						// TODO: evtl. give function to contract
 						stat = contract.readable(name);
 						if(stat.readable) {
 								value =  target[name];
 						} else {
-								switch(__config_ViolationMode) {
-										case __ViolationMode.OBSERVER:
-												// TODO add violation to the oberserver!
-												__violationLogger.set(__ViolationType.READ, tracePath);
-												value =  target[name];
-												break;
-										case __ViolationMode.PROTECTOR:
-												// TODO add violation to the oberserver!
-												__violationLogger.set(__ViolationType.READ, tracePath);
-												value = undefined;
-										default:
-												value = undefined;
-								}
+								__violationLogger.set(__ViolationType.READ, tracePath);
+								value = __config_ViolationMode == __ViolationMode.OBSERVER ? target[name] : undefined;
 						}
 
 						/* TODO
@@ -135,46 +184,28 @@ contract.readable(name, function(){
 						return __createMembrane(value, tracePath, stat.contracts);
 
 				},
-						/** function to handle write access
-						 * @param receiver Receiver of the property assignment
-						 * @param name Name of the property assignment
-						 * @param value Value to assign
-						 */
+				/** function to handle write access
+				 * @param receiver Receiver of the property assignment
+				 * @param name Name of the property assignment
+				 * @param value Value to assign
+				 * @return value
+				 */
+				set: function(receiver, name, value) {
+						// create a new path
+						tracePath =  new __TracePath(path, name);
+						// register at loggin engine
+						__accessLogger.set(__AccessType.WRITE, tracePath);
 
-						set: function(receiver, name, value) {
-								// create a new path
-								tracePath =  new __TracePath(path, name);
-								// register at loggin engine
-								__accessLogger.set(__AccessType.WRITE, tracePath);
-
-								// TODO: evtl. give function to contract
-								if(contract.writeable(name)) {
-										target[name] = value;
-								} else {
-										switch(__config_ViolationMode) {
-												case __ViolationMode.OBSERVER:
-														// TODO add violation to the oberserver!
-														__violationLogger.set(__ViolationType.WRITE, tracePath);
-														target[name] = value;
-														return true;
-														break;
-												case __ViolationMode.PROTECTOR:
-														__violationLogger.set(__ViolationType.WRITE, tracePath);
-														// TODO add violation to the oberserver!
-														return false;
-												default:
-														return false;
-										}
-
-								}
-
-								// TODO
-								// return true, for success, false in fail case
-								// what to to if PROTECTORE mode
-								// property assignment
-								//target[name] = value;
-								//return true;
+						if(contract.writeable(name)) {
+								target[name] = value;
+						} else if(__config_ViolationMod == __ViolationMode.OBSERVER) {
+								__violationLogger.set(__ViolationType.WRITE, tracePath);
+								target[name] = value;
+						} else {
+								__violationLogger.set(__ViolationType.WRITE, tracePath);
 						}
+						return value;
+				}
 		}
 };
 
