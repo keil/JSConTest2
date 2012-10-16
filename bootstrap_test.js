@@ -41,5 +41,6 @@ load("parser.js");
 //load("__test_set_read.js");
 //load("__test_set_write.js");
 
-load("__test_permit.js");
-//load("__test_permit2.js");
+//load("__test_permit.js");
+load("__test_permit2.js");
+

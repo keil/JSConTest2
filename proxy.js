@@ -23,7 +23,73 @@ load("violation.js")
  * @return AccessHandler
  */
 function __AccessHandler(target, path, contract) {
+
+/*
+{
+  getOwnPropertyDescriptor: function(name) -> PropertyDescriptor | undefined // Object.getOwnPropertyDescriptor(proxy, name)
+  getPropertyDescriptor:    function(name) -> PropertyDescriptor | undefined // Object.getPropertyDescriptor(proxy, name)   (not in ES5)
+  getOwnPropertyNames:      function() -> [ string ]                         // Object.getOwnPropertyNames(proxy) 
+  getPropertyNames:         function() -> [ string ]                         // Object.getPropertyNames(proxy)              (not in ES5)
+  defineProperty:           function(name, propertyDescriptor) -> any        // Object.defineProperty(proxy,name,pd)
+  delete:                   function(name) -> boolean                        // delete proxy.name
+  fix:                      function() -> { string: PropertyDescriptor }     // Object.{freeze|seal|preventExtensions}(proxy)
+                                          | undefined
+}
+{
+  has:       function(name) -> boolean                  // name in proxy
+  hasOwn:    function(name) -> boolean                  // ({}).hasOwnProperty.call(proxy, name)
+  get:       function(receiver, name) -> any            // receiver.name
+  set:       function(receiver, name, val) -> boolean   // receiver.name = val
+  enumerate: function() -> [string]                     // for (name in proxy) (return array of enumerable own and inherited properties)
+  keys:      function() -> [string]                     // Object.keys(proxy)  (return array of enumerable own properties only)
+}
+*/
+
 		return {
+
+
+/*
+getOwnPropertyDescriptor: function(name) {
+		__sysout("@@@ " + name);
+      var desc = Object.getOwnPropertyDescriptor(target, name);
+      if (desc !== undefined) desc.configurable = true;
+      return desc;
+    },
+    getPropertyDescriptor: function(name) {
+      var desc = Object.getOwnPropertyDescriptor(target, name);
+      //var desc = Object.getPropertyDescriptor(obj, name);  // not in ES5
+      if (desc !== undefined) desc.configurable = true;
+      return desc;
+    },
+    getOwnPropertyNames: function() {
+      return Object.getOwnPropertyNames(target);
+    },
+    getPropertyNames: function() {
+      return Object.getOwnPropertyNames(target);
+      //return Object.getPropertyNames(obj);  // not in ES5
+    },
+    defineProperty: function(name, desc) {
+      Object.defineProperty(target, name, desc);
+    },
+    delete: function(name) {
+      return delete obj[name];
+    },
+    fix: function() {
+      if (Object.isFrozen(obj)) {
+        var result = {};
+        Object.getOwnPropertyNames(obj).forEach(function(name) {
+          result[name] = Object.getOwnPropertyDescriptor(obj, name);
+        });
+        return result;
+      }
+      // As long as obj is not frozen, the proxy won't allow itself to be fixed
+      return undefined; // will cause a TypeError to be thrown
+    },
+   
+*/
+
+
+
 				/** function to handle read access
 				 * @param receiver Receiver of the property access
 				 * @param name Name of the property access 
@@ -61,7 +127,6 @@ contract.readable(name, function(){
 										default:
 												value = undefined;
 								}
-
 						}
 
 						/* TODO

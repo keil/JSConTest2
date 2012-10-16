@@ -34,7 +34,7 @@ function __permit(string, base, name) {
  * @param string Access Permission Contract with leading property
  * @param base Current object
  */
-function __applay(string, base) {
+function __apply(string, base) {
 		i = string.indexOf(".");
 		obj = string.substr(0,i);
 		contract = string.substring(i+1);
