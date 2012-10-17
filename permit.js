@@ -44,6 +44,15 @@ function __apply(string, base) {
 }
 
 
+//test = __permitArgs("a.b", function(){});
+
+function __permitArgs()
+
+function make(val) {__sysout("@" + val);}
+function test(make(v)) {__sysout("@" + v);}
+
+
+
 
 //////////////////////////////////////////////////
 // Contract
