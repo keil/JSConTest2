@@ -266,7 +266,9 @@ function __createMembrane(init, name, contract) {
 				 * @param args Function arguments
 				 */
 				function wrapFunction(func, base, args) {
-						return wrap(func.apply(base, Array.prototype.map.call(args, wrap)));
+						// TODO, discuss wrap arguments
+						//return wrap(func.apply(base, args /*Array.prototype.map.call(args, wrap)*/));
+						return func.apply(base, args);
 				}
 
 				// AccessHandler for <target>
@@ -275,14 +277,15 @@ function __createMembrane(init, name, contract) {
 				// If function, create function proxy
 				if (typeof target === "function") {
 						function callTrap() {
-								var value = wrapFunction(target, wrap(this), arguments);
+								var value = wrapFunction(target, /*wrap(this)*/ this, arguments);
 								return value;
 						}
 						function constructTrap() {
 								function forward(args) {
 										return target.apply(this, args);
 								}
-								return wrap(new forward(Array.prototype.map.call(arguments, wrap)));
+								//return wrap(new forward(Array.prototype.map.call(arguments, wrap)));
+								return new forward(arguments);
 						}
 						return Proxy.createFunction(accessHandler, callTrap, constructTrap);
 				}

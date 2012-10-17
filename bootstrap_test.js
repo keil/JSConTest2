@@ -43,5 +43,5 @@ load("parser.js");
 
 //load("__test_permit.js");
 //load("__test_permit2.js");
-//load("__test_permit3.js");
-load("__test_permit4.js");
+load("__test_permit3.js");
+//load("__test_permit4.js");
