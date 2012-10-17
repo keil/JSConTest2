@@ -1,3 +1,12 @@
+//////////////////////////////////////////////////
+// JS Proxy API - TestCase
+// (c) University of Freiburg
+// http://proglang.informatik.uni-freiburg.de/
+// Author: Matthias Keil
+// http://www.informatik.uni-freiburg.de/~keilr/
+//////////////////////////////////////////////////
+
+
 
 __sysout("\n\n################################")
 var test = new __ContractLiteral(__CType.AT, "@");

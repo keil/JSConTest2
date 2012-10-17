@@ -4,7 +4,7 @@
 // http://proglang.informatik.uni-freiburg.de/
 // Author: Matthias Keil
 // http://www.informatik.uni-freiburg.de/~keilr/
-// Version: 0.21.0
+// Version: 0.22
 //////////////////////////////////////////////////
 
 // load configuration
@@ -43,4 +43,5 @@ load("parser.js");
 
 //load("__test_permit.js");
 //load("__test_permit2.js");
+//load("__test_permit3.js");
 load("__test_permit4.js");

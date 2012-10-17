@@ -1,3 +1,12 @@
+//////////////////////////////////////////////////
+// JS Proxy API - TestCase
+// (c) University of Freiburg
+// http://proglang.informatik.uni-freiburg.de/
+// Author: Matthias Keil
+// http://www.informatik.uni-freiburg.de/~keilr/
+//////////////////////////////////////////////////
+
+
 
 Array.prototype.foreach = function( callback ) {
   for( var k=0; k<this .length; k++ ) {
