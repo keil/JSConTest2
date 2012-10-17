@@ -13,6 +13,7 @@ load("path.js");
 load("violation.js")
 
 
+
 //////////////////////////////////////////////////
 // HANDLER
 //////////////////////////////////////////////////
@@ -23,7 +24,6 @@ load("violation.js")
  * @return AccessHandler
  */
 function __AccessHandler(target, path, contract) {
-
 		/*
 		   {
 		   getOwnPropertyDescriptor: function(name) -> PropertyDescriptor | undefined // Object.getOwnPropertyDescriptor(proxy, name)
@@ -44,7 +44,6 @@ function __AccessHandler(target, path, contract) {
 		   keys:      function() -> [string]                     // Object.keys(proxy)  (return array of enumerable own properties only)
 		   }
 		   */
-
 		return {
 				/* FUNDAMENTAL TRAPS
 				*/
@@ -124,7 +123,7 @@ function __AccessHandler(target, path, contract) {
 						}
 				},
 				/** function to delete properties
-				 * @return true if deleted, otheriwse false
+				 * @return true if deleted, otherwise false
 				 */
 				delete: function(name) {
 						// create a new path
@@ -206,19 +205,31 @@ function __AccessHandler(target, path, contract) {
 						}
 						return value;
 				},
-
-
+				/** function to check properties
+				 * @param name Property name
+				 * @param value true if property exists, false otherwise false
+				 */
 				has: function(name) {
 						return (name in target);
 				},
+				/** function to check properties
+				 * @param name Property name
+				 * @param value true if property exists, false otherwise false
+				 */
 				hasOwn: function(name) {
 						return ({}).hasOwnProperty.call(target, name); 
 				},
+				/** function for enumeration
+				 * @return array
+				 */
 				enumerate: function() {
 						var result = [];
 						for (var name in target) { result.push(name); };
 						return result;
 				},
+				/** function to get keys
+				 * @return array
+				 */
 				keys: function() {
 						return Object.keys(target);
 				}
@@ -279,15 +290,7 @@ function __createMembrane(init, name, contract) {
 				// If object, create object proxy
 				else {
 						var prototype = wrap(Object.getPrototypeOf(target));
-						return Proxy.create(accessHandler, prototype);
-
-						// TODO
-						// * add access handler as property to the proxy
-						// * security reasons ???
-						// var proxy = Proxy.create(accessHandler, prototype);
-						// proxy["accesshandler"] = accessHandler;
-						// return proxy;
-
+						return Proxy.create(accessHandler, prototype);	
 				}
 		}
 
@@ -297,13 +300,23 @@ function __createMembrane(init, name, contract) {
 
 /** Apply Proxy
  * can be used to wrap an value
+ * @param contract Access Permission Contract
  * @param base Current environment <this>
  * @param name Variable name
- * @param contract Access Permission Contract
  */
 function __applyProxy(contract, base, name) {
 		obj = base[name];
 		base[name] = __createMembrane(obj, name, contract);
+}
+
+/** Wrap
+ * can be used to wrap an value
+ * @param contract Access Permission Contract
+ * @param obj Object
+ * @return Wrapped Object
+ */
+function __wrap(contract, obj) {
+		__createMembrane(obj, name, contract);
 }
 
 
@@ -312,6 +325,7 @@ function __applyProxy(contract, base, name) {
 // HANDLER REFERENCE
 ////////////////////////////////////////////////////
 
+// TODO: take use ?!
 /** Standard Handler Reference Map
  * reference map proxy -> handler
  */
