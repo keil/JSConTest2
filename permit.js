@@ -43,3 +43,156 @@ function __apply(string, base) {
 		__permit(contract, base, obj);
 }
 
+
+
+
+
+////////////////////////////////////////////////////
+// FUNCTION CONTRACTS
+////////////////////////////////////////////////////
+
+
+function __permitArgs(string, func) {
+		parser = new __ContractParser();
+		contract = parser.parse(string);
+
+		var result = __createFunctionMembrane2(func, contract);
+		return result;
+}
+
+//////////////////////////////////////////////////
+// MEMBRANE
+//////////////////////////////////////////////////
+
+/** Function Membrane
+ * @param init Value to wrap
+ * @param name Variable name (needed to trace the path)
+ */
+function __createFunctionMembrane(init, contract) {
+		if (typeof init !== "function") {
+				return __createMembrane(init, "unknown", contract); // TODO function name ?
+		}
+
+		// create trace path
+		initPath = new __TracePath(null, "function");
+
+		// AccessHandler for <target>
+		var accessHandler = __AccessHandler(init, initPath, contract);
+
+		/* WRAP function
+		 * @param func Function object
+		 * @param base Function base
+		 * @param args Function arguments
+		 */
+		function wrapFunction(func, base, args) {
+				//args.foreach(function(
+				//	args[k] = 					
+				//));
+		args = __createMembrane(args, "args", contract);	
+				//__sysout("#" + Object.keys(args));
+				return wrap(func.apply(base, args /*Array.prototype.map.call(args, wrap)*/));
+		}
+
+		function callTrap() {
+				var value = wrapFunction(init, wrap(this) , arguments);
+				return value;
+		}
+		function constructTrap() {
+				function forward(args) {
+						return target.apply(this, args);
+				}
+				return wrap(new forward(Array.prototype.map.call(arguments, wrap)));
+		}
+		// RETURN wrapped object
+		return Proxy.createFunction(accessHandler, callTrap, constructTrap);
+
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/** Standard Membrane
+ * @param init Value to wrap
+ * @param name Variable name (needed to trace the path)
+ */
+function __createFunctionMembrane2(init, contract) {
+		name = "function";
+		// create trace path
+		initPath = new __TracePath(null, name);
+
+		/** wrap object/ function or return primitive value
+		 * @param target Target value to wrap
+		 */
+		function wrap(target) {
+
+				// IF primitive value, return value
+				if (target !== Object(target)) {
+						return target;
+				}
+
+				/* WRAP function
+				 * @param func Function object
+				 * @param base Function base
+				 * @param args Function arguments
+				 */
+				function wrapFunction(func, base, args) {
+						// TODO, discuss wrap arguments
+						return wrap(func.apply(base, /*Array.prototype.map.call(args, wrap)*/ args));
+						//return func.apply(base, args);
+				}
+
+				// AccessHandler for <target>
+				var accessHandler = __AccessHandler(target, initPath, contract);
+
+				// If function, create function proxy
+				if (typeof target === "function") {
+						function callTrap() {
+								var value = wrapFunction(target, wrap(this), arguments);
+								return value;
+						}
+						function constructTrap() {
+								function forward(args) {
+										return target.apply(this, args);
+								}
+								//return wrap(new forward(Array.prototype.map.call(arguments, wrap)));
+								return new forward(arguments);
+						}
+						return Proxy.createFunction(accessHandler, callTrap, constructTrap);
+				}
+
+				// If object, create object proxy
+				else {
+						var prototype = wrap(Object.getPrototypeOf(target));
+						return Proxy.create(accessHandler, prototype);	
+				}
+		}
+
+		// RETURN wrapped object
+		return wrap(init);
+}
+
+
+
+
+
+
+
+
+
+
+

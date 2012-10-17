@@ -12,44 +12,37 @@
 __config_ViolationMode = __ViolationMode.OBSERVER;
 //__config_ViolationMode = __ViolationMode.PROTECTOR;
 
-obj = {a:4711, b:4712};
-__permit("a", this, "obj");
-function test() {
-	obj.a;
-	obj.b;
-	__dumpAccess();
-	__dumpViolation();
-}
-test();
 
-__sysout("\n\n\n");
-obj = {a:4711, b:4712};
-function test() {
-	obj.a;
-	obj.b;
-	__dumpAccess();
-	__dumpViolation();
-}
-__permit("a", this, "test");
-test();
 
-__sysout("\n\n\n");
-obj = {a:4711, b:4712};
-
-function test2(obj) {
-	this.c = 3456;
-	obj.a;
-	obj.b;
-	__dumpAccess();
-	__dumpViolation();
+func = function(x, y) {
+		__apply("x.b", this);
+		__sysout(this.x);
+		var d = 654;
+		__sysout(x.a);
+		__sysout(y.a);
+		__sysout(d);
+		__sysout("##### " + arguments.callee.name);
+		var fName = arguments.callee.toString(0).match(
+  /^function\s*(?:\s+([\w\$]*))?\s*\(/
+);
+fName = (fName ? fName[1] : "");
+__sysout("call:" + fName)
+		return this.c;
 }
 
-__permit("a", this, "test2");
+test = __permitArgs("x.a", func);
 
-test2(obj);
+test({a:3, b:5},{a:7, b:11});
 
-test2.d = 76543;
-test2.x;
-	__dumpAccess();
-	__dumpViolation();
+__dumpAccess();
+__dumpViolation();
 
+Function.prototype.getArg = function() {
+__sysout(caller.toString());
+}
+
+function getParamNames(func) {
+	__sysout(arguments.callee);
+    var funStr = func.toString();
+    return arguments.callee.toString().slice(funStr.indexOf('(')+1, funStr.indexOf(')')).match(/([^\s,]+)/g);
+}
