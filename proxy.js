@@ -116,7 +116,7 @@ function __AccessHandler(target, path, contract) {
 
 						if(contract.writeable(name)) {
 								Object.defineProperty(target, name, value);
-						} else if(__config_ViolationMod == __ViolationMode.OBSERVER) {
+						} else if(__config_ViolationMode == __ViolationMode.OBSERVER) {
 								__violationLogger.set(__ViolationType.WRITE, tracePath);
 								Object.defineProperty(target, name, value);
 						} else {
@@ -134,7 +134,7 @@ function __AccessHandler(target, path, contract) {
 
 						if(contract.writeable(name)) {
 								return delete target[name];
-						} else if(__config_ViolationMod == __ViolationMode.OBSERVER) {
+						} else if(__config_ViolationMode == __ViolationMode.OBSERVER) {
 								__violationLogger.set(__ViolationType.WRITE, tracePath);
 								return delete target[name];
 						} else {
@@ -198,7 +198,7 @@ function __AccessHandler(target, path, contract) {
 
 						if(contract.writeable(name)) {
 								target[name] = value;
-						} else if(__config_ViolationMod == __ViolationMode.OBSERVER) {
+						} else if(__config_ViolationMode == __ViolationMode.OBSERVER) {
 								__violationLogger.set(__ViolationType.WRITE, tracePath);
 								target[name] = value;
 						} else {
