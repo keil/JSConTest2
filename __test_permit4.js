@@ -168,3 +168,27 @@ test("a", "Object.preventExtensions(obj).xx;");
    }
  */
 
+test("a", "('a' in obj);");
+test("b", "('a' in obj.a);");
+
+
+test("a", "obj.a.hasOwnProperty('a');");
+test("b", "obj.a.hasOwnProperty('a');");
+
+test("a", "for (x in obj) {obj[x];}");
+test("b", "for (x in obj.a) {obj[x];}");
+test("a", "for (x in obj) {obj[x]=4711;}");
+
+test("a", "Object.keys(obj);");
+test("a", "Object.keys(obj.a);");
+test("a", "Object.keys(obj.b);");
+
+
+//test("a", "obj.keys();");
+//test("a", "obj.a.keys();");
+//test("a", "obj.b.keys();");
+
+
+//test("a", "obj.forEach(function(name) {obj[name];});");
+//test("a", "obj.forEach(function(name) {obj[name];});");
+

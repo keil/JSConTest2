@@ -66,12 +66,12 @@ function __AccessHandler(target, path, contract) {
 								return desc;
 						} else if(__config_ViolationMode == __ViolationMode.OBSERVER) {
 								__violationLogger.set(__ViolationType.READ, tracePath);
-							var desc = Object.getOwnPropertyDescriptor(target, name);
+								var desc = Object.getOwnPropertyDescriptor(target, name);
 								if (desc !== undefined) desc.value = __createMembrane(desc, tracePath, stat.contracts);
 								return desc;
 						} else {
-							__violationLogger.set(__ViolationType.READ, tracePath);
-							return undefined;
+								__violationLogger.set(__ViolationType.READ, tracePath);
+								return undefined;
 						}
 				},
 				/** function to get property descriptor
@@ -80,10 +80,10 @@ function __AccessHandler(target, path, contract) {
 				 */
 				getPropertyDescriptor: function(name) {
 						var desc = Object.getOwnPropertyDescriptor(obj, name);
-     					// TODO why
+						// TODO why
 						// a trapping proxy's properties must always be configurable
-     					if (desc !== undefined) { desc.configurable = true; }
-     					return desc;
+						if (desc !== undefined) { desc.configurable = true; }
+						return desc;
 
 
 						var desc = Object.getOwnPropertyDescriptor(target, name);
@@ -205,6 +205,22 @@ function __AccessHandler(target, path, contract) {
 								__violationLogger.set(__ViolationType.WRITE, tracePath);
 						}
 						return value;
+				},
+
+
+				has: function(name) {
+						return (name in target);
+				},
+				hasOwn: function(name) {
+						return ({}).hasOwnProperty.call(target, name); 
+				},
+				enumerate: function() {
+						var result = [];
+						for (var name in target) { result.push(name); };
+						return result;
+				},
+				keys: function() {
+						return Object.keys(target);
 				}
 		}
 };
