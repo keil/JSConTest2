@@ -7,17 +7,6 @@
 // Version: 0.20.0
 //////////////////////////////////////////////////
 
-// obj in den contract mit einbauen
-// so dass contract = obj.a.a.a
-// und obj auch geschützt wird / bekommt man das mit ?
-
-
-/* TODO:
- * test assoziatives array
- * with statement
- */
-
-
 
 
 //////////////////////////////////////////////////

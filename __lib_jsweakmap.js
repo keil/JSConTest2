@@ -157,14 +157,14 @@ var WeakMap;
 						typeof crypto.getRandomValues === 'function' &&
 						typeof ArrayBuffer === 'function' &&
 						typeof Uint8Array === 'function') {
-				var ab = new ArrayBuffer(25);
-				var u8s = new Uint8Array(ab);
-				crypto.getRandomValues(u8s);
-				HIDDEN_NAME = 'rand:' +
-						Array.prototype.map.call(u8s, function(u8) {
-								return (u8 % 36).toString(36);
-						}).join('') + '___';
-		}
+								var ab = new ArrayBuffer(25);
+								var u8s = new Uint8Array(ab);
+								crypto.getRandomValues(u8s);
+								HIDDEN_NAME = 'rand:' +
+										Array.prototype.map.call(u8s, function(u8) {
+												return (u8 % 36).toString(36);
+										}).join('') + '___';
+						}
 
 		/**
 		 * Monkey patch getOwnPropertyNames to avoid revealing the
@@ -180,10 +180,10 @@ var WeakMap;
 		 */
 		defProp(Object, 'getOwnPropertyNames', {
 				value: function fakeGetOwnPropertyNames(obj) {
-							   return gopn(obj).filter(function(name) {
-									   return name !== HIDDEN_NAME;
-							   });
-					   }
+						return gopn(obj).filter(function(name) {
+								return name !== HIDDEN_NAME;
+						});
+				}
 		});
 
 		/**
@@ -193,10 +193,10 @@ var WeakMap;
 		if ('getPropertyNames' in Object) {
 				defProp(Object, 'getPropertyNames', {
 						value: function fakeGetPropertyNames(obj) {
-									   return originalProps.getPropertyNames(obj).filter(function(name) {
-											   return name !== HIDDEN_NAME;
-									   });
-							   }
+								return originalProps.getPropertyNames(obj).filter(function(name) {
+										return name !== HIDDEN_NAME;
+								});
+						}
 				});
 		}
 
@@ -280,23 +280,23 @@ var WeakMap;
 				var oldFreeze = Object.freeze;
 				defProp(Object, 'freeze', {
 						value: function identifyingFreeze(obj) {
-									   getHiddenRecord(obj);
-									   return oldFreeze(obj);
-							   }
+								getHiddenRecord(obj);
+								return oldFreeze(obj);
+						}
 				});
 				var oldSeal = Object.seal;
 				defProp(Object, 'seal', {
 						value: function identifyingSeal(obj) {
-									   getHiddenRecord(obj);
-									   return oldSeal(obj);
-							   }
+								getHiddenRecord(obj);
+								return oldSeal(obj);
+						}
 				});
 				var oldPreventExtensions = Object.preventExtensions;
 				defProp(Object, 'preventExtensions', {
 						value: function identifyingPreventExtensions(obj) {
-									   getHiddenRecord(obj);
-									   return oldPreventExtensions(obj);
-							   }
+								getHiddenRecord(obj);
+								return oldPreventExtensions(obj);
+						}
 				});
 		})();
 
@@ -393,39 +393,39 @@ var WeakMap;
 		};
 		WeakMap.prototype = Object.create(Object.prototype, {
 				get: {
-							 /**
-							  * Return the value most recently associated with key, or
-							  * opt_default if none.
-							  */
-							 value: function get(key, opt_default) {
-											return this.get___(key, opt_default);
-									},
+						/**
+						 * Return the value most recently associated with key, or
+						 * opt_default if none.
+						 */
+						value: function get(key, opt_default) {
+								return this.get___(key, opt_default);
+						},
 				writable: true,
 				configurable: true
-					 },
+				},
 
 				has: {
-							 /**
-							  * Is there a value associated with key in this WeakMap?
-							  */
-							 value: function has(key) {
-											return this.has___(key);
-									},
+						/**
+						 * Is there a value associated with key in this WeakMap?
+						 */
+						value: function has(key) {
+								return this.has___(key);
+						},
 				writable: true,
 				configurable: true
-					 },
+				},
 
 				set: {
-							 /**
-							  * Associate value with key in this WeakMap, overwriting any
-							  * previous association if present.
-							  */
-							 value: function set(key, value) {
-											this.set___(key, value);
-									},
-							 writable: true,
-							 configurable: true
-					 },
+						/**
+						 * Associate value with key in this WeakMap, overwriting any
+						 * previous association if present.
+						 */
+						value: function set(key, value) {
+								this.set___(key, value);
+						},
+						writable: true,
+						configurable: true
+				},
 
 				'delete': {
 						/**
@@ -441,8 +441,8 @@ var WeakMap;
 						 * the association was already absent.
 						 */
 						value: function remove(key) {
-									   return this.delete___(key);
-							   },
+								return this.delete___(key);
+						},
 						writable: true,
 						configurable: true
 				}

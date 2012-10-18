@@ -67,7 +67,7 @@ function test(contract, exp) {
    enumerate: function() -> [string]                     // for (name in proxy) (return array of enumerable own and inherited properties)
    keys:      function() -> [string]                     // Object.keys(proxy)  (return array of enumerable own properties only)
    }
- */
+   */
 
 
 test("a", "Object.getOwnPropertyDescriptor(obj, \"a\");");
@@ -165,7 +165,7 @@ test("a", "Object.preventExtensions(obj).xx;");
    enumerate: function() -> [string]                     // for (name in proxy) (return array of enumerable own and inherited properties)
    keys:      function() -> [string]                     // Object.keys(proxy)  (return array of enumerable own properties only)
    }
- */
+   */
 
 test("a", "('a' in obj);");
 test("b", "('a' in obj.a);");

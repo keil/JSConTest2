@@ -2,4 +2,9 @@
 ** Parser
 ** Datastructure
 
+* rename contracts in <stat> in contract
+** dependeing to new structure
+
 * chnage Proxy Syntax
+
+* has map for proxies

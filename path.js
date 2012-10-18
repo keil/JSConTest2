@@ -153,7 +153,7 @@ function __evaluateAccess() {
 }
 
 function __clearAccess() {
-__accessLogger = new __AccessLogger();
+		__accessLogger = new __AccessLogger();
 }
 
 function __dumpAccess() {

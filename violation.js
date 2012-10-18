@@ -106,7 +106,7 @@ function __evaluateViolation() {
 }
 
 function __clearViolation() {
-__violationLogger = new __ViolationLogger();
+		__violationLogger = new __ViolationLogger();
 }
 
 function __dumpViolation() {

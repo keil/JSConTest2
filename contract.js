@@ -10,7 +10,7 @@
 // load trace path
 load("parser.js");
 
-// TODO: rename contracts in contract
+
 
 //////////////////////////////////////////////////
 // Contract
