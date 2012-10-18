@@ -37,7 +37,7 @@ function createObject() {
 function test(contract, exp) {
 		__sysout("\n\n\n");
 		obj = createObject();
-		__permit(contract, this, "obj");
+		__apply(contract, this, "obj");
 		__sysout("[" +contract+ "]: " + exp + " # " + __dump(eval(exp)));
 		__dumpAccess();
 		__dumpViolation();

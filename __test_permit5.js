@@ -13,7 +13,7 @@ __config_ViolationMode = __ViolationMode.OBSERVER;
 //__config_ViolationMode = __ViolationMode.PROTECTOR;
 
 obj = {a:4711, b:4712};
-__permit("a", this, "obj");
+__apply("a", this, "obj");
 function test() {
 	obj.a;
 	obj.b;
@@ -30,7 +30,7 @@ function test() {
 	__dumpAccess();
 	__dumpViolation();
 }
-__permit("a", this, "test");
+__apply("a", this, "test");
 test();
 
 __sysout("\n\n\n");
@@ -44,7 +44,7 @@ function test2(obj) {
 	__dumpViolation();
 }
 
-__permit("a", this, "test2");
+__apply("a", this, "test2");
 
 test2(obj);
 
