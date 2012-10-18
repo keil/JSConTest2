@@ -245,6 +245,8 @@ function __AccessHandler(target, path, contract) {
 /** Standard Membrane
  * @param init Value to wrap
  * @param name Variable name (needed to trace the path)
+ * @param contract Access Permission Contract
+ * @return wrapped object or primitive value
  */
 function __createMembrane(init, name, contract) {
 		// create trace path

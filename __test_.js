@@ -13,36 +13,25 @@ __config_ViolationMode = __ViolationMode.OBSERVER;
 //__config_ViolationMode = __ViolationMode.PROTECTOR;
 
 
+g = {a:4713, b:4714};
 
-func = function(x, y) {
-		__apply("x.b", this);
-		__sysout(this.x);
+(func = function(x, y) {
 		var d = 654;
 		__sysout(x.a);
 		__sysout(y.a);
 		__sysout(d);
-		__sysout("##### " + arguments.callee.name);
-		var fName = arguments.callee.toString(0).match(
-  /^function\s*(?:\s+([\w\$]*))?\s*\(/
-);
-fName = (fName ? fName[1] : "");
-__sysout("call:" + fName)
-		return this.c;
-}
+		__sysout(g.a);
+		this.h = function () {__sysout(x.a);}
+		//return this.c;
+})({a:3, b:5},{a:7, b:11});
 
-test = __permitArgs("x.a", func);
+test = __permitArgs("arguments.0.a", func);
+//__permit("g.a", this, "test");
+//__permit("g.a", this, "g");
 
-test({a:3, b:5},{a:7, b:11});
+
+obj = new test({a:3, b:5},{a:7, b:11});
+
 
 __dumpAccess();
 __dumpViolation();
-
-Function.prototype.getArg = function() {
-__sysout(caller.toString());
-}
-
-function getParamNames(func) {
-	__sysout(arguments.callee);
-    var funStr = func.toString();
-    return arguments.callee.toString().slice(funStr.indexOf('(')+1, funStr.indexOf(')')).match(/([^\s,]+)/g);
-}

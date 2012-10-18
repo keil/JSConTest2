@@ -56,9 +56,11 @@ function __permitArgs(string, func) {
 		parser = new __ContractParser();
 		contract = parser.parse(string);
 
-		var result = __createFunctionMembrane2(func, contract);
+		var result = __createFunctionMembrane(func, "function", contract);
 		return result;
 }
+
+
 
 //////////////////////////////////////////////////
 // MEMBRANE
@@ -67,8 +69,82 @@ function __permitArgs(string, func) {
 /** Function Membrane
  * @param init Value to wrap
  * @param name Variable name (needed to trace the path)
+ * @param contract Access Permission Contract
+ * @return wrapped function or __createMembrane(init)
  */
-function __createFunctionMembrane(init, contract) {
+function __createFunctionMembrane(init, name, contract) {
+		if (typeof init !== "function") {
+				return __createMembrane(init, "unknown", contract); // TODO function name ?
+		}
+
+		/* WRAP function
+		 * @param func Function object
+		 * @param base Function base
+		 * @param args Function arguments
+		 */
+		function wrapFunction(func, base, args) {
+				stat = contract.readable("arguments");
+				args = __createMembrane(args, "arguments", stat.contracts);
+				return func.apply(base, args);
+		}
+
+		function callTrap() {
+				return wrapFunction(init, this, arguments);
+		}
+		function constructTrap() {
+				return wrapFunction(init, this, arguments);
+		}
+
+		// create trace path
+		initPath = new __TracePath(null, name);
+		// TODO handle name
+
+		// AccessHandler for <init>
+		var accessHandler = __AccessHandler(init, initPath, contract);
+
+		return Proxy.createFunction(accessHandler, callTrap, constructTrap);
+}
+
+
+
+
+//name = "function";
+// create trace path
+//initPath = new __TracePath(null, name);
+
+/** wrap object/ function or return primitive value
+ * @param target Target value to wrap
+ */
+//function wrap(target) {
+//}
+
+// RETURN wrapped object
+//return wrap(init);
+//}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/** Function Membrane
+ * @param init Value to wrap
+ * @param name Variable name (needed to trace the path)
+ */
+function __createFunctionMembrane3(init, contract) {
 		if (typeof init !== "function") {
 				return __createMembrane(init, "unknown", contract); // TODO function name ?
 		}
@@ -88,7 +164,7 @@ function __createFunctionMembrane(init, contract) {
 				//args.foreach(function(
 				//	args[k] = 					
 				//));
-		args = __createMembrane(args, "args", contract);	
+				args = __createMembrane(args, "args", contract);	
 				//__sysout("#" + Object.keys(args));
 				return wrap(func.apply(base, args /*Array.prototype.map.call(args, wrap)*/));
 		}
