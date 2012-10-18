@@ -1,6 +1,8 @@
 * new Contracts
 ** Parser
 ** Datastructure
+** "(arguments.0.a|arguments.1.b)" - "arguments.(0|1).a"
+
 
 * rename contracts in <stat> in contract
 ** dependeing to new structure

@@ -88,7 +88,7 @@ function __permitArgs(string, func, name) {
  * @param base Current object
  * @param name Function name
  */
-function __permitArgs(string, base, name) {
+function __applyArgs(string, base, name) {
 		func = base[name];
 		base[name] = __permitArgs(string, func, name);
 }
