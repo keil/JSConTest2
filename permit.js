@@ -13,37 +13,51 @@ load("contract.js");
 
 
 ////////////////////////////////////////////////////
-// PERMIT CONTRACT
+// OBJECT CONTRACTS
 ////////////////////////////////////////////////////
 
-/** Permit Contract
+/** Permit
  * @param string Access Permission Contract to apply
- * @param base Current object
- * @param name Property name
+ * @param obj Object
+ * @param name Object name [optional]
+ * @return Object proxy
  */
-function __permit(string, base, name) {
+function __permit(string, obj, name) {
+		// optional name
+		objname = name!=null ? name : "";
+
+		// parse contracts
 		parser = new __ContractParser();
 		contract = parser.parse(string);
 
-		// wrap value
-		obj = base[name];
-		base[name] = __createMembrane(obj, name, contract);
+		// create proxy
+		return __createMembrane(obj, objname, contract);
 }
 
-/**  Permit Contract
- * @param string Access Permission Contract with leading property
+/** Apply
+ * @param string Access Permission Contract
  * @param base Current object
+ * @param name Property name
  */
-function __apply(string, base) {
+function __apply(string, base, name) {
+		obj = base[name];
+		base[name] = __permit(string, obj, name);
+}
+
+/** Apply Object
+ * @param string Access Permission Contract
+ * @param base Current object
+ * @param name Property name
+ */
+function __applyObj(string, base) {
+		// get object name
 		i = string.indexOf(".");
 		obj = string.substr(0,i);
 		contract = string.substring(i+1);
 
-		// permit contract
-		__permit(contract, base, obj);
+		// abbly contract
+		__apply(contract, base, obj);
 }
-
-
 
 
 
@@ -51,19 +65,30 @@ function __apply(string, base) {
 // FUNCTION CONTRACTS
 ////////////////////////////////////////////////////
 
+/** Permit Arguments 
+ * @param string Access Permission Contract
+ * @param function Function
+ * @param name Function name [optional]
+ * @return Function proxy
+ */
+function __permitArgs(string, func, name) {
+		// optional name
+		funcname = name!=null ? name : "";
 
-function __permitArgs(string, func) {
+		// parse contracts
 		parser = new __ContractParser();
 		contract = parser.parse(string);
 
-		var result = __createFunctionMembrane(func, "function", contract);
-		return result;
+		// create function proxy
+		return __createFunctionMembrane(func, funcname, contract);
 }
 
-
-
-//////////////////////////////////////////////////
-// MEMBRANE
-//////////////////////////////////////////////////
-
-
+/** Apply Arguments 
+ * @param string Access Permission Contract
+ * @param base Current object
+ * @param name Function name
+ */
+function __permitArgs(string, base, name) {
+		func = base[name];
+		base[name] = __permitArgs(string, func, name);
+}
