@@ -303,6 +303,52 @@ function __createMembrane(init, name, contract) {
 		return wrap(init);
 }
 
+/** Function Membrane
+ * @param init Value to wrap
+ * @param name Variable name (needed to trace the path)
+ * @param contract Access Permission Contract
+ * @return wrapped function or __createMembrane(init)
+ */
+function __createFunctionMembrane(init, name, contract) {
+		// if no function, set standard membrane
+		if (typeof init !== "function") {
+				return __createMembrane(init, name, contract);
+		}
+
+		/* WRAP function
+		 * @param func Function object
+		 * @param base Function base
+		 * @param args Function arguments
+		 */
+		function wrapFunction(func, base, args) {
+				stat = contract.readable("arguments");
+				args = __createMembrane(args, "arguments", stat.contracts);
+				return func.apply(base, args);
+		}
+
+		/* CALL trap
+		 * @return function return
+		 */
+		function callTrap() {
+				return wrapFunction(init, this, arguments);
+		}
+
+		/* CALL trap
+		 * @return function return
+		 */
+		function constructTrap() {
+				return wrapFunction(init, this, arguments);
+		}
+
+		// create trace path
+		initPath = new __TracePath(null, name);
+
+		// AccessHandler for <init>
+		var accessHandler = __AccessHandler(init, initPath, contract);
+
+		return Proxy.createFunction(accessHandler, callTrap, constructTrap);
+}
+
 /** Apply Proxy
  * can be used to wrap an value
  * @param contract Access Permission Contract
@@ -318,10 +364,12 @@ function __applyProxy(contract, base, name) {
  * can be used to wrap an value
  * @param contract Access Permission Contract
  * @param obj Object
+ * @param name Object name
  * @return Wrapped Object
  */
-function __wrap(contract, obj) {
-		__createMembrane(obj, name, contract);
+function __wrap(contract, obj, name) {
+		objname = name!=null ? name : "";
+		return __createMembrane(obj, objname, contract);
 }
 
 
