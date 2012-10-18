@@ -1,5 +1,5 @@
 default:
-	~/workspace/JSProxy/trunk/js/src/js -f bootstrap.js -i
+	../js/src/shell/js -f bootstrap.js -i
 
 test:
-	~/workspace/JSProxy/trunk/js/src/js -f bootstrap_test.js -i
+	../js/src/shell/js -f bootstrap_test.js -i
