@@ -10,3 +10,11 @@
 * chnage Proxy Syntax
 
 * has map for proxies
+
+* rename version numbers
+
+* use/ test meta-,eta proxy, to handle get, getOwn .. and so on
+** only use one method
+
+* set revoke to the function handler
+** will be needed to revoke contracts
