@@ -29,4 +29,7 @@ load("permit.js")
 //////////////////////////////////////////////////
 
 // load testcase
+load("contract2.js");
+
+// load testcase
 load("__test_.js");
