@@ -200,7 +200,7 @@ function __RegExLiteral(regex) {
 				 * @return string
 				 */
 				toString: function() {
-						return varname; 
+						return regex; 
 				}
 		};
 }
