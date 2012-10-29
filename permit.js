@@ -27,8 +27,7 @@ function __permit(string, obj, name) {
 		objname = name!=null ? name : "";
 
 		// parse contracts
-		parser = new __ContractParser();
-		contract = parser.parse(string);
+		contract = __ContractParser.parse(string);
 
 		// create proxy
 		return __createMembrane(obj, objname, contract);
@@ -76,8 +75,7 @@ function __permitArgs(string, func, name) {
 		funcname = name!=null ? name : "";
 
 		// parse contracts
-		parser = new __ContractParser();
-		contract = parser.parse(string);
+		contract = __ContractParser.parse(string);
 
 		// create function proxy
 		return __createFunctionMembrane(func, funcname, contract);

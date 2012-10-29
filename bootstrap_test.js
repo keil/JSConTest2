@@ -17,14 +17,14 @@ var __logger = new __Log(__Log.NONE, __Log.consoleLogger);
 // load system
 load("system.js");
 
+// load trace path
+load("path.js");
+
 // load proxy
 load("proxy.js");
 
 // load permit
 load("permit.js")
-
-// load trace path
-load("path.js");
 
 // load violation
 load("violation.js")
