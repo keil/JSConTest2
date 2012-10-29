@@ -13,7 +13,7 @@
 //
 // RegEx              = /.../
 // Name               = x...
-// Literal            = @ | ? | Name | RegEx
+// Literal            = ''| @ | ? | Name | RegEx
 // Set                = Literal | (Contract+Contract) | (Contract&Contract) | !(Contract)
 // Quantifiable       = Set | Set? | Set*
 // Contract           = Quantifiable | Quantifiable.Contract 
@@ -21,125 +21,180 @@
 
 
 
-
+/**
+ * '' Literal (Empty Literal)
+ */
 function __EmptyLiteral() {
 		return {
+				/** v('') :== true */
 				isNullable: function() {
 						return true;
 				},
+				/** '' ~ name */
 				isReadable: function(name) {
-						return false;
+						return (name=='');
 				},
+				/** '' ~ name */
 				isWriteable: function(name) {
-						return false;
+						return (name=='');
 				},
+				/** (d_name '') ::= @ */
 				derive: function(name) {
-						// TODO
 						return new __AtLiteral();
 				},
+				/** Dump
+				 * @return string
+				 */
 				dump: function() {
-						return "[-]";
+						return "[\'\']";
 				},
+				/** To String
+				 * @return string
+				 */
 				toString: function() {
-						return "-"; 
+						return ""; 
 				},
 		};
 }
 
-
+/**
+ * @ Literal (Empty Set)
+ */
 function __AtLiteral() {
 		return {
+				/** v(@) :== false */
 				isNullable: function() {
 						return false;
 				},
+				/** false */
 				isReadable: function(name) {
 						return false;
 				},
+				/** false */
 				isWriteable: function(name) {
 						return false;
 				},
+				/** (d_name @) ::= @ */
 				derive: function(name) {
-						// TODO
 						return new __AtLiteral();
 				},
+				/** Dump
+				 * @return string
+				 */
 				dump: function() {
 						return "[@]";
 				},
+				/** To String
+				 * @return string
+				 */
 				toString: function() {
 						return "@"; 
 				},
 		};
 }
 
-
+/**
+ * ? Literal (universe)
+ */
 function __QMarkLiteral() {
 		return {
+				/** v(?) :== false */
 				isNullable: function() {
 						return false;
 				},
+				/** true */
 				isReadable: function(name) {
 						return true;
 				},
+				/** true */
 				isWriteable: function(name) {
 						return true;
 				},
+				/** (d_name ?) ::= '' */
 				derive: function(name) {
-						// TODO
 						return new __EmptyLiteral();
 				},
+				/** Dump
+				 * @return string
+				 */
 				dump: function() {
 						return "[?]";
 				},
+				/** To String
+				 * @return string
+				 */
 				toString: function() {
 						return "?"; 
 				}
 		};
 }
 
-
+/**
+ * x Literal (property name)
+ */
 function __NameLiteral(varname) {
 		return {
+				/** v(varname) :== false */
 				isNullable: function() {
 						return false;
 				},
+				/** varname == name */
 				isReadable: function(name) {
 						return (name == varname);
 				},
+				/** varname == name */
 				isWriteable: function(name) {
 						return (name == varname);
 				},
+				/** (d_name varname) ::= '' if varname == name, @ otherwise */
 				derive: function(name) {
-						// TODO
 						return (name == varname) ? new __EmptyLiteral() : new __AtLiteral();
 				},
+				/** Dump
+				 * @return string
+				 */
 				dump: function() {
 						return "[" + varname + "]";
 				},
+				/** To String
+				 * @return string
+				 */
 				toString: function() {
 						return varname; 
 				}
 		};
 }
 
-
+/**
+ * RegEx Literal (regular expression)
+ */
 function __RegExLiteral(regex) {
 		return {
+				/** v(RegEx) :== false */
 				isNullable: function() {
 						return false;
 				},
+				/** RegEx ~ name */
 				isReadable: function(name) {
 						return (new RegExp(regex)).test(name);
 				},
+				/** RegEx ~ name */
 				isWriteable: function(name) {
 						return (new RegExp(regex)).test(name);
 				},
+				/** (d_name RegEx) ::= '' if RegEx ~ name, @ otherwise */
 				derive: function(name) {
-						// TODO
 						return (new RegExp(regex)).test(name) ? new __EmptyLiteral() : new __AtLiteral();
 				},
+				/** Dump
+				 * @return string
+				 */
 				dump: function() {
 						return "/" + regex + "/";
 				},
+				/** To String
+				 * @return string
+				 */
 				toString: function() {
 						return varname; 
 				}
@@ -182,9 +237,17 @@ function __QMarkContract(contract) {
 						// TODO
 						return contract.derive(name);
 				},
+				/**
+				 * Dump
+				 * @return string
+				 */
 				dump: function() {
 						return "[" + contract.dump() + "]"
 				},
+				/**
+				 * To String
+				 * @return string
+				 */
 				toString: function() {
 						return contract.toString() + "?";
 				},
@@ -206,9 +269,17 @@ function __StarContract(contract) {
 						// TODO
 						return contract.derive(name);
 				},
+				/**
+				 * Dump
+				 * @return string
+				 */
 				dump: function() {
 						return "[" + contract.dump() + "]"
 				},
+				/**
+				 * To String
+				 * @return string
+				 */
 				toString: function() {
 						return contract.toString() + "*";
 				},
@@ -230,9 +301,17 @@ function __OrContract(contract0, contract1) {
 						// TODO
 						return new __OrContract(contract0.derive(name), contract1.derive(name));
 				},
+				/**
+				 * Dump
+				 * @return string
+				 */
 				dump: function() {
 						return "[+ C0:" + contract0.dump() + " C1:" +  contract1.dump() +  "]"
 				},
+				/**
+				 * To String
+				 * @return string
+				 */
 				toString: function() {
 						return contract0.toString() + "+" + contract1.toString();
 				},
@@ -254,9 +333,17 @@ function __AndContract(contract0, contract1) {
 						// TODO
 						return new __AndContract(contract0.derive(name), contract1.derive(name));
 				},
+				/**
+				 * Dump
+				 * @return string
+				 */
 				dump: function() {
 						return "[& C0:" + contract0.dump() + " C1:" +  contract1.dump() +  "]"
 				},
+				/**
+				 * To String
+				 * @return string
+				 */
 				toString: function() {
 						return contract0.toString() + "&" + contract1.toString();
 				},
@@ -278,9 +365,17 @@ function __NegContract(contract) {
 						// TODO
 						return new __NegContract(contract.derive(name));
 				},
+				/**
+				 * Dump
+				 * @return string
+				 */
 				dump: function() {
 						return "[& C0:" + contract0.dump() + " C1:" +  contract1.dump() +  "]"
 				},
+				/**
+				 * To String
+				 * @return string
+				 */
 				toString: function() {
 						return contract0.toString() + "&" + contract1.toString();
 				},
@@ -306,9 +401,17 @@ function __ConcatContract(contract0, contract1) {
 						if(contract0.isNullable()) return new __OrContract(__ConcatContract(contract0.derive(name), contract1), contract1.derive(name));
 						else __ConcatContract(contract0.derive(name), contract1);
 				},
+				/**
+				 * Dump
+				 * @return string
+				 */
 				dump: function() {
 						return "[& C0:" + contract0.dump() + " C1:" +  contract1.dump() +  "]"
 				},
+				/**
+				 * To String
+				 * @return string
+				 */
 				toString: function() {
 						return contract0.toString() + "." + contract1.toString();
 				},
