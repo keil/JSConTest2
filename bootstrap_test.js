@@ -20,6 +20,21 @@ load("system.js");
 // load proxy
 load("proxy.js");
 
+// load permit
+load("permit.js")
+
+// load trace path
+load("path.js");
+
+// load violation
+load("violation.js")
+
+// load contract
+load("contract.js");
+
+// load parser
+load("parser.js");
+
 // load assert
 load("__lib_assert.js");
 
@@ -34,8 +49,8 @@ load("__lib_assert.js");
 // load("__test_basic-unittest.js");
 
 // LOAD PARSER TESTS
-load("permit.js");
-load("parser.js");
+//load("permit.js");
+//load("parser.js");
 
 // LOAD PERMIT TESTS
 //load("__test_parser.js");
@@ -49,4 +64,4 @@ load("parser.js");
 //load("__test_permit3.js");
 //load("__test_permit4.js");
 //load("__test_permit5.js");
-load("__test_permit6.js");
+//load("__test_permit6.js");

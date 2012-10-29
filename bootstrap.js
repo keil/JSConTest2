@@ -19,18 +19,26 @@ load("system.js");
 
 // load proxy
 load("proxy.js");
+
 // load permit
 load("permit.js")
 
+// load trace path
+load("path.js");
+
+// load violation
+load("violation.js")
+
+// load contract
+load("contract.js");
+
+// load parser
+load("parser.js");
 
 
 //////////////////////////////////////////////////
 // TEST
 //////////////////////////////////////////////////
-
-// load testcase
-load("contract.js");
-load("parser.js");
 
 // load testcase
 load("__test_.js");
