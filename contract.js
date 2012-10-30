@@ -222,11 +222,11 @@ function __QMarkContract(contract) {
 				},
 				/** r(C?) ::= r(C) */
 				isReadable: function(name) {
-						return contract.isReadable();
+						return contract.isReadable(name);
 				},
 				/** w(C?) ::= w(C) */
 				isWriteable: function(name) {
-						return contract.isWriteable();
+						return contract.isWriteable(name);
 				},
 				/** (d_name C?) ::= (d_name C) */
 				derive: function(name) {
@@ -258,11 +258,11 @@ function __StarContract(contract) {
 				},
 				/** r(C*) ::= r(C) */
 				isReadable: function(name) {
-						return contract.isReadable();
+						return contract.isReadable(name);
 				},
 				/** w(C*) ::= w(C) */
 				isWriteable: function(name) {
-						return contract.isWriteable();
+						return contract.isWriteable(name);
 				},
 				/** (d_name C*) ::= (d_name C).C* */
 				derive: function(name) {
@@ -300,11 +300,11 @@ function __OrContract(contract0, contract1) {
 				},
 				/** r(C0+C1) :== r(C0) + r(C1) */
 				isReadable: function(name) {
-						return (contract0.isReadable() || contract0.isReadable());
+						return (contract0.isReadable(name) || contract0.isReadable(name));
 				},
 				/** w(C0+C1) :== w(C0) + w(C1) */
 				isWriteable: function(name) {
-						return (contract0.isWriteable() || contract0.isWriteable());
+						return (contract0.isWriteable(name) || contract0.isWriteable(name));
 				},
 				/** (d_name C0+C1) :== (d_name C0) + (d_name C1) */
 				derive: function(name) {
@@ -336,15 +336,14 @@ function __AndContract(contract0, contract1) {
 				},
 				/** r(C0&C1) :== r(C0) & r(C1) */
 				isReadable: function(name) {
-						return (contract0.isReadable() && contract0.isReadable());
+						return (contract0.isReadable(name) && contract0.isReadable(name));
 				},
 				/** w(C0&C1) :== w(C0) & w(C1) */
 				isWriteable: function(name) {
-						return (contract0.isWriteable() && contract0.isWriteable());
+						return (contract0.isWriteable(name) && contract0.isWriteable(name));
 				},
 				/** (d_name C0&C1) :== (d_name C0) & (d_name C1) */
 				derive: function(name) {
-						// TODO
 						return new __AndContract(contract0.derive(name), contract1.derive(name));
 				},
 				/** Dump
@@ -373,11 +372,11 @@ function __NegContract(contract) {
 				},
 				/** r(!C) ::= false if r(C), false otherwise */
 				isReadable: function(name) {
-						return contract.isReadable() ? false : true;
+						return contract.isReadable(name) ? false : true;
 				},
 				/** w(!C) ::= false if w(C), false otherwise */
 				isWriteable: function(name) {
-						return contract.isWriteable() ? false : true;
+						return contract.isWriteable(name) ? false : true;
 				},
 				/** (d_name !C) :== !(d_name C) */
 				derive: function(name) {
@@ -393,7 +392,7 @@ function __NegContract(contract) {
 				 * @return string
 				 */
 				toString: function() {
-						return "!" + contract1.toString();
+						return "!" + contract.toString();
 				},
 		};
 }
@@ -416,13 +415,13 @@ function __ConcatContract(contract0, contract1) {
 				},
 				/** r(C0.C1) :== r(C0)+r(C1) if v(C0), r(C0) otherwise */
 				isReadable: function(name) {
-						if(contract0.isNullable()) return (contract0.isReadable() || contract1.isReadable())
-						else return contract0.isReadable();
+						if(contract0.isNullable()) return (contract0.isReadable(name) || contract1.isReadable(name))
+						else return contract0.isReadable(name);
 				},
 				/** r(C0.C1) :== w(C1) if v(C0), w(C0) if v(C1,) false otherwise */
 				isWriteable: function(name) {
-						if(contract0.isNullable()) return contract1.isWriteable();
-						else if(contract1.isNullable()) return contract0.isWriteable();
+						if(contract0.isNullable()) return contract1.isWriteable(name);
+						else if(contract1.isNullable()) return contract0.isWriteable(name);
 						else return false;
 				},
 				/** (d_name C0.C1) :== (D_name C0).C1 + (D_name C1) if V(C0), (D_name C0).C1 otherwise */
