@@ -36,11 +36,13 @@ function __EmptyLiteral() {
 				},
 				/** r('') ::= '' ~ name */
 				isReadable: function(name) {
-						return (name=='');
+						// TODO return (name=='');
+						return false;
 				},
 				/** w('') ::= '' ~ name */
 				isWriteable: function(name) {
-						return (name=='');
+						// TODO return (name=='');
+						return false;
 				},
 				/** (d_name '') ::= @ */
 				derive: function(name) {
@@ -50,7 +52,7 @@ function __EmptyLiteral() {
 				 * @return string
 				 */
 				dump: function() {
-						return "[\'\']";
+						return " [] ";
 				},
 				/** To String
 				 * @return string
@@ -86,7 +88,7 @@ function __AtLiteral() {
 				 * @return string
 				 */
 				dump: function() {
-						return "[@]";
+						return " [@] ";
 				},
 				/** To String
 				 * @return string
@@ -122,7 +124,7 @@ function __QMarkLiteral() {
 				 * @return string
 				 */
 				dump: function() {
-						return "[?]";
+						return " [?] ";
 				},
 				/** To String
 				 * @return string
@@ -158,7 +160,7 @@ function __NameLiteral(varname) {
 				 * @return string
 				 */
 				dump: function() {
-						return "[" + varname + "]";
+						return " [" + varname + "] ";
 				},
 				/** To String
 				 * @return string
@@ -194,13 +196,13 @@ function __RegExLiteral(regex) {
 				 * @return string
 				 */
 				dump: function() {
-						return "/" + regex + "/";
+						return " [/" + regex + "/] ";
 				},
 				/** To String
 				 * @return string
 				 */
 				toString: function() {
-						return regex; 
+						return "/" + regex + "/"; 
 				}
 		};
 }
@@ -236,7 +238,7 @@ function __QMarkContract(contract) {
 				 * @return string
 				 */
 				dump: function() {
-						return "[" + contract.dump() + "?]"
+						return contract.dump() + "? ";
 				},
 				/** To String
 				 * @return string
@@ -272,7 +274,7 @@ function __StarContract(contract) {
 				 * @return string
 				 */
 				dump: function() {
-						return "[" + contract.dump() + "*]"
+						return contract.dump() + "* ";
 				},
 				/** To String
 				 * @return string
@@ -296,15 +298,15 @@ function __OrContract(contract0, contract1) {
 		return {
 				/** v(C0+C1) :== v(C0) + v(C1) */
 				isNullable: function() {
-						return (contract0.isNullable() || contract0.isNullable());
+						return (contract0.isNullable() || contract1.isNullable());
 				},
 				/** r(C0+C1) :== r(C0) + r(C1) */
 				isReadable: function(name) {
-						return (contract0.isReadable(name) || contract0.isReadable(name));
+						return (contract0.isReadable(name) || contract1.isReadable(name));
 				},
 				/** w(C0+C1) :== w(C0) + w(C1) */
 				isWriteable: function(name) {
-						return (contract0.isWriteable(name) || contract0.isWriteable(name));
+						return (contract0.isWriteable(name) || contract1.isWriteable(name));
 				},
 				/** (d_name C0+C1) :== (d_name C0) + (d_name C1) */
 				derive: function(name) {
@@ -314,13 +316,13 @@ function __OrContract(contract0, contract1) {
 				 * @return string
 				 */
 				dump: function() {
-						return "[" + contract0.dump() + " + " +  contract1.dump() +  "]"
+						return " (" + contract0.dump() + " + " +  contract1.dump() +  ") ";
 				},
 				/** To String
 				 * @return string
 				 */
 				toString: function() {
-						return contract0.toString() + "+" + contract1.toString();
+						return "(" + contract0.toString() + "+" + contract1.toString() + ")";
 				},
 		};
 }
@@ -332,15 +334,15 @@ function __AndContract(contract0, contract1) {
 		return {
 				/** v(C0&C1) :== v(C0) & v(C1) */
 				isNullable: function() {
-						return (contract0.isNullable() && contract0.isNullable());
+						return (contract0.isNullable() && contract1.isNullable());
 				},
 				/** r(C0&C1) :== r(C0) & r(C1) */
 				isReadable: function(name) {
-						return (contract0.isReadable(name) && contract0.isReadable(name));
+						return (contract0.isReadable(name) && contract1.isReadable(name));
 				},
 				/** w(C0&C1) :== w(C0) & w(C1) */
 				isWriteable: function(name) {
-						return (contract0.isWriteable(name) && contract0.isWriteable(name));
+						return (contract0.isWriteable(name) && contract1.isWriteable(name));
 				},
 				/** (d_name C0&C1) :== (d_name C0) & (d_name C1) */
 				derive: function(name) {
@@ -350,13 +352,13 @@ function __AndContract(contract0, contract1) {
 				 * @return string
 				 */
 				dump: function() {
-						return "[" + contract0.dump() + " & " +  contract1.dump() +  "]"
+						return " (" + contract0.dump() + " & " +  contract1.dump() +  ") ";
 				},
 				/** To String
 				 * @return string
 				 */
 				toString: function() {
-						return contract0.toString() + "&" + contract1.toString();
+						return "(" + contract0.toString() + "&" + contract1.toString() + ")";
 				},
 		};
 }
@@ -386,13 +388,13 @@ function __NegContract(contract) {
 				 * @return string
 				 */
 				dump: function() {
-						return "[! " + contract.dump() +  "]"
+						return " !(" + contract.dump() +  ") ";
 				},
 				/** To String
 				 * @return string
 				 */
 				toString: function() {
-						return "!" + contract.toString();
+						return "!(" + contract.toString() + ")" ;
 				},
 		};
 }
@@ -411,7 +413,7 @@ function __ConcatContract(contract0, contract1) {
 		return {
 				/** v(C0.C1) :== v(C0) & v(C1) */
 				isNullable: function() {
-						return (contract0.isNullable() && contract0.isNullable());
+						return (contract0.isNullable() && contract1.isNullable());
 				},
 				/** r(C0.C1) :== r(C0)+r(C1) if v(C0), r(C0) otherwise */
 				isReadable: function(name) {
@@ -433,7 +435,7 @@ function __ConcatContract(contract0, contract1) {
 				 * @return string
 				 */
 				dump: function() {
-						return "[" + contract0.dump() + " . " +  contract1.dump() +  "]"
+						return  " " + contract0.dump() + " . " +  contract1.dump() +  " ";
 				},
 				/** To String
 				 * @return string
