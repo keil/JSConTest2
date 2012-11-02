@@ -130,26 +130,26 @@ __ContractParser = (function(){
 										}
 								}
 								if (result0 !== null) {
-										if (/^[a-zA-Z0-9_^$?*+.\\()[\]{},]/.test(input.charAt(pos))) {
+										if (/^[a-zA-Z0-9_^$?*+.\\()[\]{},|]/.test(input.charAt(pos))) {
 												result2 = input.charAt(pos);
 												pos++;
 										} else {
 												result2 = null;
 												if (reportFailures === 0) {
-														matchFailed("[a-zA-Z0-9_^$?*+.\\\\()[\\]{},]");
+														matchFailed("[a-zA-Z0-9_^$?*+.\\\\()[\\]{},|]");
 												}
 										}
 										if (result2 !== null) {
 												result1 = [];
 												while (result2 !== null) {
 														result1.push(result2);
-														if (/^[a-zA-Z0-9_^$?*+.\\()[\]{},]/.test(input.charAt(pos))) {
+														if (/^[a-zA-Z0-9_^$?*+.\\()[\]{},|]/.test(input.charAt(pos))) {
 																result2 = input.charAt(pos);
 																pos++;
 														} else {
 																result2 = null;
 																if (reportFailures === 0) {
-																		matchFailed("[a-zA-Z0-9_^$?*+.\\\\()[\\]{},]");
+																		matchFailed("[a-zA-Z0-9_^$?*+.\\\\()[\\]{},|]");
 																}
 														}
 												}
@@ -493,9 +493,30 @@ __ContractParser = (function(){
 								var pos0, pos1;
 
 								pos0 = pos;
+								pos1 = pos;
 								result0 = parse_Set();
 								if (result0 !== null) {
-										result0 = (function(offset, q) { return q; })(pos0, result0);
+										if (input.charCodeAt(pos) === 63) {
+												result1 = "?";
+												pos++;
+										} else {
+												result1 = null;
+												if (reportFailures === 0) {
+														matchFailed("\"?\"");
+												}
+										}
+										if (result1 !== null) {
+												result0 = [result0, result1];
+										} else {
+												result0 = null;
+												pos = pos1;
+										}
+								} else {
+										result0 = null;
+										pos = pos1;
+								}
+								if (result0 !== null) {
+										result0 = (function(offset, q) { return new __QMarkContract(q); })(pos0, result0[0]);
 								}
 								if (result0 === null) {
 										pos = pos0;
@@ -505,13 +526,13 @@ __ContractParser = (function(){
 										pos1 = pos;
 										result0 = parse_Set();
 										if (result0 !== null) {
-												if (input.charCodeAt(pos) === 63) {
-														result1 = "?";
+												if (input.charCodeAt(pos) === 42) {
+														result1 = "*";
 														pos++;
 												} else {
 														result1 = null;
 														if (reportFailures === 0) {
-																matchFailed("\"?\"");
+																matchFailed("\"*\"");
 														}
 												}
 												if (result1 !== null) {
@@ -525,37 +546,16 @@ __ContractParser = (function(){
 												pos = pos1;
 										}
 										if (result0 !== null) {
-												result0 = (function(offset, q) { return new __QMarkContract(s); })(pos0, result0[0]);
+												result0 = (function(offset, q) { return new __StarContract(q); })(pos0, result0[0]);
 										}
 										if (result0 === null) {
 												pos = pos0;
 										}
 										if (result0 === null) {
 												pos0 = pos;
-												pos1 = pos;
 												result0 = parse_Set();
 												if (result0 !== null) {
-														if (input.charCodeAt(pos) === 42) {
-																result1 = "*";
-																pos++;
-														} else {
-																result1 = null;
-																if (reportFailures === 0) {
-																		matchFailed("\"*\"");
-																}
-														}
-														if (result1 !== null) {
-																result0 = [result0, result1];
-														} else {
-																result0 = null;
-																pos = pos1;
-														}
-												} else {
-														result0 = null;
-														pos = pos1;
-												}
-												if (result0 !== null) {
-														result0 = (function(offset, q) { return new __StarContract(s); })(pos0, result0[0]);
+														result0 = (function(offset, q) { return q; })(pos0, result0);
 												}
 												if (result0 === null) {
 														pos = pos0;
