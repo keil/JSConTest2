@@ -13,6 +13,8 @@ load("__lib_jsweakmap.js");
 load("__lib_jshashset.js");
 // load string padding
 load("__lib_jspadding.js");
+// Load new waek map
+load("__lib_jsweakmap2.js");
 
 
 

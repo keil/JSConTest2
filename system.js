@@ -14,9 +14,9 @@
 //////////////////////////////////////////////////
 
 Array.prototype.foreach = function( callback ) {
-  for( var k=0; k<this .length; k++ ) {
-    callback( k, this[ k ] );
-  }
+		for( var k=0; k<this .length; k++ ) {
+				callback( k, this[ k ] );
+		}
 }
 
 
@@ -68,3 +68,27 @@ function __closeHandler() {
 };
 // assign close handler to __
 __ = Proxy.create(__closeHandler());
+
+
+
+//////////////////////////////////////////////////
+// CHECK
+//////////////////////////////////////////////////
+
+/* Check function
+*/
+function __check() {
+		__dumpAccess();
+		__dumpViolation();
+}
+
+/* Check Handler
+*/
+function __checkHandler() {
+		return {
+				get: function(receiver, name) {
+						__check();
+				}};
+};
+// assign check handler to ?
+_ = Proxy.create(__checkHandler());

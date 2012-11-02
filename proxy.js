@@ -18,6 +18,13 @@
  */
 function __AccessHandler(target, path, contract) {
 		return {
+				/** extend contract
+				 * @param Access Permission Contract 
+				 */
+				extend: function(extension) {
+						contract = new __AndContract(contract, extension);
+				},
+
 				/* FUNDAMENTAL TRAPS
 				*/
 
@@ -156,12 +163,7 @@ function __AccessHandler(target, path, contract) {
 								__violationLogger.put(__ViolationType.READ, tracePath);
 								value = __config_ViolationMode == __ViolationMode.OBSERVER ? target[name] : undefined;
 						}
-
-						/* TODO
-						 * check if it is already wrapped, than extend handler, otherwise create new one
-						 */
 						return __createMembrane(value, tracePath, contract.derive(name));
-
 				},
 				/** function to handle write access
 				 * @param receiver Receiver of the property assignment
@@ -267,8 +269,7 @@ function __createMembrane(init, name, contract) {
 								return new forward(arguments);
 						}
 						var proxy = Proxy.createFunction(accessHandler, callTrap, constructTrap);
-						// TODO
-						//__handlerReference.put(proxy, accessHandler);
+						__handlerReference.put(proxy, accessHandler);
 						return proxy;
 				}
 
@@ -276,14 +277,23 @@ function __createMembrane(init, name, contract) {
 				else {
 						var prototype = wrap(Object.getPrototypeOf(target));
 						var proxy = Proxy.create(accessHandler, prototype);
-						// TODO
-						//__handlerReference.put(proxy, accessHandler);
+						__handlerReference.put(proxy, accessHandler);
 						return proxy;
 				}
 		}
 
-		// RETURN wrapped object
-		return wrap(init);
+		// check if init is already a proxy
+		// than, extend the contract
+		// otherwise, create new a proxy
+		if(__handlerReference.containsKey(init)) {
+				var accessHandler = __handlerReference.get(init);
+				accessHandler.extend(contract);
+				return init;
+
+		} else {
+				// RETURN wrapped object
+				return wrap(init);
+		}
 }
 
 /** Function Membrane
@@ -364,8 +374,8 @@ function __wrap(contract, obj, name) {
 /** Standard Handler Reference Map
  * reference map proxy -> handler
  */
-function __HandlerReference() {
-		var handlerMap = new WeakMap();
+function __HandlerReference() {	
+		var handlerMap = new SimpleWeakMap();
 
 		return {
 				/** put map entry
@@ -387,7 +397,7 @@ function __HandlerReference() {
 						 * @return true if proxy is element of map, false otherwise
 						 */
 						containsKey: function(proxy) {
-								return handlerMap.get(proxy);
+								return handlerMap.get(proxy) !== undefined ? true : false;
 
 						}
 		};
