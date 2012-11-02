@@ -1,20 +1,8 @@
-* new Contracts
-** Parser
-** Datastructure
-** "(arguments.0.a|arguments.1.b)" - "arguments.(0|1).a"
-
-
-* rename contracts in <stat> in contract
-** dependeing to new structure
-
 * chnage Proxy Syntax
 
 * has map for proxies
 
-* rename version numbers
-
-* use/ test meta-,eta proxy, to handle get, getOwn .. and so on
-** only use one method
-
 * set revoke to the function handler
 ** will be needed to revoke contracts
+
+* Proxy Structure to get permti global objects
