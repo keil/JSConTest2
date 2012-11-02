@@ -34,14 +34,12 @@ function __EmptyLiteral() {
 				isNullable: function() {
 						return true;
 				},
-				/** r('') ::= '' ~ name */
+				/** r('') ::= false */
 				isReadable: function(name) {
-						// TODO return (name=='');
 						return false;
 				},
-				/** w('') ::= '' ~ name */
+				/** w('') ::= false */
 				isWriteable: function(name) {
-						// TODO return (name=='');
 						return false;
 				},
 				/** (d_name '') ::= @ */

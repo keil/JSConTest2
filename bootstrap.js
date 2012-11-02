@@ -23,14 +23,14 @@ load("path.js");
 // load proxy
 load("proxy.js");
 
+// load contract
+load("contract.js");
+
 // load permit
 load("permit.js")
 
 // load violation
 load("violation.js")
-
-// load contract
-load("contract.js");
 
 // load parser
 load("parser.js");
