@@ -156,10 +156,6 @@ testR("!(a)", "b");
 testNR("!(?)", "a");
 testR("!(@)", "a");
 
-//testNR("!((a+b))", "a");
-//testR("!((a+b))", "c");
-//testR("!((a&b))", "a");
-//testNR("!((a&?))", "a");
 testR("!(!(a))", "a");
 testNR("!(!(b))", "a");
 
@@ -191,10 +187,6 @@ testW("!(a)", "b");
 testNW("!(?)", "a");
 testW("!(@)", "a");
 
-//testNW("!((a+b))", "a");
-//testW("!((a+b))", "c");
-//testW("!((a&b))", "a");
-//testNW("!((a&?))", "a");
 testW("!(!(a))", "a");
 testNW("!(!(b))", "a");
 
