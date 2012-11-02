@@ -7,15 +7,6 @@
 // Version: 1.00
 //////////////////////////////////////////////////
 
-// Load waek map
-load("__lib_jsweakmap.js");
-// load hash set
-load("__lib_jshashset.js");
-// load string padding
-load("__lib_jspadding.js");
-
-
-
 //////////////////////////////////////////////////
 // TRACE PATH
 // data structure to log access paths
@@ -32,10 +23,10 @@ function __TraceProperty(variable) {
 				// property value
 				property: variable,
 
-						// to string method
-						toString : function () {
-								return property;
-						}
+				// to string method
+				toString : function () {
+						return property;
+				}
 		}
 }
 

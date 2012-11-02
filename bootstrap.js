@@ -7,6 +7,15 @@
 // Version: 1.00
 //////////////////////////////////////////////////
 
+// Load waek map
+load("__lib_jsweakmap.js");
+// load hash set
+load("__lib_jshashset.js");
+// load string padding
+load("__lib_jspadding.js");
+
+
+
 // load configuration
 load("config.js");
 
