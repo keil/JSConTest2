@@ -1,6 +1,4 @@
-* chnage Proxy Syntax
-
-* has map for proxies
+* change Proxy Syntax (new/ ECMA version)
 
 * set revoke to the function handler
 ** will be needed to revoke contracts
