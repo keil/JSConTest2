@@ -224,6 +224,8 @@ testR("(aa+?).@", "aa");
 testNR("(aa&cc).bb", "aa");
 testNR("(aa&cc).bb", "bb");
 testR("(aa&?).@", "aa");
+testR("(aa&cc)?.bb", "bb");
+testR("(aa&cc)*.bb", "bb");
 
 testR("aa.aa", "aa");
 testNR("aa.bb", "bb");
@@ -244,3 +246,54 @@ testNR("(a.?&/get/)", "set");
 testR("(?&!(length))", "a");
 testNR("(?&!(length))", "length");
 testR("((a.?&!(length))+/X/)", "lengthX");
+
+// COMPLEX CONTRACT TESTS
+// READABLE
+
+testNW("?.a", "a");
+testNW("?.b", "b");
+
+testNW("@.a", "a");
+testNW("@.b", "b");
+
+testNW("a?.b", "a");
+testW("a?.b", "b");
+testNW("a?.b", "c");
+testNW("a?.b", "");
+
+testNW("a*.b", "a");
+testW("a*.b", "b");
+testNW("a*.b", "c");
+testNW("a*.b", "");
+
+testNW("(aa+bb).aa", "aa");
+testNW("(aa+cc).bb", "bb");
+testNW("(aa+?).@", "aa");
+
+testNW("(aa&cc).bb", "aa");
+testNW("(aa&cc).bb", "bb");
+testNW("(aa&?).@", "aa");
+testW("(aa&cc)?.bb", "bb");
+testW("(aa&cc)*.bb", "bb");
+
+testNW("aa.aa", "aa");
+testNW("aa.bb", "bb");
+testNW("aa.@", "aa");
+testNW("aa.?", "aa");
+testW("aa.bb?", "aa");
+testW("aa.bb*", "aa");
+
+testNW("aa.aa", "aa");
+testNW("aa.bb", "bb");
+testNW("aa.@", "aa");
+testNW("aa.?", "aa");
+
+testNW("(a.?+b.@)", "a");
+testNW("(a.?&b.@)", "b");
+testNW("(a.?&/get/)", "get");
+testW("(a.?+/get/)", "get");
+testNW("(a.?&/get/)", "set");
+
+testW("(?&!(length))", "a");
+testNW("(?&!(length))", "length");
+testW("((a.?&!(length))+/X/)", "lengthX");
