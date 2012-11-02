@@ -103,11 +103,11 @@ function __AccessLogger() {
 		var accessMap = new HashSet(hashingFunction, equalityFunction);
 
 		return {
-				/** sets a new value
+				/** put a new value
 				 * @param type Access type
 				 * @param path Access path
 				 */
-				set: function(type, path) {
+				put: function(type, path) {
 						entryValue = Entry(type, path);
 						accessMap.add(entryValue);
 				},

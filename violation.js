@@ -56,11 +56,11 @@ function __ViolationLogger() {
 		var accessMap = new HashSet(hashingFunction, equalityFunction);
 
 		return {
-				/** sets a new value
+				/** puts a new value
 				 * @param type Access type
 				 * @param path Access path
 				 */
-				set: function(type, path) {
+				put: function(type, path) {
 						entryValue = Entry(type, path);
 						accessMap.add(entryValue);
 				},

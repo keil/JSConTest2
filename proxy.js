@@ -29,19 +29,19 @@ function __AccessHandler(target, path, contract) {
 						// create a new path
 						tracePath =  new __TracePath(path, name);
 						// register at loggin engine
-						__accessLogger.set(__AccessType.READ, tracePath);
+						__accessLogger.put(__AccessType.READ, tracePath);
 
 						if(contract.isReadable(name)) {
 								var desc = Object.getOwnPropertyDescriptor(target, name);
 								if (desc !== undefined) desc.value = __createMembrane(desc, tracePath, contract.derive(name));
 								return desc;
 						} else if(__config_ViolationMode == __ViolationMode.OBSERVER) {
-								__violationLogger.set(__ViolationType.READ, tracePath);
+								__violationLogger.put(__ViolationType.READ, tracePath);
 								var desc = Object.getOwnPropertyDescriptor(target, name);
 								if (desc !== undefined) desc.value = __createMembrane(desc, tracePath, contract.derive(name));
 								return desc;
 						} else {
-								__violationLogger.set(__ViolationType.READ, tracePath);
+								__violationLogger.put(__ViolationType.READ, tracePath);
 								return undefined;
 						}
 				},
@@ -53,7 +53,7 @@ function __AccessHandler(target, path, contract) {
 						// create a new path
 						tracePath =  new __TracePath(path, name);
 						// register at loggin engine
-						__accessLogger.set(__AccessType.READ, tracePath);
+						__accessLogger.put(__AccessType.READ, tracePath);
 
 						if(contract.isReadable(name)) {
 								var desc = Object.getOwnPropertyDescriptor(target, name);
@@ -61,13 +61,13 @@ function __AccessHandler(target, path, contract) {
 								if (desc !== undefined) desc.value = __createMembrane(desc, tracePath, contract.derive(name));
 								return desc;
 						} else if(__config_ViolationMode == __ViolationMode.OBSERVER) {
-								__violationLogger.set(__ViolationType.READ, tracePath);
+								__violationLogger.put(__ViolationType.READ, tracePath);
 								var desc = Object.getOwnPropertyDescriptor(target, name);
 								//var desc = Object.getPropertyDescriptor(obj, name); // not in ES5
 								if (desc !== undefined) desc.value = __createMembrane(desc, tracePath, contract.derive(name));
 								return desc;
 						} else {
-								__violationLogger.set(__ViolationType.READ, tracePath);
+								__violationLogger.put(__ViolationType.READ, tracePath);
 								return undefined;
 						}
 				},
@@ -92,15 +92,15 @@ function __AccessHandler(target, path, contract) {
 						// create a new path
 						tracePath =  new __TracePath(path, name);
 						// register at loggin engine
-						__accessLogger.set(__AccessType.WRITE, tracePath);
+						__accessLogger.put(__AccessType.WRITE, tracePath);
 
 						if(contract.isWriteable(name)) {
 								Object.defineProperty(target, name, value);
 						} else if(__config_ViolationMode == __ViolationMode.OBSERVER) {
-								__violationLogger.set(__ViolationType.WRITE, tracePath);
+								__violationLogger.put(__ViolationType.WRITE, tracePath);
 								Object.defineProperty(target, name, value);
 						} else {
-								__violationLogger.set(__ViolationType.WRITE, tracePath);
+								__violationLogger.put(__ViolationType.WRITE, tracePath);
 						}
 				},
 				/** function to delete properties
@@ -110,15 +110,15 @@ function __AccessHandler(target, path, contract) {
 						// create a new path
 						tracePath =  new __TracePath(path, name);
 						// register at loggin engine
-						__accessLogger.set(__AccessType.WRITE, tracePath);
+						__accessLogger.put(__AccessType.WRITE, tracePath);
 
 						if(contract.isWriteable(name)) {
 								return delete target[name];
 						} else if(__config_ViolationMode == __ViolationMode.OBSERVER) {
-								__violationLogger.set(__ViolationType.WRITE, tracePath);
+								__violationLogger.put(__ViolationType.WRITE, tracePath);
 								return delete target[name];
 						} else {
-								__violationLogger.set(__ViolationType.WRITE, tracePath);
+								__violationLogger.put(__ViolationType.WRITE, tracePath);
 								return false;
 						}
 				},
@@ -148,12 +148,12 @@ function __AccessHandler(target, path, contract) {
 						// create a new path
 						tracePath =  new __TracePath(path, name);
 						// register at loggin engine
-						__accessLogger.set(__AccessType.READ, tracePath);
+						__accessLogger.put(__AccessType.READ, tracePath);
 
 						if(contract.isReadable(name)) {
 								value =  target[name];
 						} else {
-								__violationLogger.set(__ViolationType.READ, tracePath);
+								__violationLogger.put(__ViolationType.READ, tracePath);
 								value = __config_ViolationMode == __ViolationMode.OBSERVER ? target[name] : undefined;
 						}
 
@@ -173,15 +173,15 @@ function __AccessHandler(target, path, contract) {
 						// create a new path
 						tracePath =  new __TracePath(path, name);
 						// register at loggin engine
-						__accessLogger.set(__AccessType.WRITE, tracePath);
+						__accessLogger.put(__AccessType.WRITE, tracePath);
 
 						if(contract.isWriteable(name)) {
 								target[name] = value;
 						} else if(__config_ViolationMode == __ViolationMode.OBSERVER) {
-								__violationLogger.set(__ViolationType.WRITE, tracePath);
+								__violationLogger.put(__ViolationType.WRITE, tracePath);
 								target[name] = value;
 						} else {
-								__violationLogger.set(__ViolationType.WRITE, tracePath);
+								__violationLogger.put(__ViolationType.WRITE, tracePath);
 						}
 						return value;
 				},
@@ -266,13 +266,19 @@ function __createMembrane(init, name, contract) {
 								}
 								return new forward(arguments);
 						}
-						return Proxy.createFunction(accessHandler, callTrap, constructTrap);
+						var proxy = Proxy.createFunction(accessHandler, callTrap, constructTrap);
+						// TODO
+						//__handlerReference.put(proxy, accessHandler);
+						return proxy;
 				}
 
 				// If object, create object proxy
 				else {
 						var prototype = wrap(Object.getPrototypeOf(target));
-						return Proxy.create(accessHandler, prototype);	
+						var proxy = Proxy.create(accessHandler, prototype);
+						// TODO
+						//__handlerReference.put(proxy, accessHandler);
+						return proxy;
 				}
 		}
 
@@ -355,7 +361,6 @@ function __wrap(contract, obj, name) {
 // HANDLER REFERENCE
 ////////////////////////////////////////////////////
 
-// TODO: take use ?!
 /** Standard Handler Reference Map
  * reference map proxy -> handler
  */
@@ -363,11 +368,11 @@ function __HandlerReference() {
 		var handlerMap = new WeakMap();
 
 		return {
-				/** set map entry
+				/** put map entry
 				 * @param proxy Key value
 				 * @param handler Value
 				 */
-				set: function(proxy, handler) {
+				put: function(proxy, handler) {
 						handlerMap.set(proxy, handler);
 						return true;
 				},
@@ -375,7 +380,15 @@ function __HandlerReference() {
 						 * @param proxy Key value
 						 */
 						get: function(proxy) {
-								return handlerMap.get(proxy, undefined);
+								return handlerMap.get(proxy);
+						},
+						/** contains key
+						 * @param proxy
+						 * @return true if proxy is element of map, false otherwise
+						 */
+						containsKey: function(proxy) {
+								return handlerMap.get(proxy);
+
 						}
 		};
 };
