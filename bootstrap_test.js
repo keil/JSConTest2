@@ -65,3 +65,6 @@ load("__lib_assert.js");
 //load("__test_permit4.js");
 //load("__test_permit5.js");
 //load("__test_permit6.js");
+
+load("__test_contract.js");
+

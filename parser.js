@@ -238,8 +238,8 @@ __ContractParser = (function(){
 						}
 
 						function parse_Literal() {
-								var result0;
-								var pos0;
+								var result0, result1, result2;
+								var pos0, pos1;
 
 								pos0 = pos;
 								if (input.charCodeAt(pos) === 64) {
@@ -276,21 +276,66 @@ __ContractParser = (function(){
 										}
 										if (result0 === null) {
 												pos0 = pos;
-												result0 = parse_RegEx();
+												pos1 = pos;
+												if (input.substr(pos, 2) === "!(") {
+														result0 = "!(";
+														pos += 2;
+												} else {
+														result0 = null;
+														if (reportFailures === 0) {
+																matchFailed("\"!(\"");
+														}
+												}
 												if (result0 !== null) {
-														result0 = (function(offset, l) { return new __RegExLiteral(l); })(pos0, result0);
+														result1 = parse_Literal();
+														if (result1 !== null) {
+																if (input.charCodeAt(pos) === 41) {
+																		result2 = ")";
+																		pos++;
+																} else {
+																		result2 = null;
+																		if (reportFailures === 0) {
+																				matchFailed("\")\"");
+																		}
+																}
+																if (result2 !== null) {
+																		result0 = [result0, result1, result2];
+																} else {
+																		result0 = null;
+																		pos = pos1;
+																}
+														} else {
+																result0 = null;
+																pos = pos1;
+														}
+												} else {
+														result0 = null;
+														pos = pos1;
+												}
+												if (result0 !== null) {
+														result0 = (function(offset, l) { return new __NegContract(l); })(pos0, result0[1]);
 												}
 												if (result0 === null) {
 														pos = pos0;
 												}
 												if (result0 === null) {
 														pos0 = pos;
-														result0 = parse_Name();
+														result0 = parse_RegEx();
 														if (result0 !== null) {
-																result0 = (function(offset, l) { return new __NameLiteral(l); })(pos0, result0);
+																result0 = (function(offset, l) { return new __RegExLiteral(l); })(pos0, result0);
 														}
 														if (result0 === null) {
 																pos = pos0;
+														}
+														if (result0 === null) {
+																pos0 = pos;
+																result0 = parse_Name();
+																if (result0 !== null) {
+																		result0 = (function(offset, l) { return new __NameLiteral(l); })(pos0, result0);
+																}
+																if (result0 === null) {
+																		pos = pos0;
+																}
 														}
 												}
 										}
@@ -431,57 +476,12 @@ __ContractParser = (function(){
 										}
 										if (result0 === null) {
 												pos0 = pos;
-												pos1 = pos;
-												if (input.substr(pos, 2) === "!(") {
-														result0 = "!(";
-														pos += 2;
-												} else {
-														result0 = null;
-														if (reportFailures === 0) {
-																matchFailed("\"!(\"");
-														}
-												}
+												result0 = parse_Literal();
 												if (result0 !== null) {
-														result1 = parse_Contract();
-														if (result1 !== null) {
-																if (input.charCodeAt(pos) === 41) {
-																		result2 = ")";
-																		pos++;
-																} else {
-																		result2 = null;
-																		if (reportFailures === 0) {
-																				matchFailed("\")\"");
-																		}
-																}
-																if (result2 !== null) {
-																		result0 = [result0, result1, result2];
-																} else {
-																		result0 = null;
-																		pos = pos1;
-																}
-														} else {
-																result0 = null;
-																pos = pos1;
-														}
-												} else {
-														result0 = null;
-														pos = pos1;
-												}
-												if (result0 !== null) {
-														result0 = (function(offset, s) { return new __NegContract(s); })(pos0, result0[1]);
+														result0 = (function(offset, s) { return s; })(pos0, result0);
 												}
 												if (result0 === null) {
 														pos = pos0;
-												}
-												if (result0 === null) {
-														pos0 = pos;
-														result0 = parse_Literal();
-														if (result0 !== null) {
-																result0 = (function(offset, s) { return s; })(pos0, result0);
-														}
-														if (result0 === null) {
-																pos = pos0;
-														}
 												}
 										}
 								}

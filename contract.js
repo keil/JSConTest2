@@ -429,7 +429,7 @@ function __ConcatContract(contract0, contract1) {
 				/** (d_name C0.C1) :== (D_name C0).C1 + (D_name C1) if V(C0), (D_name C0).C1 otherwise */
 				derive: function(name) {
 						if(contract0.isNullable()) return new __OrContract(__ConcatContract(contract0.derive(name), contract1), contract1.derive(name));
-						else __ConcatContract(contract0.derive(name), contract1);
+						else return __ConcatContract(contract0.derive(name), contract1);
 				},
 				/** Dump
 				 * @return string
