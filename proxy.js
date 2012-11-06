@@ -23,7 +23,7 @@ function __AccessHandler(target, path, contract) {
 				 */
 				extend: function(extPath, extContract) {
 						__sysout("EXTEND with " + path + extContract);
-						contract = new __AndContract(contract, extContract);
+						contract = new __AndContract(contract, extContract).reduce();
 						path = new __TraceSet(path, extPath);
 				},
 
@@ -256,7 +256,7 @@ function __createMembrane(init, name, contract) {
 				}
 
 				// AccessHandler for <target>
-				var accessHandler = __AccessHandler(target, initPath, contract);
+				var accessHandler = __AccessHandler(target, initPath, contract.reduce());
 
 				// If function, create function proxy
 				if (typeof target === "function") {
@@ -284,7 +284,6 @@ function __createMembrane(init, name, contract) {
 				}
 		}
 
-		// TODO: merge path ?
 		// check if init is already a proxy
 		// than, extend the contract
 		// otherwise, create new a proxy

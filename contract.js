@@ -62,6 +62,12 @@ function __EmptyLiteral() {
 				toString: function() {
 						return ""; 
 				},
+				/** Reduce Contract
+				 * @return n-reduced contract
+				 */
+				reduce: function() {
+						return this;
+				}
 		};
 }
 
@@ -102,6 +108,12 @@ function __AtLiteral() {
 				toString: function() {
 						return "@"; 
 				},
+				/** Reduce Contract
+				 * @return n-reduced contract
+				 */
+				reduce: function() {
+						return this;
+				}
 		};
 }
 
@@ -141,6 +153,12 @@ function __QMarkLiteral() {
 				 */
 				toString: function() {
 						return "?"; 
+				},
+				/** Reduce Contract
+				 * @return n-reduced contract
+				 */
+				reduce: function() {
+						return this;
 				}
 		};
 }
@@ -181,6 +199,12 @@ function __NameLiteral(varname) {
 				 */
 				toString: function() {
 						return varname; 
+				},
+				/** Reduce Contract
+				 * @return n-reduced contract
+				 */
+				reduce: function() {
+						return this;
 				}
 		};
 }
@@ -221,6 +245,12 @@ function __RegExLiteral(regex) {
 				 */
 				toString: function() {
 						return "/" + regex + "/"; 
+				},
+				/** Reduce Contract
+				 * @return n-reduced contract
+				 */
+				reduce: function() {
+						return this;
 				}
 		};
 }
@@ -268,6 +298,12 @@ function __QMarkContract(contract) {
 				toString: function() {
 						return contract.toString() + "?";
 				},
+				/** Reduce Contract
+				 * @return n-reduced contract
+				 */
+				reduce: function() {
+						return new __QMarkContract(contract.reduce());
+				}
 		};
 }
 
@@ -308,6 +344,12 @@ function __StarContract(contract) {
 				toString: function() {
 						return contract.toString() + "*";
 				},
+				/** Reduce Contract
+				 * @return n-reduced contract
+				 */
+				reduce: function() {
+						return new __StarContract(contract.reduce());
+				}
 		};
 }
 
@@ -354,6 +396,19 @@ function __OrContract(contract0, contract1) {
 				toString: function() {
 						return "(" + contract0.toString() + "+" + contract1.toString() + ")";
 				},
+				/** Reduce Contract
+				 * @return n-reduced contract
+				 */
+				reduce: function() {
+						if(this.isEmpty())
+								return new __AtLiteral();
+						else if(contract0.isEmpty())
+								return contract1.reduce();
+						else if(contract1.isEmpty())
+								return contract0.reduce();
+						else 
+								return new  __OrContract(contract0.reduce(), contract1.reduce());
+				}
 		};
 }
 
@@ -394,6 +449,15 @@ function __AndContract(contract0, contract1) {
 				toString: function() {
 						return "(" + contract0.toString() + "&" + contract1.toString() + ")";
 				},
+				/** Reduce Contract
+				 * @return n-reduced contract
+				 */
+				reduce: function() {
+						if(this.isEmpty())
+								return new __AtLiteral();
+						else 
+								return new  __AndContract(contract0.reduce(), contract1.reduce());
+				}
 		};
 }
 
@@ -437,6 +501,15 @@ function __NegContract(contract) {
 				toString: function() {
 						return "!(" + contract.toString() + ")" ;
 				},
+				/** Reduce Contract
+				 * @return n-reduced contract
+				 */
+				reduce: function() {
+						if(this.isEmpty())
+								return new __AtLiteral();
+						else 
+								return new  __NegContract(contract.reduce());
+				}
 		};
 }
 
@@ -488,5 +561,14 @@ function __ConcatContract(contract0, contract1) {
 				toString: function() {
 						return contract0.toString() + "." + contract1.toString();
 				},
+				/** Reduce Contract
+				 * @return n-reduced contract
+				 */
+				reduce: function() {
+						if(this.isEmpty())
+								return new __AtLiteral();
+						else 
+								return new  __ConcatContract(contract0.reduce(), contract1.reduce());
+				}
 		};
 }
