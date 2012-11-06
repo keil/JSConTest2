@@ -30,6 +30,10 @@
  */
 function __EmptyLiteral() {
 		return {
+				/** n('') ::= false */
+				isEmpty: function() {
+						return false;
+				},
 				/** v('') ::= true */
 				isNullable: function() {
 						return true;
@@ -66,6 +70,10 @@ function __EmptyLiteral() {
  */
 function __AtLiteral() {
 		return {
+				/** n(@) ::= true */
+				isEmpty: function() {
+						return true;
+				},
 				/** v(@) ::= false */
 				isNullable: function() {
 						return false;
@@ -102,6 +110,10 @@ function __AtLiteral() {
  */
 function __QMarkLiteral() {
 		return {
+				/** n(?) ::= false */
+				isEmpty: function() {
+						return false;
+				},
 				/** v(?) ::= false */
 				isNullable: function() {
 						return false;
@@ -138,6 +150,10 @@ function __QMarkLiteral() {
  */
 function __NameLiteral(varname) {
 		return {
+				/** n(varname) ::= false */
+				isEmpty: function() {
+						return false;
+				},
 				/** v(varname) ::= false */
 				isNullable: function() {
 						return false;
@@ -174,6 +190,10 @@ function __NameLiteral(varname) {
  */
 function __RegExLiteral(regex) {
 		return {
+				/** n(RegEx) ::= false */
+				isEmpty: function() {
+						return false;
+				},
 				/** v(RegEx) ::= false */
 				isNullable: function() {
 						return false;
@@ -216,6 +236,10 @@ function __RegExLiteral(regex) {
  */
 function __QMarkContract(contract) {
 		return {
+				/** n(C?) ::= false */
+				isEmpty: function() {
+						return false;
+				},
 				/** v(C?) :== true */
 				isNullable: function() {
 						return true;
@@ -252,7 +276,11 @@ function __QMarkContract(contract) {
  */
 function __StarContract(contract) {
 		return {
-				/** v(C?) :== true */
+				/** n(C*) ::= false */
+				isEmpty: function() {
+						return false;
+				},
+				/** v(C*) :== true */
 				isNullable: function() {
 						return true;
 				},
@@ -294,6 +322,10 @@ function __StarContract(contract) {
  */
 function __OrContract(contract0, contract1) {
 		return {
+				/** n(C0+C1) ::= n(C0) & n(C1) */
+				isEmpty: function() {
+						return contract0.isEmpty() && contract1.isEmpty();
+				},
 				/** v(C0+C1) :== v(C0) + v(C1) */
 				isNullable: function() {
 						return (contract0.isNullable() || contract1.isNullable());
@@ -330,6 +362,10 @@ function __OrContract(contract0, contract1) {
  */
 function __AndContract(contract0, contract1) {
 		return {
+				/** n(C0+C1) ::= n(C0) + n(C1) */
+				isEmpty: function() {
+						return contract0.isEmpty() || contract1.isEmpty();
+				},
 				/** v(C0&C1) :== v(C0) & v(C1) */
 				isNullable: function() {
 						return (contract0.isNullable() && contract1.isNullable());
@@ -366,6 +402,13 @@ function __AndContract(contract0, contract1) {
  */
 function __NegContract(contract) {
 		return {
+				/** n(!C) ::= true if C=?, false otherwise */
+				isEmpty: function() {
+						if(contract.toString()=="?")
+								return true;
+						else 
+								return false;
+				},
 				/** v(!C) ::= false if v(C), false otherwise */
 				isNullable: function() {
 						return contract.isNullable() ? false : true;
@@ -409,6 +452,10 @@ function __NegContract(contract) {
  */
 function __ConcatContract(contract0, contract1) {
 		return {
+				/** n(C0.C1) ::= n(C0) */
+				isEmpty: function() {
+						return contract0.isEmpty();
+				},
 				/** v(C0.C1) :== v(C0) & v(C1) */
 				isNullable: function() {
 						return (contract0.isNullable() && contract1.isNullable());
