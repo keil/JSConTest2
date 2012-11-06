@@ -8,13 +8,13 @@
 //////////////////////////////////////////////////
 
 // Load waek map
-load("__lib_jsweakmap.js");
+load("__lib/__lib_jsweakmap.js");
 // load hash set
-load("__lib_jshashset.js");
+load("__lib/__lib_jshashset.js");
 // load string padding
-load("__lib_jspadding.js");
+load("__lib/__lib_jspadding.js");
 // Load new waek map
-load("__lib_jsweakmap2.js");
+load("__lib/__lib_jsweakmap2.js");
 
 
 
@@ -22,7 +22,7 @@ load("__lib_jsweakmap2.js");
 load("config.js");
 
 // load logging engine
-load("__lib_log4js.js");
+load("__lib/__lib_log4js.js");
 var __logger = new __Log(__Log.NONE, __Log.consoleLogger);
 
 // load system
@@ -52,4 +52,4 @@ load("parser.js");
 //////////////////////////////////////////////////
 
 // load testcase
-load("__test_.js");
+load("__test/__test_.js");

@@ -8,13 +8,13 @@
 //////////////////////////////////////////////////
 
 // Load waek map
-load("__lib_jsweakmap.js");
+load("__lib/__lib_jsweakmap.js");
 // load hash set
-load("__lib_jshashset.js");
+load("__lib/__lib_jshashset.js");
 // load string padding
-load("__lib_jspadding.js");
+load("__lib/__lib_jspadding.js");
 // Load new waek map
-load("__lib_jsweakmap2.js");
+load("__lib/__lib_jsweakmap2.js");
 
 
 
@@ -22,7 +22,7 @@ load("__lib_jsweakmap2.js");
 load("config.js");
 
 // load logging engine
-load("__lib_log4js.js");
+load("__lib/__lib_log4js.js");
 var __logger = new __Log(__Log.NONE, __Log.consoleLogger);
 
 // load system
@@ -47,7 +47,7 @@ load("violation.js")
 load("parser.js");
 
 // load assert
-load("__lib_assert.js");
+load("__lib/__lib_assert.js");
 
 
 
@@ -77,4 +77,4 @@ load("__lib_assert.js");
 //load("__test_permit5.js");
 //load("__test_permit6.js");
 
-load("__test_contract.js");
+load("__test/__test_contract.js");
