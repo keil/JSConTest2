@@ -316,8 +316,8 @@ function __createFunctionMembrane(init, name, contract) {
 		 * @param args Function arguments
 		 */
 		function wrapFunction(func, base, args) {
-				stat = contract.readable("arguments");
-				args = __createMembrane(args, "arguments", stat.contracts);
+				args = __createMembrane(args, "arguments", contract.derive("arguments"));
+				base = __createMembrane(base, "this", contract);
 				return func.apply(base, args);
 		}
 
