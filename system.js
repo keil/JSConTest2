@@ -77,18 +77,7 @@ __ = Proxy.create(__closeHandler());
 
 /* Check function
 */
-function __check() {
+function __dump() {
 		__dumpAccess();
 		__dumpViolation();
 }
-
-/* Check Handler
-*/
-function __checkHandler() {
-		return {
-				get: function(receiver, name) {
-						__check();
-				}};
-};
-// assign check handler to ?
-_ = Proxy.create(__checkHandler());

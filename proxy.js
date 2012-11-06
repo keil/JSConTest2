@@ -21,8 +21,10 @@ function __AccessHandler(target, path, contract) {
 				/** extend contract
 				 * @param Access Permission Contract 
 				 */
-				extend: function(extension) {
-						contract = new __AndContract(contract, extension);
+				extend: function(extPath, extContract) {
+						__sysout("EXTEND with " + path + extContract);
+						contract = new __AndContract(contract, extContract);
+						path = new __TraceSet(path, extPath);
 				},
 
 				/* FUNDAMENTAL TRAPS
@@ -34,7 +36,7 @@ function __AccessHandler(target, path, contract) {
 				 */
 				getOwnPropertyDescriptor: function(name) {
 						// create a new path
-						tracePath =  new __TracePath(path, name);
+						tracePath =  new __TracePath(path, new __TraceProperty(name));
 						// register at loggin engine
 						__accessLogger.put(__AccessType.READ, tracePath);
 
@@ -58,7 +60,7 @@ function __AccessHandler(target, path, contract) {
 				 */
 				getPropertyDescriptor: function(name) {
 						// create a new path
-						tracePath =  new __TracePath(path, name);
+						tracePath =  new __TracePath(path, new __TraceProperty(name));
 						// register at loggin engine
 						__accessLogger.put(__AccessType.READ, tracePath);
 
@@ -97,7 +99,7 @@ function __AccessHandler(target, path, contract) {
 				 */
 				defineProperty: function(name, value) {
 						// create a new path
-						tracePath =  new __TracePath(path, name);
+						tracePath =  new __TracePath(path, new __TraceProperty(name));
 						// register at loggin engine
 						__accessLogger.put(__AccessType.WRITE, tracePath);
 
@@ -115,7 +117,7 @@ function __AccessHandler(target, path, contract) {
 				 */
 				delete: function(name) {
 						// create a new path
-						tracePath =  new __TracePath(path, name);
+						tracePath =  new __TracePath(path, new __TraceProperty(name));
 						// register at loggin engine
 						__accessLogger.put(__AccessType.WRITE, tracePath);
 
@@ -153,7 +155,7 @@ function __AccessHandler(target, path, contract) {
 				 */
 				get: function(receiver, name) {
 						// create a new path
-						tracePath =  new __TracePath(path, name);
+						tracePath =  new __TracePath(path, new __TraceProperty(name));
 						// register at loggin engine
 						__accessLogger.put(__AccessType.READ, tracePath);
 
@@ -173,7 +175,7 @@ function __AccessHandler(target, path, contract) {
 				 */
 				set: function(receiver, name, value) {
 						// create a new path
-						tracePath =  new __TracePath(path, name);
+						tracePath =  new __TracePath(path, new __TraceProperty(name));
 						// register at loggin engine
 						__accessLogger.put(__AccessType.WRITE, tracePath);
 
@@ -232,7 +234,7 @@ function __AccessHandler(target, path, contract) {
  */
 function __createMembrane(init, name, contract) {
 		// create trace path
-		initPath = new __TracePath(null, name);
+		initPath = name=="" ? new __TraceEmpty() : new __TraceProperty(name);
 
 		/** wrap object/ function or return primitive value
 		 * @param target Target value to wrap
@@ -282,12 +284,13 @@ function __createMembrane(init, name, contract) {
 				}
 		}
 
+		// TODO: merge path ?
 		// check if init is already a proxy
 		// than, extend the contract
 		// otherwise, create new a proxy
 		if(__handlerReference.containsKey(init)) {
 				var accessHandler = __handlerReference.get(init);
-				accessHandler.extend(contract);
+				accessHandler.extend(initPath, contract);
 				return init;
 
 		} else {
@@ -334,7 +337,7 @@ function __createFunctionMembrane(init, name, contract) {
 		}
 
 		// create trace path
-		initPath = new __TracePath(null, name);
+		initPath = name=="" ? new __TraceEmpty() : new __TraceProperty(name);
 
 		// AccessHandler for <init>
 		var accessHandler = __AccessHandler(init, initPath, contract);

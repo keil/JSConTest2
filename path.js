@@ -11,19 +11,50 @@
 // TRACE PATH
 // data structure to log access paths
 // Property	p = "x" ...
-// Path 	P = [] | P.p 
+// Path 	P = [] | P.p | P;P
 //////////////////////////////////////////////////
 
+
+
+/** Empty Trace Property
+*/
+function __TraceEmpty() {
+		return {
+				/* Dump
+				 * @return Array<String>
+				 */
+				dump: function(array) {
+						array.push("");
+						return array;
+				},
+
+				/* To String
+				 * @return String
+				 */
+				toString : function () {
+						return "";
+				}
+		}
+}
 
 /** Trace Property
  * @param variable Variable name
  */
-function __TraceProperty(variable) {
+function __TraceProperty(property) {
 		return {
-				// property value
-				property: variable,
+				/* Dump
+				 * @return Array<String>
+				 */
+				dump: function(array) {
+						array.foreach(function(k, v){
+								array[k] = v + "." + property;
+						});
+						return array;
+				},
 
-				// to string method
+				/* To String
+				 * @return String
+				 */
 				toString : function () {
 						return property;
 				}
@@ -31,26 +62,67 @@ function __TraceProperty(variable) {
 }
 
 /** Trace Path
- * @param prefix Path prefix
- * @param variable Path property
+ * @param path Path prefix
+ * @param property Path property
  */
-function __TracePath(prefix, variable) {
+function __TracePath(path, property) {
 		return {
-				// path prefix
-				path: prefix,
+				/* Dump
+				 * @return Array<String>
+				 */
+				dump: function(array) {
+						array = path.dump(array);
 
-				// path property
-				property: variable,
+						//array.foreach(function(k,v){
+						//		array[k] = v + ".";
+						//});
+						array = property.dump(array);
 
-				// to string method
+						return array;
+				},
+
+				/* To String
+				 * @return String
+				 */
 				toString : function () {
-						if (this.path == null)
-								return this.property.toString();
-						else
-								return this.path.toString() + "." + this.property.toString();
+						return path.toString() + "." + property.toString();
 				}
 		}
 }
+
+/** Trace Path Set
+ * @param path0 Trace Path 0
+ * @param path1 Trace Path 1
+ */
+function __TraceSet(path0, path1) {
+		return {
+
+				/* Dump
+				 * @return Array<String>
+				 */
+				dump: function(array) {
+						// dump path 0
+						var set0 = new Array(array);
+						path0.dump(set0);
+
+						// dump path 1
+						var set1 = new Array(array);
+						path1.dump(set1);
+
+						// merge sets
+						return set0.concat(set1);
+				},
+
+				/* To String
+				 * @return String
+				 */
+				toString : function () {
+						return "( " + path0.toString() + " ; " + path1.toString() + " )";
+				}
+		}
+}
+
+
 
 
 
