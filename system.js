@@ -62,12 +62,12 @@ function __dump(value) {
 */
 function __closeHandler() {
 		return {
-				get: function(receiver, name) {
+				get: function(target, name, receiver) {
 						quit();
 				}};
 };
 // assign close handler to __
-__ = Proxy.create(__closeHandler());
+var __ = Proxy({}, __closeHandler());
 
 
 

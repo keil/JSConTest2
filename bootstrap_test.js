@@ -15,6 +15,8 @@ load("__lib/__lib_jshashset.js");
 load("__lib/__lib_jspadding.js");
 // Load new waek map
 load("__lib/__lib_jsweakmap2.js");
+// Load reflect API
+load("__lib/__lib_reflect.js");
 
 
 
