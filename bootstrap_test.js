@@ -7,16 +7,16 @@
 // Version: 1.00
 //////////////////////////////////////////////////
 
-// Load waek map
-load("__lib/__lib_jsweakmap.js");
 // load hash set
-load("__lib/__lib_jshashset.js");
+load("__lib/__lib_apache_hashset.js");
 // load string padding
-load("__lib/__lib_jspadding.js");
+load("__lib/__lib_padding.js");
 // Load new waek map
-load("__lib/__lib_jsweakmap2.js");
+load("__lib/__lib_harmony_weakmap.js");
 // Load reflect API
 load("__lib/__lib_reflect.js");
+// load assert
+load("__lib/__lib_assert.js");
 
 
 
@@ -47,9 +47,6 @@ load("violation.js")
 
 // load parser
 load("parser.js");
-
-// load assert
-load("__lib/__lib_assert.js");
 
 
 
