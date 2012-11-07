@@ -238,7 +238,7 @@ function __AccessHandler(path, contract) {
 				 * @param args Arguments
 				 * @return Any
 				 */
-				apply: function(target, thisArg, args {
+				apply: function(target, thisArg, args) {
 						// TODO
 						return target.apply(thisArg, args);
 				},
@@ -251,190 +251,158 @@ function __AccessHandler(path, contract) {
 						// TODO
 						return target.apply(this, args);
 				}
-				}
-				};
+		};
+}
 
 
 
-				//////////////////////////////////////////////////
-				// MEMBRANE
-				//////////////////////////////////////////////////
-
-				/** Standard Membrane
-				 * @param init Value to wrap
-				 * @param name Variable name (needed to trace the path)
-				 * @param contract Access Permission Contract
-				 * @return wrapped object or primitive value
-				 */
-				function __createMembrane(init, name, contract) {
-						// create trace path
-						initPath = name=="" ? new __TraceEmpty() : new __TraceProperty(name);
-
-						/** wrap object/ function or return primitive value
-						 * @param target Target value to wrap
-						 */
-						function wrap(target) {
-
-								// IF primitive value, return value
-								if (target !== Object(target)) {
-										return target;
-								}
-
-								/* WRAP function
-								 * @param func Function object
-								 * @param base Function base
-								 * @param args Function arguments
-								 */
-								function wrapFunction(func, base, args) {
-										return func.apply(base, args);
-								}
-
-								// AccessHandler for <target>
-								var accessHandler = __AccessHandler(target, initPath, contract.reduce());
-
-								// If function, create function proxy
-								if (typeof target === "function") {
-										function callTrap() {
-												var value = wrapFunction(target, this, arguments);
-												return value;
-										}
-										function constructTrap() {
-												function forward(args) {
-														return target.apply(this, args);
-												}
-												return new forward(arguments);
-										}
-										var proxy = Proxy.createFunction(accessHandler, callTrap, constructTrap);
-										__handlerReference.put(proxy, accessHandler);
-										return proxy;
-								}
-
-								// If object, create object proxy
-								else {
-										var prototype = wrap(Object.getPrototypeOf(target));
-										var proxy = Proxy.create(accessHandler, prototype);
-										__handlerReference.put(proxy, accessHandler);
-										return proxy;
-								}
-						}
-
-						// check if init is already a proxy
-						// than, extend the contract
-						// otherwise, create new a proxy
-						if(__handlerReference.containsKey(init)) {
-								var accessHandler = __handlerReference.get(init);
-								accessHandler.extend(initPath, contract);
-								return init;
-
-						} else {
-								// RETURN wrapped object
-								return wrap(init);
-						}
-				}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/** Standard Function Handler
- * @param path Path of the wrapped value
+/** Function Handler
+ * @param contract Access Permission Contract
  * @return FunctionHandler
  */
-function __FunctionHandler(path, contract) {
+function __FunctionHandler(contract) {
 		return {
-				// TODO Caching ?
-				extend: function(extPath, extContract) {
-						__sysout("EXTEND with " + path + extContract);
-						contract = new __AndContract(contract, extContract).reduce();
-						path = new __TraceSet(path, extPath);
-				},
-				// TODO
-				apply: function(target, thisArg, args {
-						args = __createMembrane(args, "arguments", contract.derive("arguments"));
-						base = __createMembrane(thisArg, "this", contract);
-						return target.apply(base, args);
-				},
-				// TODO
-				construct: function(target, args) {
-						// TODO: whats to do
-						// is apply called ?
-						//
-				}
-				}
-				};
-
-
-
-
-
-				/** Function Membrane
-				 * @param init Value to wrap
-				 * @param name Variable name (needed to trace the path)
-				 * @param contract Access Permission Contract
-				 * @return wrapped function or __createMembrane(init)
+				/** extend contract
+				 * @param extPath Access Permission Contract
+				 * @param extContract Access Permission Contract
 				 */
-function __createFunctionMembrane(init, name, contract) {
-		// if no function, set standard membrane
-		if (typeof init !== "function") {
-				return __createMembrane(init, name, contract);
-		}
+				extend: function(extContract) {
+						/* C = C&C' */
+						contract = new __AndContract(contract, extContract).reduce();
+				},
 
-		/* WRAP function
-		 * @param func Function object
-		 * @param base Function base
-		 * @param args Function arguments
-		 */
-		function wrapFunction(func, base, args) {
-		}
 
-		/* CALL trap
-		 * @return function return
-		 */
-		function callTrap() {
-				return wrapFunction(init, this, arguments);
-		}
 
-		/* CALL trap
-		 * @return function return
-		 */
-		function constructTrap() {
-				return wrapFunction(init, this, arguments);
-		}
+				/* ************************************************** *
+				 * HANDLER TRAPS
+				 * ************************************************** */ 
 
-		// create trace path
-		initPath = name=="" ? new __TraceEmpty() : new __TraceProperty(name);
 
-		// AccessHandler for <init>
-		var accessHandler = __AccessHandler(init, initPath, contract);
 
-		return Proxy.createFunction(accessHandler, callTrap, constructTrap);
+				/** proxy(...args)
+				 * @param target Wrapped target value
+				 * @param thisArg This 
+				 * @param args Arguments
+				 * @return Any
+				 */
+				apply: function(target, thisArg, args) {
+						// TODO
+						args = __createMembrane(args, "arguments", contract.derive("arguments"));
+						thisArg = __createMembrane(thisArg, "this", contract);
+						return target.apply(thisArg, args);
+				},
+				/** new proxy(...args)
+				 * @param target Wrapped target value
+				 * @param args Arguments
+				 * @return Any
+				 */
+				construct: function(target, args) {
+						return apply(target, this, args);
+				}
+		};
 }
 
 
 
 
+
+//////////////////////////////////////////////////
+// MEMBRANE
+//////////////////////////////////////////////////
+
+/** Standard Membrane
+ * @param init Value to wrap
+ * @param contract Access Permission Contract
+ * @param name Variable name
+ * @return wrapped object or primitive value
+ */
+function __createMembrane(init, contract, name) {
+		/* Trace Path *************************************** */
+		initPath = name=="" ? new __TraceEmpty() : new __TraceProperty(name);
+
+		/** Wrap Object
+		 * @param target Target value to wrap
+		 * @return  Proxy | Primitive
+		 */
+		function wrap(target) {
+				// IF target is primitive value, return target
+				if (target !== Object(target)) {
+						return target;
+				}
+
+				/* Access Handler *********************************** */
+				var accessHandler = __AccessHandler(target, initPath, contract.reduce());
+
+				/* Proxy ******************************************** */
+				var proxy = Proxy(target, accessHandler);
+				__cache.put(proxy, accessHandler);
+				return proxy;
+		}
+
+		/** Wrap Object
+		 * @param target Target value to wrap
+		 * @return  Proxy
+		 */
+		function extend(target) {
+				_cache.get(target).extend(initPath, contract);
+				return target;
+		}
+
+		// RETURN wrapped object
+		return (__cache.containsKey(init)) ? extend(init) : wrap(init);
+}
+
+
+
+/** Function Membrane
+ * @param init Value to wrap
+ * @param contract Access Permission Contract
+ * @param name Variable name
+ * @return wrapped object
+ */
+function __createFunctionMembrane(init, contract, name) {
+		/* Trace Path *************************************** */
+		initPath = name=="" ? new __TraceEmpty() : new __TraceProperty(name);
+
+		/** Wrap Object
+		 * @param target Target value to wrap
+		 * @return  Proxy | Primitive
+		 */
+		function wrap(target) {
+				// IF no function, return standard membrane
+				if (typeof init !== "function") {
+						return __createMembrane(init, contract, name);
+				}
+
+				/* Access Handler *********************************** */
+				var functionHandler = __FunctionHandler(target, initPath, contract.reduce());
+
+				/* Proxy ******************************************** */
+				var proxy = Proxy(target, functionHandler);
+				__fcache.put(proxy, functionHandler);
+				return proxy;
+		}
+
+		/** Wrap Object
+		 * @param target Target value to wrap
+		 * @return  Proxy
+		 */
+		function extend(target) {
+				_fcache.get(target).extend(initPath, contract);
+				return target;
+		}
+
+		// RETURN wrapped object
+		return (__fcache.containsKey(init)) ? extend(init) : wrap(init);
+}
+
+
+
+
+
+////////////////////////////////////////////////////
+// INTERFACE
+////////////////////////////////////////////////////
 
 
 /** Apply Proxy
@@ -445,11 +413,8 @@ function __createFunctionMembrane(init, name, contract) {
  */
 function __applyProxy(contract, base, name) {
 		obj = base[name];
-		base[name] = __createMembrane(obj, name, contract);
+		base[name] = __createMembrane(obj, contract, name);
 }
-
-
-
 
 
 /** Wrap
@@ -461,7 +426,7 @@ function __applyProxy(contract, base, name) {
  */
 function __wrap(contract, obj, name) {
 		objname = name!=null ? name : "";
-		return __createMembrane(obj, objname, contract);
+		return __createMembrane(obj, contract, objname);
 }
 
 
@@ -504,5 +469,7 @@ function __HandlerCache() {
 		};
 };
 
-// current proxy,handler map
+// AccessHandler Cache
 var __cache = new  __HandlerCache();
+// FucntionHandler Cache
+var __fcache = new  __HandlerCache();
