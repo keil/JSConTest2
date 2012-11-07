@@ -341,13 +341,12 @@ function __createMembrane(init, contract, path) {
 		 * @return  Proxy
 		 */
 		function extend(target) {
-			//	_cache.get(target).extend(contract, path);
+				_cache.get(target).extend(contract, path);
 				return target;
 		}
 
 		// RETURN wrapped object
-		//return (__cache.containsKey(init)) ? extend(init) : wrap(init);
-		return  wrap(init);
+		return (__cache.containsKey(init)) ? extend(init) : wrap(init);
 }
 
 
