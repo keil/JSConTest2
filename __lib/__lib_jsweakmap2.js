@@ -1,4 +1,4 @@
-function SimpleWeakMap() {
+function WeakMap() {
 		var keys = [];
 		var values = [];
 		return Object.freeze({

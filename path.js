@@ -225,4 +225,3 @@ function __dumpAccess() {
 		__accessLogger.print();
 		__clearAccess();
 }
-

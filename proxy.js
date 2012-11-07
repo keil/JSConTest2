@@ -341,12 +341,13 @@ function __createMembrane(init, contract, path) {
 		 * @return  Proxy
 		 */
 		function extend(target) {
-				_cache.get(target).extend(contract, path);
+			//	_cache.get(target).extend(contract, path);
 				return target;
 		}
 
 		// RETURN wrapped object
-		return (__cache.containsKey(init)) ? extend(init) : wrap(init);
+		//return (__cache.containsKey(init)) ? extend(init) : wrap(init);
+		return  wrap(init);
 }
 
 
@@ -401,7 +402,7 @@ function __createFunctionMembrane(init, contract) {
  * reference map proxy -> handler
  */
 function __HandlerCache() {	
-		var handlerMap = new SimpleWeakMap();
+		var handlerMap = new WeakMap();
 
 		return {
 				/** put map entry

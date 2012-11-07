@@ -8,7 +8,7 @@
 //////////////////////////////////////////////////
 
 // Load waek map
-load("__lib/__lib_jsweakmap.js");
+//  load("__lib/__lib_jsweakmap.js");
 // load hash set
 load("__lib/__lib_jshashset.js");
 // load string padding

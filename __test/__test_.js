@@ -11,3 +11,5 @@
 
 __config_ViolationMode = __ViolationMode.OBSERVER;
 //__config_ViolationMode = __ViolationMode.PROTECTOR;
+
+test = __permit("a", {});
