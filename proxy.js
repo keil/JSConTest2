@@ -12,17 +12,17 @@
 //////////////////////////////////////////////////
 
 /** Standard Access Handler
- * @param path Trace Path
  * @param contract Access Permission Contract
+ * @param path Trace Path
  * @return AccessHandler
  */
-function __AccessHandler(path, contract) {
+function __AccessHandler(contract, path) {
 		return {
 				/** extend contract
-				 * @param extPath Access Permission Contract
 				 * @param extContract Access Permission Contract
+				 * @param extPath Access Permission Contract
 				 */
-				extend: function(extPath, extContract) {
+				extend: function(extContract, extPath) {
 						/* C = C&C' */
 						contract = new __AndContract(contract, extContract).reduce();
 						/* P = P;P' */
@@ -50,12 +50,12 @@ function __AccessHandler(path, contract) {
 						/* Access Permission Contract *********************** */
 						if(contract.isReadable(name)) {
 								var desc = Object.getOwnPropertyDescriptor(target, name);
-								if (desc !== undefined) desc.value = __createMembrane(desc, tracePath, contract.derive(name));
+								if (desc !== undefined) desc.value = __createMembrane(desc, contract.derive(name), tracePath);
 								return desc;
 						} else {
 								__violationLogger.put(__ViolationType.READ, tracePath);
 								var desc = (__config_ViolationMode == __ViolationMode.OBSERVER) ? Object.getOwnPropertyDescriptor(target, name) : undefined;
-								if (desc !== undefined) desc.value = __createMembrane(desc.value, tracePath, contract.derive(name));
+								if (desc !== undefined) desc.value = __createMembrane(desc.value, contract.derive(name), tracePath);
 								return desc;
 						}
 				},
@@ -191,7 +191,7 @@ function __AccessHandler(path, contract) {
 								return target[name];
 						} else {
 								__violationLogger.put(__ViolationType.READ, tracePath);
-								return (__config_ViolationMode == __ViolationMode.OBSERVER) ? __createMembrane(target[name], tracePath, contract.derive(name)) : undefined;
+								return (__config_ViolationMode == __ViolationMode.OBSERVER) ? __createMembrane(target[name], contract.derive(name), tracePath) : undefined;
 						}
 				},
 				/** proxy[name] = val
@@ -287,8 +287,8 @@ function __FunctionHandler(contract) {
 				 */
 				apply: function(target, thisArg, args) {
 						// TODO
-						args = __createMembrane(args, "arguments", contract.derive("arguments"));
-						thisArg = __createMembrane(thisArg, "this", contract);
+						args = __createMembrane(args, contract.derive("arguments"), "arguments");
+						thisArg = __createMembrane(thisArg, contract, "this");
 						return target.apply(thisArg, args);
 				},
 				/** new proxy(...args)
@@ -313,13 +313,10 @@ function __FunctionHandler(contract) {
 /** Standard Membrane
  * @param init Value to wrap
  * @param contract Access Permission Contract
- * @param name Variable name
+ * @param path Trace Path
  * @return wrapped object or primitive value
  */
-function __createMembrane(init, contract, name) {
-		/* Trace Path *************************************** */
-		initPath = name=="" ? new __TraceEmpty() : new __TraceProperty(name);
-
+function __createMembrane(init, contract, path) {
 		/** Wrap Object
 		 * @param target Target value to wrap
 		 * @return  Proxy | Primitive
@@ -331,7 +328,7 @@ function __createMembrane(init, contract, name) {
 				}
 
 				/* Access Handler *********************************** */
-				var accessHandler = __AccessHandler(target, initPath, contract.reduce());
+				var accessHandler = __AccessHandler(contract.reduce(), path);
 
 				/* Proxy ******************************************** */
 				var proxy = Proxy(target, accessHandler);
@@ -344,7 +341,7 @@ function __createMembrane(init, contract, name) {
 		 * @return  Proxy
 		 */
 		function extend(target) {
-				_cache.get(target).extend(initPath, contract);
+				_cache.get(target).extend(contract, path);
 				return target;
 		}
 
@@ -357,13 +354,9 @@ function __createMembrane(init, contract, name) {
 /** Function Membrane
  * @param init Value to wrap
  * @param contract Access Permission Contract
- * @param name Variable name
  * @return wrapped object
  */
-function __createFunctionMembrane(init, contract, name) {
-		/* Trace Path *************************************** */
-		initPath = name=="" ? new __TraceEmpty() : new __TraceProperty(name);
-
+function __createFunctionMembrane(init, contract) {
 		/** Wrap Object
 		 * @param target Target value to wrap
 		 * @return  Proxy | Primitive
@@ -371,11 +364,11 @@ function __createFunctionMembrane(init, contract, name) {
 		function wrap(target) {
 				// IF no function, return standard membrane
 				if (typeof init !== "function") {
-						return __createMembrane(init, contract, name);
+						return __createMembrane(init, contract, new __TraceEmpty());
 				}
 
 				/* Access Handler *********************************** */
-				var functionHandler = __FunctionHandler(target, initPath, contract.reduce());
+				var functionHandler = __FunctionHandler(contract.reduce());
 
 				/* Proxy ******************************************** */
 				var proxy = Proxy(target, functionHandler);
@@ -388,45 +381,12 @@ function __createFunctionMembrane(init, contract, name) {
 		 * @return  Proxy
 		 */
 		function extend(target) {
-				_fcache.get(target).extend(initPath, contract);
+				_fcache.get(target).extend(contract);
 				return target;
 		}
 
 		// RETURN wrapped object
 		return (__fcache.containsKey(init)) ? extend(init) : wrap(init);
-}
-
-
-
-
-
-////////////////////////////////////////////////////
-// INTERFACE
-////////////////////////////////////////////////////
-
-
-/** Apply Proxy
- * can be used to wrap an value
- * @param contract Access Permission Contract
- * @param base Current environment <this>
- * @param name Variable name
- */
-function __applyProxy(contract, base, name) {
-		obj = base[name];
-		base[name] = __createMembrane(obj, contract, name);
-}
-
-
-/** Wrap
- * can be used to wrap an value
- * @param contract Access Permission Contract
- * @param obj Object
- * @param name Object name
- * @return Wrapped Object
- */
-function __wrap(contract, obj, name) {
-		objname = name!=null ? name : "";
-		return __createMembrane(obj, contract, objname);
 }
 
 

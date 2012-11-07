@@ -20,7 +20,7 @@
  */
 function __permit(string, obj, name) {
 		// optional name
-		objname = name!=null ? name : "";
+		objname = name!=null ? new __TraceProperty(name) : new __TraceEmpty();
 
 		// parse contracts
 		contract = __ContractParser.parse(string);
@@ -39,20 +39,7 @@ function __apply(string, base, name) {
 		base[name] = __permit(string, obj, name);
 }
 
-/** Apply Object
- * @param string Access Permission Contract
- * @param base Current object
- * @param name Property name
- */
-function __applyObj(string, base) {
-		// get object name
-		i = string.indexOf(".");
-		obj = string.substr(0,i);
-		contract = string.substring(i+1);
 
-		// abbly contract
-		__apply(contract, base, obj);
-}
 
 
 
@@ -63,18 +50,14 @@ function __applyObj(string, base) {
 /** Permit Arguments 
  * @param string Access Permission Contract
  * @param function Function
- * @param name Function name [optional]
  * @return Function proxy
  */
-function __permitArgs(string, func, name) {
-		// optional name
-		funcname = name!=null ? name : "";
-
+function __permitArgs(string, func) {
 		// parse contracts
 		contract = __ContractParser.parse(string);
 
 		// create function proxy
-		return __createFunctionMembrane(func, contract, funcname);
+		return __createFunctionMembrane(func, contract);
 }
 
 /** Apply Arguments 
@@ -84,5 +67,5 @@ function __permitArgs(string, func, name) {
  */
 function __applyArgs(string, base, name) {
 		func = base[name];
-		base[name] = __permitArgs(string, func, name);
+		base[name] = __permitArgs(string, func);
 }
