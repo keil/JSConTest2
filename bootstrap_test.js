@@ -4,7 +4,7 @@
 // http://proglang.informatik.uni-freiburg.de/
 // Author: Matthias Keil
 // http://www.informatik.uni-freiburg.de/~keilr/
-// Version: 1.00
+// Version: 2.00
 //////////////////////////////////////////////////
 
 // load hash set
@@ -16,7 +16,7 @@ load("__lib/__lib_harmony_weakmap.js");
 // Load reflect API
 load("__lib/__lib_reflect.js");
 // load assert
-load("__lib/__lib_assert.js");
+load("__lib/__lib_apache_assert.js");
 
 
 
