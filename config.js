@@ -1,5 +1,7 @@
 //////////////////////////////////////////////////
-// JS Proxy API - Configuration File
+// JavaScript Reflection API
+//  for Access Permission Contracts
+// - Configuration File -
 // (c) University of Freiburg
 // http://proglang.informatik.uni-freiburg.de/
 // Author: Matthias Keil

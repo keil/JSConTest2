@@ -1,3 +1,15 @@
+//////////////////////////////////////////////////
+// JavaScript Reflection API
+//  for Access Permission Contracts
+// - TestCase -
+// (c) University of Freiburg
+// http://proglang.informatik.uni-freiburg.de/
+// Author: Matthias Keil
+// http://www.informatik.uni-freiburg.de/~keilr/
+//////////////////////////////////////////////////
+
+
+
 windowX = {location:2, document:4};
 documentX = windowX.document;
 secret = "chacha";
