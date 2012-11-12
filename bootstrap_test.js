@@ -55,21 +55,27 @@ load("parser.js");
 // TEST
 //////////////////////////////////////////////////
 
+/* Test Parser **/
+load("__test/__test_parser.js");
 
-// LOAD BASIC UNITTESTS
-// load("__test_basic-unittest.js");
+/* Test Path **/
+//load("__test/__test_path.js");
 
-// LOAD PARSER TESTS
-//load("permit.js");
-//load("parser.js");
 
-// LOAD PERMIT TESTS
-//load("__test_parser.js");
+/** Test Contract **/
+//load("__test/__test_contract.js");
+
+/** Test Contract (reduced) **/
+//load("__test/__test_contract_reduce.js");
+
+/* Test Contract (derive) **/
 //load("__test_contract_read.js");
 //load("__test_contract_write.js");
-//load("__test_set_read.js");
-//load("__test_set_write.js");
+//load("__test/__test_set_read.js");
+//load("__test/__test_set_write.js");
 
+
+/* Test Permit **/
 //load("__test_permit.js");
 //load("__test_permit2.js");
 //load("__test_permit3.js");
@@ -77,4 +83,6 @@ load("parser.js");
 //load("__test_permit5.js");
 //load("__test_permit6.js");
 
-load("__test/__test_contract.js");
+
+/* Test Permit (special) **/
+//load("__test_scope.js");

@@ -140,26 +140,26 @@ __ContractParser = (function(){
 										}
 								}
 								if (result0 !== null) {
-										if (/^[a-zA-Z0-9_^$?*+.\\()[\]{},|]/.test(input.charAt(pos))) {
+										if (/^[a-zA-Z0-9_^$?*+.\\(){}[\],|\-]/.test(input.charAt(pos))) {
 												result2 = input.charAt(pos);
 												pos++;
 										} else {
 												result2 = null;
 												if (reportFailures === 0) {
-														matchFailed("[a-zA-Z0-9_^$?*+.\\\\()[\\]{},|]");
+														matchFailed("[a-zA-Z0-9_^$?*+.\\\\(){}[\\],|\\-]");
 												}
 										}
 										if (result2 !== null) {
 												result1 = [];
 												while (result2 !== null) {
 														result1.push(result2);
-														if (/^[a-zA-Z0-9_^$?*+.\\()[\]{},|]/.test(input.charAt(pos))) {
+														if (/^[a-zA-Z0-9_^$?*+.\\(){}[\],|\-]/.test(input.charAt(pos))) {
 																result2 = input.charAt(pos);
 																pos++;
 														} else {
 																result2 = null;
 																if (reportFailures === 0) {
-																		matchFailed("[a-zA-Z0-9_^$?*+.\\\\()[\\]{},|]");
+																		matchFailed("[a-zA-Z0-9_^$?*+.\\\\(){}[\\],|\\-]");
 																}
 														}
 												}
