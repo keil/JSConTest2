@@ -68,7 +68,7 @@ test("g.a", "obj.g().a");
 test("h", "obj.h()");
 
 // h() - this.zzz = 4711
-test("(h|zzz)", "obj.h()");
+test("(h+zzz)", "obj.h()");
 
 // gg() - this
 test("gg", "obj.gg()");
@@ -80,7 +80,7 @@ test("gg.a", "obj.gg().a");
 test("gg.c", "obj.gg().a");
 
 // gg() - this
-test("(gg|a)", "obj.gg().a");
+test("(gg+a)", "obj.gg().a");
 
 // gg() - this
 test("gg.c", "obj.gg().c = 4711");
@@ -89,6 +89,6 @@ test("gg.c", "obj.gg().c = 4711");
 test("gg.a", "obj.gg().c = 4711");
 
 // gg() - this
-test("(gg|c)", "obj.gg().c = 4711");
+test("(gg+c)", "obj.gg().c = 4711");
 
 

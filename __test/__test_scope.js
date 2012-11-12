@@ -10,28 +10,22 @@
 
 
 
-windowX = {location:2, document:4};
-documentX = windowX.document;
-secret = "chacha";
-
 function func(s) {
-	//__sysout(s);
-	//__sysout(arguments[0]);
-	windowX = this.windowX;
-		__sysout(secret);
-	windowX.document;
-	windowX.location = 54;
+	__sysout(this.secret);
+	this.x = 765;
+	this.c;
 }
 
-test = __permitArgs("(arguments.0.@+window.document)", func);
+
+test = __permitArgs("(arguments.0.@+secret)", func);
+test2 = {secret: "chacha", func: test};
 
 
-func(secret);
-__dump();
-test(secret);
-__dump();
-func();
-__dump(secret);
+//test.call(this, {});
+test2.func();
+__look();
+
+
 
 
 /*
