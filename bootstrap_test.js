@@ -55,24 +55,24 @@ load("parser.js");
 // TEST
 //////////////////////////////////////////////////
 
-/* Test Parser **/
-load("__test/__test_parser.js");
+/* Test Parser **/ // (TESTED)
+//load("__test/__test_parser.js");
 
-/* Test Path **/
+/* Test Path **/ // (TESTED)
 //load("__test/__test_path.js");
 
 
-/** Test Contract **/
+/** Test Contract **/ // (TESTED)
 //load("__test/__test_contract.js");
 
-/** Test Contract (reduced) **/
+/** Test Contract (reduced) **/ // (TESTED)
 //load("__test/__test_contract_reduce.js");
 
 /* Test Contract (derive) **/
-//load("__test_contract_read.js");
-//load("__test_contract_write.js");
+//load("__test/__test_contract_read.js");
+//load("__test/__test_contract_write.js");
 //load("__test/__test_set_read.js");
-//load("__test/__test_set_write.js");
+load("__test/__test_set_write.js");
 
 
 /* Test Permit **/

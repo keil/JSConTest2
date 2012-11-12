@@ -8,98 +8,81 @@
 // http://www.informatik.uni-freiburg.de/~keilr/
 //////////////////////////////////////////////////
 
-
-
-// parser
-parser = new __ContractParser();
-
-function testRR(string, name1, name2) {
-		contract = parser.parse(string);
+function testR(string, name1, name2) {
+		contract = __ContractParser.parse(string);
 		assertTrue(contract.isReadable(name1));
 		__sysout("[" + contract.toString() + "] " + name1 + ": " + contract.isReadable(name1) + "/ " + contract.derive(name1).toString());
-		assertTrue(contract.derive(name1).isReadable(name2));
-		__sysout("[" + contract.derive(name1).toString() + "] " + name2 + ": " + contract.derive(name1).isReadable(name2) + "/ " + contract.derive(name1).derive(name2).toString());
-}
-
-function testRN(string, name1, name2) {
-		contract = parser.parse(string);
-		assertTrue(contract.isReadable(name1));
-		__sysout("[" + contract.toString() + "] " + name1 + ": " + contract.isReadable(name1) + "/ " + contract.derive(name1).toString());
-		assertFalse(contract.derive(name1).isReadable(name2));
-		__sysout("[" + contract.derive(name1).toString() + "] " + name2 + ": " + contract.derive(name1).isReadable(name2) + "/ " + contract.derive(name1).derive(name2).toString());
 }
 
 function testN(string, name1, name2) {
-		contract = parser.parse(string);
+		contract = __ContractParser.parse(string);
 		assertFalse(contract.isReadable(name1));
 		__sysout("[" + contract.toString() + "] " + name1 + ": " + contract.isReadable(name1) + "/ " + contract.derive(name1).toString());
-		assertFalse(contract.derive(name1).isReadable(name2));
-		__sysout("[" + contract.derive(name1).toString() + "] " + name2 + ": " + contract.derive(name1).isReadable(name2) + "/ " + contract.derive(name1).derive(name2).toString());
 }
 
 __sysout("# TEST 1 #");
-test("@.b.c", "a");
-test("@.b*.c", "b");
-test("@", "a");
+testN("@.b.c", "a");
+testN("@.b*.c", "b");
+testN("@", "a");
 
 __sysout("# TEST 2 #");
-test("?.b.c", "a");
-test("?.b*.c", "b");
-test("?", "1");
-test("?", "1");
+testR("?.b.c", "a");
+testR("?.b*.c", "b");
+testR("?", "1");
+testR("?", "1");
 
 __sysout("# TEST 3 #");
-//test("[a-z].b.c", "a");
-test("a.b.c", "a");
-//test("[a-z].b.c", "b");
-test("a.b.c", "b");
-//test("[a-z]", "a");
-test("a", "a");
-test("b", "b");
+testR("/[a-z]/.b.c", "a");
+testR("a.b.c", "a");
+testR("/[a-z]/.b.c", "b");
+testN("a.b.c", "b");
+testR("/[a-z]/", "a");
+testR("a", "a");
+testR("b", "b");
 
 __sysout("# TEST 4 #");
-//test("[a-z].b.c", "a");
-test("a*.b.c", "a");
-//test("[a-z].b.c", "b");
-test("a*.b.c", "b");
-//test("[a-z]", "a");
-test("a*", "a");
-test("b*", "b");
+testR("/[a-z]/.b.c", "a");
+testR("a*.b.c", "a");
+testR("/[a-z]/.b.c", "b");
+testR("a*.b.c", "b");
+testR("/[a-z]/", "a");
+testR("a*", "a");
+testR("b*", "b");
 
 __sysout("# TEST 5 #");
-//test("[a-z].b.c", "a");
-test("a?.b.c", "a");
-//test("[a-z].b.c", "b");
-test("a?.b.c", "b");
-//test("[a-z]", "a");
-test("a?", "a");
-test("b?", "b");
+testR("/[a-z]/.b.c", "a");
+testR("a?.b.c", "a");
+testR("/[a-z]/.b.c", "b");
+testR("a?.b.c", "b");
+testR("/[a-z]/", "a");
+testR("a?", "a");
+testR("b?", "b");
 
 __sysout("# TEST 6 #");
-test("(a|b).b.c", "a");
-test("(a|b).b.c", "b");
-test("(a|b).b.c", "c");
-test("(a|b)", "a");
-test("(a|b)", "b");
-test("(a|b)", "c");
+testR("(a+b).b.c", "a");
+testR("(a+b).b.c", "b");
+testN("(a+b).b.c", "c");
+testR("(a+b)", "a");
+testR("(a+b)", "b");
+testN("(a+b)", "c");
 
 __sysout("# TEST 7 #");
-test("(a|b)*.b.c", "a");
-test("(a|b)*.b.c", "b");
-test("(a|b)*.b.c", "c");
-test("(a|b)*", "a");
-test("(a|b)*", "b");
-test("(a|b)*", "c");
+testR("(a+b)*.b.c", "a");
+testR("(a+b)*.b.c", "b");
+testN("(a+b)*.b.c", "c");
+testR("(a+b)*", "a");
+testR("(a+b)*", "b");
+testN("(a+b)*", "c");
 
 
 __sysout("# TEST 8 #");
-test("(a|b)?.b.c", "a");
-test("(a|b)?.b.c", "b");
-test("(a|b)?.b.c", "c");
-test("(a|b)?", "a");
-test("(a|b)?", "b");
-test("(a|b)?", "c");
+testR("(a+b)?.b.c", "a");
+testR("(a+b)?.b.c", "b");
+testN("(a+b)?.b.c", "c");
+testR("(a+b)?", "a");
+testR("(a+b)?", "b");
+testN("(a+b)?", "c");
 
 __sysout("# TEST 9 #");
-//test("(a|b*).b.c", "a");
+testR("(a+b*).b.c", "a");
 
