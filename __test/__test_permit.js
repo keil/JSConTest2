@@ -11,7 +11,7 @@
 //////////////////////////////////////////////////
 //
 
-__config_ViolationMode = __ViolationMode.OBSERVER;
+//__config_ViolationMode = __ViolationMode.OBSERVER;
 //__config_ViolationMode = __ViolationMode.PROTECTOR;
 
 
@@ -67,11 +67,11 @@ test("a", "obj.b");
 test("bb", "obj.bb");
 test("bb", "obj.bbb");
 
-// Single Read Test - (x|x)
-test("(a|b)", "obj.a");
-test("(c|a)", "obj.b");
-test("(a|b)", "obj.bb");
-test("(bb|bb)", "obj.bbb");
+// Single Read Test - (x+x)
+test("(a+b)", "obj.a");
+test("(c+a)", "obj.b");
+test("(a+b)", "obj.bb");
+test("(bb+bb)", "obj.bbb");
 
 // Single Read Test - x?
 test("a?", "obj.a");
@@ -79,9 +79,9 @@ test("a?", "obj.b");
 test("bb?", "obj.bb");
 test("bb?", "obj.bbb");
 
-// Single Read Test - (x|x)?
-test("(a|b)?", "obj.a");
-test("(c|a)?", "obj.b");
+// Single Read Test - (x+x)?
+test("(a+b)?", "obj.a");
+test("(c+a)?", "obj.b");
 
 // Single Read Test - x*
 test("a*", "obj");
@@ -91,11 +91,11 @@ test("a*", "obj.a.a.a.b");
 test("a*", "obj.b");
 test("bb*", "obj.bbb");
 
-// Single Read Test - (x|x)*
-test("(a|b)*", "obj.a");
-test("(c|a)*", "obj.b");
-test("(a|b)*", "obj.bb");
-test("(bb|bb)*", "obj.bbb");
+// Single Read Test - (x+x)*
+test("(a+b)*", "obj.a");
+test("(c+a)*", "obj.b");
+test("(a+b)*", "obj.bb");
+test("(bb+bb)*", "obj.bbb");
 
 
 
@@ -118,13 +118,13 @@ test("a", "obj.b.a.b");
 test("bb", "obj.bb.bb");
 test("bb", "obj.bb");
 
-// Multiple Read Test - (x|x)
-test("a.a.(a|b)", "obj.a.a.a");
-test("a.a.(a|b)", "obj.a.a.b");
-test("a.a.(a|b)", "obj.a.a.c");
-test("(a|b).a", "obj.a.a");
-test("(a|b).a", "obj.b.a");
-test("(c|b).a", "obj.a.a");
+// Multiple Read Test - (x+x)
+test("a.a.(a+b)", "obj.a.a.a");
+test("a.a.(a+b)", "obj.a.a.b");
+test("a.a.(a+b)", "obj.a.a.c");
+test("(a+b).a", "obj.a.a");
+test("(a+b).a", "obj.b.a");
+test("(c+b).a", "obj.a.a");
 
 // Multiple Read Test - x?
 test("a.a?.a", "obj.a.a.a");
@@ -132,13 +132,13 @@ test("a?.b.a.b", "obj.b.a.b");
 test("bb.bb?", "obj.bb.bb");
 test("bb?", "obj.bb");
 
-// Multiple Read Test - (x|x)?
-test("a.a.(a|b)?", "obj.a.a.a");
-test("a.a.(a|b)?", "obj.a.a.b");
-test("a.a.(a|b)?", "obj.a.a.c");
-test("(a|b)?.a", "obj.a.a");
-test("(a|b)?.b.a", "obj.b.a");
-test("(c|b)?.a", "obj.a.a");
+// Multiple Read Test - (x+x)?
+test("a.a.(a+b)?", "obj.a.a.a");
+test("a.a.(a+b)?", "obj.a.a.b");
+test("a.a.(a+b)?", "obj.a.a.c");
+test("(a+b)?.a", "obj.a.a");
+test("(a+b)?.b.a", "obj.b.a");
+test("(c+b)?.a", "obj.a.a");
 
 // Multiple Read Test - x*
 test("a.a*.a", "obj.a.a.a");
@@ -146,13 +146,13 @@ test("a*.b.a.b", "obj.b.a.b");
 test("bb.bb*", "obj.bb.bb");
 test("bb*", "obj.bb");
 
-// Multiple Read Test - (x|x)*
-test("a.a.(a|b)*", "obj.a.a.a");
-test("a.a.(a|b)*", "obj.a.a.b");
-test("a.a.(a|b)*", "obj.a.a.c");
-test("(a|b)*.a", "obj.a.a");
-test("(a|b)*.b.a", "obj.b.a");
-test("(c|b)*.a", "obj.a.a");
+// Multiple Read Test - (x+x)*
+test("a.a.(a+b)*", "obj.a.a.a");
+test("a.a.(a+b)*", "obj.a.a.b");
+test("a.a.(a+b)*", "obj.a.a.c");
+test("(a+b)*.a", "obj.a.a");
+test("(a+b)*.b.a", "obj.b.a");
+test("(c+b)*.a", "obj.a.a");
 
 
 
@@ -175,11 +175,11 @@ test("a", "obj.b = 4711");
 test("bb", "obj.bb = 4711");
 test("bb", "obj.bbb = 4711");
 
-// Single Write Test - (x|x)
-test("(a|b)", "obj.a = 4711");
-test("(c|a)", "obj.b = 4711");
-test("(a|b)", "obj.bb = 4711");
-test("(bb|bb)", "obj.bbb = 4711");
+// Single Write Test - (x+x)
+test("(a+b)", "obj.a = 4711");
+test("(c+a)", "obj.b = 4711");
+test("(a+b)", "obj.bb = 4711");
+test("(bb+bb)", "obj.bbb = 4711");
 
 // Single Write Test - x?
 test("a?", "obj.a = 4711");
@@ -187,9 +187,9 @@ test("a?", "obj.b = 4711");
 test("bb?", "obj.bb = 4711");
 test("bb?", "obj.bbb = 4711");
 
-// Single Write Test - (x|x)?
-test("(a|b)?", "obj.a = 4711");
-test("(c|a)?", "obj.b = 4711");
+// Single Write Test - (x+x)?
+test("(a+b)?", "obj.a = 4711");
+test("(c+a)?", "obj.b = 4711");
 
 // Single Write Test - x*
 test("a*", "obj = 4711");
@@ -199,11 +199,11 @@ test("a*", "obj.a.a.a.b = 4711");
 test("a*", "obj.b = 4711");
 test("bb*", "obj.bbb = 4711");
 
-// Single Write Test - (x|x)*
-test("(a|b)*", "obj.a = 4711");
-test("(c|a)*", "obj.b = 4711");
-test("(a|b)*", "obj.bb = 4711");
-test("(bb|bb)*", "obj.bbb = 4711");
+// Single Write Test - (x+x)*
+test("(a+b)*", "obj.a = 4711");
+test("(c+a)*", "obj.b = 4711");
+test("(a+b)*", "obj.bb = 4711");
+test("(bb+bb)*", "obj.bbb = 4711");
 
 
 
@@ -226,13 +226,13 @@ test("a", "obj.b.a.b = 4711");
 test("bb", "obj.bb.bb = 4711");
 test("bb", "obj.bb = 4711");
 
-// Multiple Write Test - (x|x)
-test("a.a.(a|b)", "obj.a.a.a = 4711");
-test("a.a.(a|b)", "obj.a.a.b = 4711");
-test("a.a.(a|b)", "obj.a.a.c = 4711");
-test("(a|b).a", "obj.a.a = 4711");
-test("(a|b).a", "obj.b.a = 4711");
-test("(c|b).a", "obj.a.a = 4711");
+// Multiple Write Test - (x+x)
+test("a.a.(a+b)", "obj.a.a.a = 4711");
+test("a.a.(a+b)", "obj.a.a.b = 4711");
+test("a.a.(a+b)", "obj.a.a.c = 4711");
+test("(a+b).a", "obj.a.a = 4711");
+test("(a+b).a", "obj.b.a = 4711");
+test("(c+b).a", "obj.a.a = 4711");
 
 // Multiple Write Test - x?
 test("a.a?.a", "obj.a.a.a = 4711");
@@ -241,14 +241,14 @@ test("a?.b.a.b", "obj.b.a.b = 4711");
 test("bb.bb?", "obj.bb.bb = 4711");
 test("bb?", "obj.bb = 4711");
 
-// Multiple Write Test - (x|x)?
-test("a.a.(a|b)?", "obj.a.a.a = 4711");
-test("a.a.(a|b)?", "obj.a.a.b = 4711");
-test("a.a.(a|b)?", "obj.a.a.c = 4711");
-test("a.(a|b)?.a", "obj.a.a.a = 4711");
-test("(a|b)?.a", "obj.a.a = 4711");
-test("(a|b)?.b.a", "obj.b.a = 4711");
-test("(c|b)?.a", "obj.a.a = 4711");
+// Multiple Write Test - (x+x)?
+test("a.a.(a+b)?", "obj.a.a.a = 4711");
+test("a.a.(a+b)?", "obj.a.a.b = 4711");
+test("a.a.(a+b)?", "obj.a.a.c = 4711");
+test("a.(a+b)?.a", "obj.a.a.a = 4711");
+test("(a+b)?.a", "obj.a.a = 4711");
+test("(a+b)?.b.a", "obj.b.a = 4711");
+test("(c+b)?.a", "obj.a.a = 4711");
 
 // Multiple Write Test - x*
 test("a.a*.a", "obj.a.a.a = 4711");
@@ -257,11 +257,11 @@ test("a*.b.a.b", "obj.b.a.b = 4711");
 test("bb.bb*", "obj.bb.bb = 4711");
 test("bb*", "obj.bb = 4711");
 
-// Multiple Write Test - (x|x)*
-test("a.a.(a|b)*", "obj.a.a.a = 4711");
-test("a.a.(a|b)*", "obj.a.a.b = 4711");
-test("a.a.(a|b)*", "obj.a.a.c = 4711");
-test("a.(a|b)*.a", "obj.a.a.a = 4711");
-test("(a|b)*.a", "obj.a.a = 4711");
-test("(a|b)*.b.a", "obj.b.a = 4711");
-test("(c|b)*.a", "obj.a.a = 4711");
+// Multiple Write Test - (x+x)*
+test("a.a.(a+b)*", "obj.a.a.a = 4711");
+test("a.a.(a+b)*", "obj.a.a.b = 4711");
+test("a.a.(a+b)*", "obj.a.a.c = 4711");
+test("a.(a+b)*.a", "obj.a.a.a = 4711");
+test("(a+b)*.a", "obj.a.a = 4711");
+test("(a+b)*.b.a", "obj.b.a = 4711");
+test("(c+b)*.a", "obj.a.a = 4711");

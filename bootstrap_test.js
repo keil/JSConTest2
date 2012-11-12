@@ -72,17 +72,17 @@ load("parser.js");
 //load("__test/__test_contract_read.js");
 //load("__test/__test_contract_write.js");
 //load("__test/__test_set_read.js");
-load("__test/__test_set_write.js");
+//load("__test/__test_set_write.js");
 
 
 /* Test Permit **/
-//load("__test_permit.js");
-//load("__test_permit2.js");
-//load("__test_permit3.js");
-//load("__test_permit4.js");
-//load("__test_permit5.js");
-//load("__test_permit6.js");
+load("__test/__test_permit.js");
+//load("__test/__test_permit2.js");
+//load("__test/__test_permit3.js");
+//load("__test/__test_permit4.js");
+//load("__test/__test_permit5.js");
+//load("__test/__test_permit6.js");
 
 
 /* Test Permit (special) **/
-//load("__test_scope.js");
+//load("__test/__test_scope.js");

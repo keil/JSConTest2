@@ -189,7 +189,7 @@ function __AccessHandler(contract, path) {
 
 						/* Access Permission Contract *********************** */
 						if(contract.isReadable(name)) {
-								return target[name];
+								return __createMembrane(target[name], contract.derive(name), tracePath);
 						} else {
 								__violationLogger.put(__ViolationType.READ, tracePath);
 								return (__config_ViolationMode == __ViolationMode.OBSERVER) ? __createMembrane(target[name], contract.derive(name), tracePath) : undefined;

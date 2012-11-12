@@ -61,7 +61,7 @@ function __dump(value) {
 
 /* Check function
 */
-function __dump() {
+function __look() {
 		__dumpAccess();
 		__dumpViolation();
 }
