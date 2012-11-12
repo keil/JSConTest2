@@ -287,9 +287,9 @@ function __FunctionHandler(contract) {
 				 * @return Any
 				 */
 				apply: function(target, thisArg, args) {
-						// TODO
 						args = __createMembrane(args, contract.derive("arguments"), "arguments");
 						thisArg = __createMembrane(thisArg, contract, "this");
+
 						return target.apply(thisArg, args);
 				},
 				/** new proxy(...args)
@@ -298,7 +298,7 @@ function __FunctionHandler(contract) {
 				 * @return Any
 				 */
 				construct: function(target, args) {
-						return apply(target, this, args);
+						return this.apply(target, this, args);
 				}
 		};
 }
