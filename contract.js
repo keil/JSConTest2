@@ -592,7 +592,7 @@
 		APC.Contract.QMarkContract	= __QMarkContract;
 		APC.Contract.StarContract	= __StarContract;
 		APC.Contract.OrContract		= __OrContract;
-		APC.Contract.AndkContract	= __AndContract;
+		APC.Contract.AndContract	= __AndContract;
 		APC.Contract.NegContract	= __NegContract;
 		APC.Contract.ConcatContract	= __ConcatContract;
 
