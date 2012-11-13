@@ -7,7 +7,6 @@
 // http://www.informatik.uni-freiburg.de/~keilr/
 // Version: 2.00
 //////////////////////////////////////////////////
-
 var __APC = (function() {
 
 		return {}
