@@ -116,7 +116,6 @@ function __AccessHandler(contract, path) {
 				 * @return Boolean
 				 */
 				freeze: function(target) {
-						// TODO
 						return Object.freeze(target);
 				},
 				/** Object.seal(proxy) 
@@ -124,7 +123,6 @@ function __AccessHandler(contract, path) {
 				 * @return Boolean
 				 */
 				seal: function(target) {
-						// TODO
 						return Object.seal(target);
 				},
 				/** Object.preventExtensions(proxy) 
@@ -132,7 +130,6 @@ function __AccessHandler(contract, path) {
 				 * @return Boolean
 				 */
 				preventExtensions: function(target) {
-						// TODO
 						return Object.preventExtensions(target);
 				},
 				/** Object.isFrozen(proxy) 
@@ -140,7 +137,6 @@ function __AccessHandler(contract, path) {
 				 * @return Boolean
 				 */
 				isFrozen: function(target) {
-						// TODO
 						return Object.isFrozen(target);
 				},
 				/** Object.preventExtensions(proxy) 
@@ -148,7 +144,6 @@ function __AccessHandler(contract, path) {
 				 * @return Boolean
 				 */
 				isSealed: function(target) {
-						// TODO
 						return Object.isSealed(target);
 				},
 				/** Object.preventExtensions(proxy) 
@@ -156,7 +151,6 @@ function __AccessHandler(contract, path) {
 				 * @return Boolean
 				 */
 				isExtensible: function(target) {
-						// TODO
 						return Object.isExtensible(target);
 				},
 
@@ -240,7 +234,6 @@ function __AccessHandler(contract, path) {
 				 * @return Any
 				 */
 				apply: function(target, thisArg, args) {
-						// TODO
 						return target.apply(thisArg, args);
 				},
 				/** new proxy(...args)
@@ -249,7 +242,6 @@ function __AccessHandler(contract, path) {
 				 * @return Any
 				 */
 				construct: function(target, args) {
-						// TODO
 						return target.apply(this, args);
 				}
 		};
