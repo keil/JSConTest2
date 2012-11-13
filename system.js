@@ -5,7 +5,7 @@
 // http://proglang.informatik.uni-freiburg.de/
 // Author: Matthias Keil
 // http://www.informatik.uni-freiburg.de/~keilr/
-// Version: 2.00
+// Version: 2.01
 //////////////////////////////////////////////////
 
 
@@ -62,6 +62,6 @@ function __dump(value) {
 /* Check function
 */
 function __look() {
-		__dumpAccess();
-		__dumpViolation();
+		__APC.Access.dump();
+		__APC.Violation.dump();
 }
