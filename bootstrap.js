@@ -57,7 +57,7 @@ load("permit.js")
 //////////////////////////////////////////////////
 
 // load testcase
-//load("__test/__test_.js");
+load("__test/__test_.js");
 
 // TODO
 quit();

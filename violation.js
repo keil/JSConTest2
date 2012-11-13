@@ -114,7 +114,7 @@ WRITE: {value: 1, name: "WRITE VIOLATION", toString: function() { return this.na
 		//////////////////////////////////////////////////
 		APC.Violation = {};
 		APC.Violation.Type		= __ViolationType;
-		APC.Violation.Logger	= __ViolationLogger;
+		APC.Violation.Logger	= __violationLogger;
 		APC.Violation.evaluate	= __evaluateViolation;
 		APC.Violation.dump		= __dumpViolation;
 

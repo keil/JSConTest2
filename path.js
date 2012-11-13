@@ -243,7 +243,7 @@
 		//////////////////////////////////////////////////
 		APC.Access = {};
 		APC.Access.Type				= __AccessType;
-		APC.Access.Logger			= __AccessLogger;
+		APC.Access.Logger			= __accessLogger;
 		APC.Access.evaluate			= __evaluateAccess;
 		APC.Access.dump				= __dumpAccess;
 

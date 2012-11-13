@@ -27,7 +27,7 @@
 				contract = APC.Parser.parse(string);
 
 				// create proxy
-				return __createMembrane(obj, contract, objname);
+				return __APC.Proxy.wrap(obj, contract, objname);
 		}
 
 		/** Apply
@@ -58,7 +58,7 @@
 				contract = APC.Parser.parse(string);
 
 				// create function proxy
-				return __createFunctionMembrane(func, contract);
+				return __APC.Proxy.wrapArgs(func, contract);
 		}
 
 		/** Apply Arguments 
