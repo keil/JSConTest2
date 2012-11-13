@@ -438,4 +438,4 @@
 		APC.Proxy.wrap = __createMembrane;
 		APC.Proxy.wrapArgs = __createFunctionMembrane;
 
-})(APC);
+})(__APC);

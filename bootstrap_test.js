@@ -5,7 +5,7 @@
 // http://proglang.informatik.uni-freiburg.de/
 // Author: Matthias Keil
 // http://www.informatik.uni-freiburg.de/~keilr/
-// Version: 2.00
+// Version: 2.01
 //////////////////////////////////////////////////
 
 // load hash set
@@ -19,35 +19,38 @@ load("__lib/__lib_reflect.js");
 // load assert
 load("__lib/__lib_apache_assert.js");
 
-
-
-// load configuration
-load("config.js");
-
 // load logging engine
 load("__lib/__lib_log4js.js");
 var __logger = new __Log(__Log.NONE, __Log.consoleLogger);
 
+
+
 // load system
 load("system.js");
+
+// load apc
+load("apc.js");
+
+// load configuration
+load("config.js");
 
 // load trace path
 load("path.js");
 
-// load proxy
-load("proxy.js");
-
 // load contract
 load("contract.js");
-
-// load permit
-load("permit.js")
 
 // load violation
 load("violation.js")
 
 // load parser
 load("parser.js");
+
+// load proxy
+load("proxy.js");
+
+// load permit
+load("permit.js")
 
 
 
@@ -56,17 +59,17 @@ load("parser.js");
 //////////////////////////////////////////////////
 
 /* Test Parser **/ // (TESTED)
-//load("__test/__test_parser.js");
+load("__test/__test_parser.js");
 
 /* Test Path **/ // (TESTED)
-//load("__test/__test_path.js");
+load("__test/__test_path.js");
 
 
 /** Test Contract **/ // (TESTED)
-//load("__test/__test_contract.js");
+load("__test/__test_contract.js");
 
 /** Test Contract (reduced) **/ // (TESTED)
-//load("__test/__test_contract_reduce.js");
+load("__test/__test_contract_reduce.js");
 
 /* Test Contract (derive) **/  // (TESTED)
 //load("__test/__test_contract_read.js");

@@ -5,7 +5,7 @@
 // http://proglang.informatik.uni-freiburg.de/
 // Author: Matthias Keil
 // http://www.informatik.uni-freiburg.de/~keilr/
-// Version: 2.00
+// Version: 2.01
 //////////////////////////////////////////////////
 
 // load hash set

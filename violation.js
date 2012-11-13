@@ -118,4 +118,4 @@ WRITE: {value: 1, name: "WRITE VIOLATION", toString: function() { return this.na
 		APC.Violation.evaluate	= __evaluateViolation;
 		APC.Violation.dump		= __dumpViolation;
 
-})(APC);
+})(__APC);

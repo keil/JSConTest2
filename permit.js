@@ -81,4 +81,4 @@
 		APC.permitArgs	= __permitArgs;
 		APC.applyArgs	= __applyArgs;
 
-})(APC);
+})(__APC);

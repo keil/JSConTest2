@@ -596,4 +596,4 @@
 		APC.Contract.NegContract	= __NegContract;
 		APC.Contract.ConcatContract	= __ConcatContract;
 
-})(APC);
+})(__APC);

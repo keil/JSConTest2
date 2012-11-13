@@ -247,4 +247,4 @@
 		APC.Access.evaluate			= __evaluateAccess;
 		APC.Access.dump				= __dumpAccess;
 
-})(APC);
+})(__APC);
