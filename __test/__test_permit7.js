@@ -9,12 +9,6 @@
 //////////////////////////////////////////////////
 
 //////////////////////////////////////////////////
-//
-
-__config_ViolationMode = __ViolationMode.OBSERVER;
-//__config_ViolationMode = __ViolationMode.PROTECTOR;
-
-//////////////////////////////////////////////////
 // TESTS
 
 obj = {
@@ -25,7 +19,7 @@ obj = {
         this._value = val;
     }
 }
-test = __permit("@", obj);
+test = __APC.permit("@", obj);
 test.value;
 test.value = "chacha";
 __look();

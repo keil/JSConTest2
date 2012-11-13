@@ -8,16 +8,6 @@
 // http://www.informatik.uni-freiburg.de/~keilr/
 //////////////////////////////////////////////////
 
-
-
-//////////////////////////////////////////////////
-//
-
-__config_ViolationMode = __ViolationMode.OBSERVER;
-//__config_ViolationMode = __ViolationMode.PROTECTOR;
-
-
-
 //////////////////////////////////////////////////
 // OBJECTS
 
@@ -45,19 +35,17 @@ function createFunction() {
 function test(contract, exp) {
 		__sysout("\n\n\n");
 		obj = createObject();
-		__apply(contract, this, "obj");
+		__APC.apply(contract, this, "obj");
 		__sysout("[" +contract+ "]: " + exp + " # " + __dump(eval(exp)));
-		__dumpAccess();
-		__dumpViolation();
+		__look();
 }
 
 function testFunc(contract, exp) {
 		__sysout("\n\n\n");
 		func = createFunction();
-		__apply(contract, this, "func");
+		__APC.apply(contract, this, "func");
 		__sysout("[" +contract+ "]: " + exp + " # " + __dump(eval(exp)));
-		__dumpAccess();
-		__dumpViolation();
+		__look();
 }
 
 

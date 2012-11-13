@@ -8,19 +8,12 @@
 // http://www.informatik.uni-freiburg.de/~keilr/
 //////////////////////////////////////////////////
 
-//////////////////////////////////////////////////
-//
-
-__config_ViolationMode = __ViolationMode.OBSERVER;
-//__config_ViolationMode = __ViolationMode.PROTECTOR;
-
 obj = {a:4711, b:4712};
-__apply("a", this, "obj");
+__APC.apply("a", this, "obj");
 function test() {
 		obj.a;
 		obj.b;
-		__dumpAccess();
-		__dumpViolation();
+		__look();
 }
 test();
 
@@ -29,10 +22,9 @@ obj = {a:4711, b:4712};
 function test() {
 		obj.a;
 		obj.b;
-		__dumpAccess();
-		__dumpViolation();
+		__look();
 }
-__apply("a", this, "test");
+__APC.apply("a", this, "test");
 test();
 
 __sysout("\n\n\n");
@@ -42,16 +34,13 @@ function test2(obj) {
 		this.c = 3456;
 		obj.a;
 		obj.b;
-		__dumpAccess();
-		__dumpViolation();
+		__look();
 }
 
-__apply("a", this, "test2");
+__APC.apply("a", this, "test2");
 
 test2(obj);
 
 test2.d = 76543;
 test2.x;
-__dumpAccess();
-__dumpViolation();
-
+__look();

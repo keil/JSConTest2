@@ -21,7 +21,7 @@ __look();
 
 
 (function() {
-		var obj = __permit("@", {a:4711});
+		var obj = __APC.permit("@", {a:4711});
 		eval(test.toString());
 		test();
 })();

@@ -8,16 +8,6 @@
 // http://www.informatik.uni-freiburg.de/~keilr/
 //////////////////////////////////////////////////
 
-
-
-//////////////////////////////////////////////////
-//
-
-__config_ViolationMode = __ViolationMode.OBSERVER;
-//__config_ViolationMode = __ViolationMode.PROTECTOR;
-
-
-
 //////////////////////////////////////////////////
 // OBJECTS
 
@@ -40,10 +30,9 @@ function createObject() {
 function test(contract, exp) {
 		__sysout("\n\n\n");
 		obj = createObject();
-		__apply(contract, this, "obj");
+		__APC.apply(contract, this, "obj");
 		__sysout("[" +contract+ "]: " + exp + " # " + __dump(eval(exp)));
-		__dumpAccess();
-		__dumpViolation();
+		__look();
 }
 
 
@@ -55,37 +44,33 @@ function test(contract, exp) {
 // normal access
 __sysout("\n\n\n");
 obj = createObject();
-__apply("a*", this, "obj");
+__APC.apply("a*", this, "obj");
 __sysout("[a*]: obj.a.a # " + __dump(obj.a.a));
 __sysout("[a*]: obj.a.a = 4711 # " + __dump(obj.a.a = 4711));
-__dumpAccess();
-__dumpViolation();
+__look();
 
 __sysout("\n\n\n");
 obj = createObject();
-__apply("c*", this, "obj");
+__APC.apply("c*", this, "obj");
 __sysout("[c*]: obj.a.a # " + __dump(obj.a.a));
 __sysout("[c*]: obj.a.a = 4711 # " + __dump(obj.a.a = 4711));
-__dumpAccess();
-__dumpViolation();
+__look();
 
 
 // evla
 __sysout("\n\n\n");
 obj = createObject();
-__apply("a*", this, "obj");
+__APC.apply("a*", this, "obj");
 __sysout("[a*]: eval(obj.a.a) # " + __dump(eval(obj.a.a)));
 __sysout("[a*]: eval(obj.a.a = 4711) # " + __dump(eval(obj.a.a = 4711)));
-__dumpAccess();
-__dumpViolation();
+__look();
 
 __sysout("\n\n\n");
 obj = createObject();
-__apply("c*", this, "obj");
+__APC.apply("c*", this, "obj");
 __sysout("[c*]: eval(obj.a.a) # " + __dump(eval(obj.a.a)));
 __sysout("[c*]: eval(obj.a.a = 4711) # " + __dump(eval(obj.a.a = 4711)));
-__dumpAccess();
-__dumpViolation();
+__look();
 
 
 
@@ -94,34 +79,30 @@ __dumpViolation();
 // e.e
 __sysout("\n\n\n");
 obj = createObject();
-__apply("a*", this, "obj");
+__APC.apply("a*", this, "obj");
 __sysout("[a*]: obj.a.a # " + __dump(obj.a.a));
-__dumpAccess();
-__dumpViolation();
+__look();
 
 // e.e = e
 __sysout("\n\n\n");
 obj = createObject();
-__apply("a*", this, "obj");
+__APC.apply("a*", this, "obj");
 __sysout("[a*]: obj.a.a = 4711 # " + __dump(obj.a.a = 4711));
-__dumpAccess();
-__dumpViolation();
+__look();
 
 // e.e
 __sysout("\n\n\n");
 obj = createObject();
-__apply("c*", this, "obj");
+__APC.apply("c*", this, "obj");
 __sysout("[c*]: obj.a.a # " + __dump(obj.a.a));
-__dumpAccess();
-__dumpViolation();
+__look();
 
 // e.e = e
 __sysout("\n\n\n");
 obj = createObject();
-__apply("c*", this, "obj");
+__APC.apply("c*", this, "obj");
 __sysout("[c*]: obj.a.a = 4711 # " + __dump(obj.a.a = 4711));
-__dumpAccess();
-__dumpViolation();
+__look();
 
 
 
@@ -130,36 +111,32 @@ __dumpViolation();
 // e[e]
 __sysout("\n\n\n");
 obj = createObject();
-__apply("a*", this, "obj");
+__APC.apply("a*", this, "obj");
 __sysout("[a*]: obj[a] # " + __dump(obj["a"]));
-__dumpAccess();
-__dumpViolation();
+__look();
 
 // e[e] = e
 __sysout("\n\n\n");
 obj = createObject();
-__apply("a*", this, "obj");
+__APC.apply("a*", this, "obj");
 __sysout("[a*]: obj[a] = 4711 # " + __dump(obj["a"] = 4711));
-__dumpAccess();
-__dumpViolation();
+__look();
 
 
 
 // e[e]
 __sysout("\n\n\n");
 obj = createObject();
-__apply("c*", this, "obj");
+__APC.apply("c*", this, "obj");
 __sysout("[c*]: obj[a] # " + __dump(obj["a"]));
-__dumpAccess();
-__dumpViolation();
+__look();
 
 // e[e] = e
 __sysout("\n\n\n");
 obj = createObject();
-__apply("c*", this, "obj");
+__APC.apply("c*", this, "obj");
 __sysout("[c*]: obj[a] = 4711 # " + __dump(obj["a"] = 4711));
-__dumpAccess();
-__dumpViolation();
+__look();
 
 
 
@@ -245,49 +222,45 @@ test("c", "obj.c = 4711");
 // Array
 __sysout("\n\n\n");
 array = new Array("a", "b", "c");
-__apply("0", this, "array");
+__APC.apply("0", this, "array");
 __sysout("[0]: array[0] # " + __dump(array["0"]));
 __sysout("[0]: array[1] # " + __dump(array["1"]));
 __sysout("[0]: array[0] = 4711# " + __dump(array["0"] = 4711));
 __sysout("[0]: array[1] = 4711# " + __dump(array["1"] = 4711));
-__dumpAccess();
-__dumpViolation();
+__look();
 
 
 
 // Array
 __sysout("\n\n\n");
 array = new Array("a", "b", "c");
-__apply("0", this, "array");
+__APC.apply("0", this, "array");
 array.foreach(function(k,v) {
 		array[k];
 });
-__dumpAccess();
-__dumpViolation();
+__look();
 
 
 
 // Array
 __sysout("\n\n\n");
 array = new Array("a", "b", "c");
-__apply("0", this, "array");
+__APC.apply("0", this, "array");
 array.foreach(function(k,v) {
 		__sysout(v)
 });
-__dumpAccess();
-__dumpViolation();
+__look();
 
 
 
 // Array
 __sysout("\n\n\n");
 array = new Array("a", "b", "c");
-__apply("0", this, "array");
+__APC.apply("0", this, "array");
 array.foreach(function(k,v) {
 		__sysout(array[k] = 4711)
 });
-__dumpAccess();
-__dumpViolation();
+__look();
 
 
 
@@ -300,14 +273,13 @@ array = new Array();
 array["a"] = "a";
 array["b"] = "b";
 array["c"] = "c";
-__apply("a", this, "array");
+__APC.apply("a", this, "array");
 __sysout("[a]: array.a # " + __dump(array.a));
 __sysout("[a]: array[a] # " + __dump(array["a"]));
 __sysout("[a]: array[b] # " + __dump(array["b"]));
 __sysout("[a]: array[a] = 4711# " + __dump(array["a"] = 4711));
 __sysout("[a]: array[b] = 4711# " + __dump(array["b"] = 4711));
-__dumpAccess();
-__dumpViolation();
+__look();
 
 
 
@@ -317,12 +289,11 @@ array = new Array();
 array["a"] = "a";
 array["b"] = "b";
 array["c"] = "c";
-__apply("a", this, "array");
+__APC.apply("a", this, "array");
 array.foreach(function(k,v) {
 		array[k];
 });
-__dumpAccess();
-__dumpViolation();
+__look();
 
 
 
@@ -332,12 +303,11 @@ array = new Array();
 array["a"] = "a";
 array["b"] = "b";
 array["c"] = "c";
-__apply("a", this, "array");
+__APC.apply("a", this, "array");
 array.foreach(function(k,v) {
 		__sysout(v)
 });
-__dumpAccess();
-__dumpViolation();
+__look();
 
 
 
@@ -347,19 +317,18 @@ array = new Array();
 array["a"] = "a";
 array["b"] = "b";
 array["c"] = "c";
-__apply("a", this, "array");
+__APC.apply("a", this, "array");
 array.foreach(function(k,v) {
 		__sysout(array[k] = 4711)
 });
-__dumpAccess();
-__dumpViolation();
+__look();
 
 
 
 // WITH
 __sysout("\n\n\n");
 obj = createObject();
-__apply("a*", this, "obj");
+__APC.apply("a*", this, "obj");
 with(obj) {
 		__sysout(this.a);
 		__sysout(__dump(b));
@@ -373,6 +342,4 @@ with(obj) {
 		gg().a;
 		h();
 }
-__dumpAccess();
-__dumpViolation();
-
+__look();

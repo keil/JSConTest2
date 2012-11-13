@@ -8,8 +8,6 @@
 // http://www.informatik.uni-freiburg.de/~keilr/
 //////////////////////////////////////////////////
 
-
-
 function func(s) {
 	__sysout(this.secret);
 	this.x = 765;
@@ -17,7 +15,7 @@ function func(s) {
 }
 
 
-test = __permitArgs("(arguments.0.@+secret)", func);
+test = __APC.permitArgs("(arguments.0.@+secret)", func);
 test2 = {secret: "chacha", func: test};
 
 

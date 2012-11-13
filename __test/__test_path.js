@@ -8,25 +8,25 @@
 // http://www.informatik.uni-freiburg.de/~keilr/
 //////////////////////////////////////////////////
 
-start = new __TraceEmpty();
+start = new __APC.TracePath.TraceEmpty();
 
-a = new __TraceProperty("a");
-b = new __TraceProperty("b");
-c = new __TraceProperty("c");
-d = new __TraceProperty("d");
-e = new __TraceProperty("e");
-f = new __TraceProperty("f");
+a = new __APC.TracePath.TraceProperty("a");
+b = new __APC.TracePath.TraceProperty("b");
+c = new __APC.TracePath.TraceProperty("c");
+d = new __APC.TracePath.TraceProperty("d");
+e = new __APC.TracePath.TraceProperty("e");
+f = new __APC.TracePath.TraceProperty("f");
 
 
-p1 = new __TracePath(b, c);
+p1 = new __APC.TracePath.TracePath(b, c);
 
-q1 =  new __TracePath(d, e);
+q1 =  new __APC.TracePath.TracePath(d, e);
 
-s0 = new __TraceSet(p1, q1);
+s0 = new __APC.TracePath.TraceSet(p1, q1);
 
-b0 = new __TracePath(start, a);
-b1 = new __TracePath(b0, s0);
-b2 = new __TracePath(b1, f);
+b0 = new __APC.TracePath.TracePath(start, a);
+b1 = new __APC.TracePath.TracePath(b0, s0);
+b2 = new __APC.TracePath.TracePath(b1, f);
 
 __sysout(b2);
 

@@ -8,10 +8,4 @@
 // http://www.informatik.uni-freiburg.de/~keilr/
 //////////////////////////////////////////////////
 
-//////////////////////////////////////////////////
-//
-
-__config_ViolationMode = __ViolationMode.OBSERVER;
-//__config_ViolationMode = __ViolationMode.PROTECTOR;
-
-test = __permit("a", {});
+test = APC.permit("a", {});

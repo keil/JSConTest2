@@ -9,13 +9,13 @@
 //////////////////////////////////////////////////
 
 function testW(string, name1, name2) {
-		contract = __ContractParser.parse(string);
+		contract = __APC.Parser.parse(string);
 		assertTrue(contract.isWriteable(name1));
 		__sysout("/[" + contract.toString() + "] " + name1 + ": " + contract.isWriteable(name1) + "/ " + contract.derive(name1).toString());
 }
 
 function testN(string, name1, name2) {
-		contract = __ContractParser.parse(string);
+		contract = __APC.Parser.parse(string);
 		assertFalse(contract.isWriteable(name1));
 		__sysout("/[" + contract.toString() + "] " + name1 + ": " + contract.isWriteable(name1) + "/ " + contract.derive(name1).toString());
 }
