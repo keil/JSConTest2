@@ -26,9 +26,9 @@
 						 */
 						extend: function(extContract, extPath) {
 								/* C = C&C' */
-								contract = new __AndContract(contract, extContract).reduce();
+								contract = new APC.Contract.AndContract(contract, extContract).reduce();
 								/* P = P;P' */
-								path = new __TraceSet(path, extPath);
+								path = new APC.TracePath.TraceSet(path, extPath);
 						},
 
 
@@ -46,8 +46,8 @@
 						 */
 						getOwnPropertyDescriptor: function(target, name) {
 								/* Trace Path *************************************** */
-								tracePath =  new __TracePath(path, new __TraceProperty(name));
-								__accessLogger.put(__AccessType.READ, tracePath);
+								tracePath =  new APC.TracePath.TracePath(path, new APC.TracePath.TraceProperty(name));
+								APC.Access.Logger.put(APC.Access.Type.READ, tracePath);
 
 								/* Access Permission Contract *********************** */
 								if(contract.isReadable(name)) {
@@ -55,8 +55,8 @@
 										if (desc !== undefined) desc.value = __createMembrane(desc, contract.derive(name), tracePath);
 										return desc;
 								} else {
-										__violationLogger.put(__ViolationType.READ, tracePath);
-										var desc = (__config_ViolationMode == __ViolationMode.OBSERVER) ? Object.getOwnPropertyDescriptor(target, name) : undefined;
+										APC.Violation.Logger.put(APC.Violation.Type.READ, tracePath);
+										var desc = (APC.Config.EvaluationMode == APC.Evaluation.Mode.OBSERVER) ? Object.getOwnPropertyDescriptor(target, name) : undefined;
 										if (desc !== undefined) desc.value = __createMembrane(desc.value, contract.derive(name), tracePath);
 										return desc;
 								}
@@ -83,15 +83,15 @@
 						 */
 						defineProperty: function(target, name, desc) {
 								/* Trace Path *************************************** */
-								tracePath =  new __TracePath(path, new __TraceProperty(name));
-								__accessLogger.put(__AccessType.WRITE, tracePath);
+								tracePath =  new APC.TracePath.TracePath(path, new APC.TracePath.TraceProperty(name));
+								APC.Access.Logger.put(APC.Access.Type.WRITE, tracePath);
 
 								/* Access Permission Contract *********************** */
 								if(contract.isWriteable(name)) {
 										return Object.defineProperty(target, name, desc);
 								} else {
-										__violationLogger.put(__ViolationType.WRITE, tracePath);
-										return (__config_ViolationMode == __ViolationMode.OBSERVER) ? Object.defineProperty(target, name, desc) : false;
+										APC.Violation.Logger.put(APC.Violation.Type.WRITE, tracePath);
+										return (APC.Config.EvaluationMode == APC.Evaluation.Mode.OBSERVER) ? Object.defineProperty(target, name, desc) : false;
 								}
 						},
 						/** delete proxy[name]
@@ -101,15 +101,15 @@
 						 */
 						deleteProperty: function(target, name) {
 								/* Trace Path *************************************** */
-								tracePath =  new __TracePath(path, new __TraceProperty(name));
-								__accessLogger.put(__AccessType.WRITE, tracePath);
+								tracePath =  new APC.TracePath.TracePath(path, new APC.TracePath.TraceProperty(name));
+								APC.Access.Logger.put(APC.Access.Type.WRITE, tracePath);
 
 								/* Access Permission Contract *********************** */
 								if(contract.isWriteable(name)) {
 										return delete target[name];
 								} else {
-										__violationLogger.put(__ViolationType.WRITE, tracePath);
-										return (__config_ViolationMode == __ViolationMode.OBSERVER) ? delete target[name] : false;
+										APC.Violation.Logger.put(APC.Violation.Type.WRITE, tracePath);
+										return (APC.Config.EvaluationMode == APC.Evaluation.Mode.OBSERVER) ? delete target[name] : false;
 								}
 						},
 						/** Object.freeze(proxy)
@@ -179,15 +179,15 @@
 						 */
 						get: function(target, name, receiver) {
 								/* Trace Path *************************************** */
-								tracePath =  new __TracePath(path, new __TraceProperty(name));
-								__accessLogger.put(__AccessType.READ, tracePath);
+								tracePath =  new APC.TracePath.TracePath(path, new APC.TracePath.TraceProperty(name));
+								APC.Access.Logger.put(APC.Access.Type.READ, tracePath);
 
 								/* Access Permission Contract *********************** */
 								if(contract.isReadable(name)) {
 										return __createMembrane(target[name], contract.derive(name), tracePath);
 								} else {
-										__violationLogger.put(__ViolationType.READ, tracePath);
-										return (__config_ViolationMode == __ViolationMode.OBSERVER) ? __createMembrane(target[name], contract.derive(name), tracePath) : undefined;
+										APC.Violation.Logger.put(APC.Violation.Type.READ, tracePath);
+										return (APC.Config.EvaluationMode == APC.Evaluation.Mode.OBSERVER) ? __createMembrane(target[name], contract.derive(name), tracePath) : undefined;
 								}
 						},
 						/** proxy[name] = val
@@ -199,15 +199,15 @@
 						 */
 						set: function(target, name, value, receiver) {
 								/* Trace Path *************************************** */
-								tracePath =  new __TracePath(path, new __TraceProperty(name));
-								__accessLogger.put(__AccessType.WRITE, tracePath);
+								tracePath =  new APC.TracePath.TracePath(path, new APC.TracePath.TraceProperty(name));
+								APC.Access.Logger.put(APC.Access.Type.WRITE, tracePath);
 
 								/* Access Permission Contract *********************** */
 								if(contract.isWriteable(name)) {
 										return target[name] = value;
 								} else {
-										__violationLogger.put(__ViolationType.WRITE, tracePath);
-										return (__config_ViolationMode == __ViolationMode.OBSERVER) ? target[name] = value : false;
+										APC.Violation.Logger.put(APC.Violation.Type.WRITE, tracePath);
+										return (APC.Config.EvaluationMode == APC.Evaluation.Mode.OBSERVER) ? target[name] = value : false;
 								}
 						},
 						/** for (name in proxy)
@@ -262,7 +262,7 @@
 						 */
 						extend: function(extContract) {
 								/* C = C&C' */
-								contract = new __AndContract(contract, extContract).reduce();
+								contract = new APC.Contract.AndContract(contract, extContract).reduce();
 						},
 
 

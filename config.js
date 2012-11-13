@@ -11,13 +11,19 @@
 (function(APC) {
 
 		//////////////////////////////////////////////////
-		// VIOLATION MODE
+		// EVALUATION MODE
 		// PROTECTOR: return undefined, if property access in not allowed
 		// OBSERVER: recorded access violations
 		//////////////////////////////////////////////////
 
 		// Violation Mode
-		var __ViolationMode = { PROTECTOR: "protector", OBSERVER: "observer" }
+		var __EvaluationMode = { PROTECTOR: "protector", OBSERVER: "observer" }
+
+		//////////////////////////////////////////////////
+		// APC . Config
+		//////////////////////////////////////////////////
+		APC.Evaluation = {};
+		APC.Evaluation.Mode = __EvaluationMode;
 
 
 
@@ -25,6 +31,6 @@
 		// APC . Config
 		//////////////////////////////////////////////////
 		APC.Config = {};
-		APC.Config.ViolationMode = __ViolationMode.OBSERVER;
+		APC.Config.EvaluationMode = __EvaluationMode.OBSERVER;
 
 })(__APC);

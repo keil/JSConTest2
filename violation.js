@@ -5,7 +5,7 @@
 // http://proglang.informatik.uni-freiburg.de/
 // Author: Matthias Keil
 // http://www.informatik.uni-freiburg.de/~keilr/
-// Version: 2.00
+// Version: 2.01
 //////////////////////////////////////////////////
 (function(APC){
 
@@ -17,7 +17,7 @@
 		/** Access Type
 		*/
 		var __ViolationType = {
-				READ : {value: 0, name: "READ VIOLATION", toString: function() { return this.name;} }, 
+				READ: {value: 0, name: "READ VIOLATION", toString: function() { return this.name;} }, 
 WRITE: {value: 1, name: "WRITE VIOLATION", toString: function() { return this.name;} }
 		};
 

@@ -21,10 +21,10 @@
 		 */
 		function __permit(string, obj, name) {
 				// optional name
-				objname = name!=null ? new __TraceProperty(name) : new __TraceEmpty();
+				objname = name!=null ? new APC.TracePath.TraceProperty(name) : new APC.TracePath.TraceEmpty();
 
 				// parse contracts
-				contract = __ContractParser.parse(string);
+				contract = APC.Parser.parse(string);
 
 				// create proxy
 				return __createMembrane(obj, contract, objname);
@@ -55,7 +55,7 @@
 		 */
 		function __permitArgs(string, func) {
 				// parse contracts
-				contract = __ContractParser.parse(string);
+				contract = APC.Parser.parse(string);
 
 				// create function proxy
 				return __createFunctionMembrane(func, contract);

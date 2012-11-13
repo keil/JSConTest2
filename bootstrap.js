@@ -38,7 +38,6 @@ load("path.js");
 // load contract
 load("contract.js");
 
-
 // load violation
 load("violation.js")
 
@@ -59,8 +58,6 @@ load("permit.js")
 
 // load testcase
 //load("__test/__test_.js");
-//
 
+// TODO
 quit();
-
-

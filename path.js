@@ -5,7 +5,7 @@
 // http://proglang.informatik.uni-freiburg.de/
 // Author: Matthias Keil
 // http://www.informatik.uni-freiburg.de/~keilr/
-// Version: 2.00
+// Version: 2.01
 //////////////////////////////////////////////////
 (function(APC) {
 
@@ -123,11 +123,14 @@
 				}
 		}
 
+		//////////////////////////////////////////////////
+		// APC . Path
+		//////////////////////////////////////////////////
 		APC.TracePath = {};
-		APC.TracePath.TraceEmpty = __TraceEmpty;
-		APC.TracePath.TraceProperty = __TraceProperty;
-		APC.TracePath.TracePath = __TracePath;
-		APC.TracePath.TraceSet = __TraceSet;
+		APC.TracePath.TraceEmpty	= __TraceEmpty;
+		APC.TracePath.TraceProperty	= __TraceProperty;
+		APC.TracePath.TracePath		= __TracePath;
+		APC.TracePath.TraceSet		= __TraceSet;
 
 
 
@@ -241,7 +244,7 @@
 		APC.Access = {};
 		APC.Access.Type				= __AccessType;
 		APC.Access.Logger			= __AccessLogger;
-		APC.Access.evaluateAccess	= __evaluateAccess;
-		APC.Access.dumpAccess		= __dumpAccess;
+		APC.Access.evaluate			= __evaluateAccess;
+		APC.Access.dump				= __dumpAccess;
 
 })(APC);
