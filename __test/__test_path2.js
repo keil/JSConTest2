@@ -1,8 +1,6 @@
 var fname = "f";
 var vname = "v";
 
-
-
 obj = __APC.permit("@", {a:2, b:3, x:{a:2, b:3, c:4, d:5}, y:{a:2, b:3, c:4, d:5}}, vname);
 
 obj.a;
