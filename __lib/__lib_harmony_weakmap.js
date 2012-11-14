@@ -5,7 +5,7 @@ function WeakMap() {
 				set: function(key, value) {
 						if (key !== Object(key)) { 
 								throw new TypeError("Object expected");						}
-						let i = keys.indexOf(key);
+						var i = keys.indexOf(key);
 						if (i < 0) { i = keys.length; }
 						keys[i] = key;
 						values[i] = value;

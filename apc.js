@@ -12,3 +12,5 @@ var __APC = (function() {
 		return {}
 
 })();
+
+var p = new Proxy({}, {});

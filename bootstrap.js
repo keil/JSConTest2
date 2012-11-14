@@ -9,6 +9,7 @@
 //////////////////////////////////////////////////
 
 // load hash set
+load("__lib/__lib_apache_hashtable.js");
 load("__lib/__lib_apache_hashset.js");
 // load string padding
 load("__lib/__lib_padding.js");
@@ -18,11 +19,11 @@ load("__lib/__lib_harmony_weakmap.js");
 load("__lib/__lib_reflect.js");
 
 // load logging engine
-load("__lib/__lib_log4js.js");
-var __logger = new __Log(__Log.NONE, __Log.consoleLogger);
+//load("__lib/__lib_log4js.js");
+//var __logger = new __Log(__Log.NONE, __Log.consoleLogger);
 
 // TODO
-//load("__lib/__lib_jscontest_effects.js");
+load("__lib/__lib_jscontest_effects.js");
 
 // load system
 load("system.js");

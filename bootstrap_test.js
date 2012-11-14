@@ -9,6 +9,7 @@
 //////////////////////////////////////////////////
 
 // load hash set
+load("__lib/__lib_apache_hashtable.js");
 load("__lib/__lib_apache_hashset.js");
 // load string padding
 load("__lib/__lib_padding.js");

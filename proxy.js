@@ -325,7 +325,7 @@
 						var accessHandler = __AccessHandler(contract.reduce(), path);
 
 						/* Proxy ******************************************** */
-						var proxy = Proxy(target, accessHandler);
+						var proxy = new Proxy(target, accessHandler);
 						__cache.put(proxy, accessHandler);
 						return proxy;
 				}
@@ -365,7 +365,7 @@
 						var functionHandler = __FunctionHandler(contract.reduce());
 
 						/* Proxy ******************************************** */
-						var proxy = Proxy(target, functionHandler);
+						var proxy = new Proxy(target, functionHandler);
 						__fcache.put(proxy, functionHandler);
 						return proxy;
 				}

@@ -1,8 +1,16 @@
 // from JSConTest / js / jscontest.effects.js
-"use strict";
-(function () {
-		// the local config data
-		var gconfig;
+
+//"use strict";
+
+var JSConTest = {};
+JSConTest.events = {};
+JSConTest.events.handler = {};
+JSConTest.events.handler.effects = {};
+
+
+(function (JSConTest) {
+		var SELF = {}, gconfig;
+		JSConTest.events.handler.effects = SELF;
 
 		// initialize global config default values
 		gconfig = { gdef: { HIGH_DEGREE: 20 }, 
@@ -1256,5 +1264,6 @@
 						assertEffectsWrite: registerEffect (writePath, writeEffects)
 				};
 		}
+		SELF.create = create;
 
-}());
+}(JSConTest));
