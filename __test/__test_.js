@@ -8,4 +8,4 @@
 // http://www.informatik.uni-freiburg.de/~keilr/
 //////////////////////////////////////////////////
 
-test = APC.permit("a", {});
+test = __APC.permit("a", {});

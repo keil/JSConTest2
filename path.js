@@ -236,8 +236,6 @@
 				__clearAccess();
 		}
 
-
-
 		//////////////////////////////////////////////////
 		// APC . Access
 		//////////////////////////////////////////////////
@@ -247,4 +245,42 @@
 		APC.Access.evaluate			= __evaluateAccess;
 		APC.Access.dump				= __dumpAccess;
 
+
+
+
+
+
+		// TODO
+		function __makeReadEffects(fname) {
+							// <func>; <var>; <prop0>; ..
+				var result = new Array();
+				var fname = new Array((fname!=null) ? fname : "");
+				__accessLogger.foreach(function(v) {
+						if(v.type == APC.Access.Type.READ) {
+								result.push(fname.concat(v.path.toString().split(".")));
+						}
+				});
+				return result;
+		}
+
+		// TODO
+		function __makeWriteEffects(fname) {
+				// <func>; <var>; <prop0>; ..
+				var result = new Array();
+				var fname = new Array((fname!=null) ? fname : "");
+				__accessLogger.foreach(function(v) {
+						if(v.type == APC.Access.Type.WRITE) {
+								result.push(fname.concat(v.path.toString().split(".")));
+						}
+				});
+				return result;
+		}
+
+		//////////////////////////////////////////////////
+		// APC . Effect
+		//////////////////////////////////////////////////
+		APC.Effect = {};
+		APC.Effect.getReadEffect	= __makeReadEffects;
+		APC.Effect.getWriteEffect	= __makeWriteEffects;
+		
 })(__APC);

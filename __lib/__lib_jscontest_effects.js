@@ -2,7 +2,7 @@
 "use strict";
 (function () {
 		// the local config data
-		gconfig;
+		var gconfig;
 
 		// initialize global config default values
 		gconfig = { gdef: { HIGH_DEGREE: 20 }, 

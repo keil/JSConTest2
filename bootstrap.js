@@ -21,7 +21,8 @@ load("__lib/__lib_reflect.js");
 load("__lib/__lib_log4js.js");
 var __logger = new __Log(__Log.NONE, __Log.consoleLogger);
 
-
+// TODO
+//load("__lib/__lib_jscontest_effects.js");
 
 // load system
 load("system.js");
@@ -58,6 +59,3 @@ load("permit.js")
 
 // load testcase
 load("__test/__test_.js");
-
-// TODO
-quit();

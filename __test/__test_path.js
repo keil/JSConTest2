@@ -33,5 +33,3 @@ __sysout(b2);
 (b2.dump(new Array())).foreach(function(k,v){
 		__sysout(v);
 });
-
-

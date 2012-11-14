@@ -59,35 +59,37 @@ load("permit.js")
 //////////////////////////////////////////////////
 
 /* Test Parser **/ // (TESTED)
-load("__test/__test_parser.js");
+//load("__test/__test_parser.js");
 
 /* Test Path **/ // (TESTED)
-load("__test/__test_path.js");
-
+//load("__test/__test_path.js");
+load("__test/__test_path2.js");
 
 /** Test Contract **/ // (TESTED)
-load("__test/__test_contract.js");
+//load("__test/__test_contract.js");
 
 /** Test Contract (reduced) **/ // (TESTED)
-load("__test/__test_contract_reduce.js");
+//load("__test/__test_contract_reduce.js");
 
 /* Test Contract (derive) **/  // (TESTED)
-load("__test/__test_contract_read.js");
-load("__test/__test_contract_write.js");
-load("__test/__test_set_read.js");
-load("__test/__test_set_write.js");
+//load("__test/__test_contract_read.js");
+//load("__test/__test_contract_write.js");
+//load("__test/__test_set_read.js");
+//load("__test/__test_set_write.js");
 
 
 /* Test Permit **/  // (TESTED)
-load("__test/__test_permit.js");
-load("__test/__test_permit2.js");
-load("__test/__test_permit3.js");
-load("__test/__test_permit4.js");
-load("__test/__test_permit5.js");
-load("__test/__test_permit6.js");
-load("__test/__test_permit7.js");
+//load("__test/__test_permit.js");
+//load("__test/__test_permit2.js");
+//load("__test/__test_permit3.js");
+//load("__test/__test_permit4.js");
+//load("__test/__test_permit5.js");
+//load("__test/__test_permit6.js");
+//load("__test/__test_permit7.js");
 
 
 /* Test Permit (special) **/ // (TESTED)
-load("__test/__test_scope.js");
-load("__test/__test_scope2.js");
+//load("__test/__test_scope.js");
+//load("__test/__test_scope2.js");
+
+quit();
