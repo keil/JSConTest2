@@ -23,7 +23,7 @@ load("__lib/__lib_reflect.js");
 //var __logger = new __Log(__Log.NONE, __Log.consoleLogger);
 
 // TODO
-load("__lib/__lib_jscontest_effects.js");
+load("__JsConTest/jscontest.events.handler.effects3.js");
 
 // load system
 load("system.js");

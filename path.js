@@ -249,38 +249,129 @@
 
 
 
+		//////////////////////////////////////////////////
+		//  JsConTest
+		//  contract/effect generator
+		//////////////////////////////////////////////////
 
-		// TODO
-		function __makeReadEffects(fname) {
-							// <func>; <var>; <prop0>; ..
-				var result = new Array();
-				var fname = new Array((fname!=null) ? fname : "");
+		// TODO: handel fname
+		// maybe, add the function name to the path iff the permitARGS is called
+		// use types ?
+
+
+		/** Make Read Effects
+		 * returns a list with dumped TracePath Elements in <acp>-style
+		 * @see __JSConTest.events.handler.effects / acpToPath
+		 * @return Array
+		 */
+		function __makeReadEffects() {
+				var rEffects = new Array();
 				__accessLogger.foreach(function(v) {
 						if(v.type == APC.Access.Type.READ) {
-								result.push(fname.concat(v.path.toString().split(".")));
+								rEffects.push(__makeEffectPath(v.path.toString().split(".")));
 						}
 				});
-				return result;
+				return rEffects;
 		}
 
-		// TODO
-		function __makeWriteEffects(fname) {
-				// <func>; <var>; <prop0>; ..
-				var result = new Array();
-				var fname = new Array((fname!=null) ? fname : "");
+		/** Make Write Effects
+		 * returns a list with dumped TracePath Elements in <acp>-style
+		 * @see __JSConTest.events.handler.effects / acpToPath
+		 * @return Array
+		 */
+		function __makeWriteEffects() {
+				var wEffects = new Array();
 				__accessLogger.foreach(function(v) {
 						if(v.type == APC.Access.Type.WRITE) {
-								result.push(fname.concat(v.path.toString().split(".")));
+								wEffects.push(__makeEffectPath(v.path.toString().split(".")));
 						}
 				});
-				return result;
+				return wEffects;
+		}
+
+		/** Make Write Effects
+		 * generates a TracePath to an <acp>-like path
+		 * @see __JSConTest.events.handler.effects / acpToPath
+		 * @return <acp>-Path
+		 */
+		function __makeEffectPath(pathArray) {
+
+				// an access path <acp> is
+				// {type: PROP, property: "name", effect: <acp>}
+				// {type: PARAMETER, number: anInt, fname: "fun_identifier"}
+				// {type: VARIABLE, name: "var_identifier", }
+
+
+				// <acp>-Types
+				var PARAMETER = 1,
+					VARIABLE = 2,
+					PROP = 3,
+					QUESTIONMARK = 4,
+					STAR = 5,
+					ALL = 6,
+					noPROP = 7,
+					regExProp = 8,
+					regExVar = 9;
+
+
+				/** Make <acp>-Variable
+				 * @param varname Variable name
+				 * @return <acp>-Variable
+				 */
+				function makeVariable(varname) {
+						return {type: VARIABLE, name:varname, toString: function() {return varname;}}
+				}
+
+				/** Make <acp>-Parameter
+				 * @param parnum Parameter number
+				 * @param fname Function name
+				 * @return <acp>-Parameter
+				 */
+				function makeParameter(parnum, fname) {
+						return {type: PARAMETER, number: parnum, fname: fname, toString: function() {return fname + ".arguments." + parnum;}}
+				}
+
+				/** Make <acp>-Property
+				 * @param pname Property name
+				 * @param effect Parent effect
+				 * @return <acp>-Parameter
+				 */	
+				function makeProperty(pname, effect) {
+						return {type: PROP, property: pname, effect: effect, toString: function() {return effect.toString + "." + pname;}}
+				}
+
+				// TODO: make difference between function and object mode
+				// current mode: only object
+				var tmp = makeVariable(pathArray[0]);
+				for( var k=1; k<pathArray.length; k++ ) {
+						tmp = {type: PROP, property:  pathArray[k], effect: tmp}
+				}
+				return tmp;
+		}
+
+
+
+		/** Append Effect Inference to DOM node
+		 * @param domNode DOM node
+		 */
+		function __appendEffects(domNode) {
+				var handler = __JSConTest.events.handler.effects.create(domNode);
+
+				var rEffect = __makeReadEffects();
+				handler.assertEffectsRead(0,0,0,0,rEffect);
+
+				var wEffect = __makeWriteEffects();
+				handler.assertEffectsWrite(0,0,0,0,wEffect);
+
+				handler.statistic();
 		}
 
 		//////////////////////////////////////////////////
 		// APC . Effect
 		//////////////////////////////////////////////////
 		APC.Effect = {};
-		APC.Effect.getReadEffect	= __makeReadEffects;
-		APC.Effect.getWriteEffect	= __makeWriteEffects;
-		
+		APC.Effect.getReadEffect		= __makeReadEffects;
+		APC.Effect.getWriteEffect		= __makeWriteEffects;
+		APC.Effect.appendEffectsToNode	= __appendEffects;
+
 })(__APC);

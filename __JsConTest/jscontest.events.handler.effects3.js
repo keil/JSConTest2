@@ -1,12 +1,9 @@
 // from JSConTest / js / jscontest.effects.js
 
-//"use strict";
-
-var JSConTest = {};
-JSConTest.events = {};
-JSConTest.events.handler = {};
-JSConTest.events.handler.effects = {};
-
+var __JSConTest = {};
+__JSConTest.events = {};
+__JSConTest.events.handler = {};
+__JSConTest.events.handler.effects = {};
 
 (function (JSConTest) {
 		var SELF = {}, gconfig;
@@ -1266,4 +1263,4 @@ JSConTest.events.handler.effects = {};
 		}
 		SELF.create = create;
 
-}(JSConTest));
+}(__JSConTest));

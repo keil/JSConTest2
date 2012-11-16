@@ -25,6 +25,9 @@ load("__lib/__lib_log4js.js");
 var __logger = new __Log(__Log.NONE, __Log.consoleLogger);
 
 
+// TODO
+load("__JsConTest/jscontest.events.handler.effects3.js");
+
 
 // load system
 load("system.js");
