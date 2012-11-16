@@ -417,8 +417,10 @@
 								 * @return true if proxy is element of map, false otherwise
 								 */
 								containsKey: function(proxy) {
-										return handlerMap.get(proxy) !== undefined ? true : false;
-
+										if (proxy !== Object(proxy)) {
+												return false;
+										}
+										return (handlerMap.get(proxy, undefined) !== undefined) ? true : false;
 								}
 				};
 		};
