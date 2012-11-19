@@ -9,6 +9,7 @@
 //////////////////////////////////////////////////
 
 start = new __APC.TracePath.TraceEmpty();
+//start = new __APC.TracePath.TraceProperty("chahca");
 
 a = new __APC.TracePath.TraceProperty("a");
 b = new __APC.TracePath.TraceProperty("b");
@@ -31,5 +32,5 @@ b2 = new __APC.TracePath.TracePath(b1, f);
 __sysout(b2);
 
 (b2.dump(new Array())).foreach(function(k,v){
-		__sysout(v);
+		__sysout("@" + v);
 });

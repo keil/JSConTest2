@@ -53,12 +53,15 @@
 		 * @param function Function
 		 * @return Function proxy
 		 */
-		function __permitArgs(string, func) {
+		function __permitArgs(string, func, name) {
+				// optional name
+				fname = name!=null ? new APC.TracePath.TraceProperty(name) : new APC.TracePath.TraceEmpty();
+
 				// parse contracts
 				contract = APC.Parser.parse(string);
 
 				// create function proxy
-				return __APC.Proxy.wrapArgs(func, contract);
+				return __APC.Proxy.wrapArgs(func, contract, fname);
 		}
 
 		/** Apply Arguments 
@@ -68,7 +71,7 @@
 		 */
 		function __applyArgs(string, base, name) {
 				func = base[name];
-				base[name] = __permitArgs(string, func);
+				base[name] = __permitArgs(string, func, name);
 		}
 
 

@@ -47,6 +47,11 @@
 						 * @return Array<String>
 						 */
 						dump: function(array) {
+								if(array.length === 0) {
+										array.push(property);
+										return array;
+								}
+
 								array.foreach(function(k, v){
 										array[k] = v + "." + property;
 								});
@@ -62,6 +67,30 @@
 				}
 		}
 
+		/** Trace Argument
+		 * @param path Function path
+		 * @param property Argument name
+		 */
+		function __TraceArgument(path, property) {
+				return {
+						/* Dump
+						 * @return Array<String>
+						 */
+						dump: function(array) {
+								array = path.dump(array);
+								array = property.dump(array);
+								return array;
+						},
+
+						/* To String
+						 * @return String
+						 */
+						toString : function () {
+								return "function " + path.toString() + ": " + property.toString();
+						}
+				}
+		}
+
 		/** Trace Path
 		 * @param path Path prefix
 		 * @param property Path property
@@ -73,12 +102,7 @@
 						 */
 						dump: function(array) {
 								array = path.dump(array);
-
-								//array.foreach(function(k,v){
-								//		array[k] = v + ".";
-								//});
 								array = property.dump(array);
-
 								return array;
 						},
 
@@ -129,6 +153,7 @@
 		APC.TracePath = {};
 		APC.TracePath.TraceEmpty	= __TraceEmpty;
 		APC.TracePath.TraceProperty	= __TraceProperty;
+		APC.TracePath.TraceArgument	= __TraceArgument;
 		APC.TracePath.TracePath		= __TracePath;
 		APC.TracePath.TraceSet		= __TraceSet;
 
@@ -254,11 +279,6 @@
 		//  contract/effect generator
 		//////////////////////////////////////////////////
 
-		// TODO: handel fname
-		// maybe, add the function name to the path iff the permitARGS is called
-		// use types ?
-
-
 		/** Make Read Effects
 		 * returns a list with dumped TracePath Elements in <acp>-style
 		 * @see __JSConTest.events.handler.effects / acpToPath
@@ -268,7 +288,9 @@
 				var rEffects = new Array();
 				__accessLogger.foreach(function(v) {
 						if(v.type == APC.Access.Type.READ) {
-								rEffects.push(__makeEffectPath(v.path.toString().split(".")));
+								(v.path.dump(new Array())).foreach(function(k, v){
+										rEffects.push(__makeEffectPath(v.split(".")));
+								});
 						}
 				});
 				return rEffects;
@@ -283,7 +305,9 @@
 				var wEffects = new Array();
 				__accessLogger.foreach(function(v) {
 						if(v.type == APC.Access.Type.WRITE) {
-								wEffects.push(__makeEffectPath(v.path.toString().split(".")));
+								(v.path.dump(new Array())).foreach(function(k,v) {
+										wEffects.push(__makeEffectPath(v.split(".")));
+								});
 						}
 				});
 				return wEffects;
@@ -328,7 +352,7 @@
 				 * @return <acp>-Parameter
 				 */
 				function makeParameter(parnum, fname) {
-						return {type: PARAMETER, number: parnum, fname: fname, toString: function() {return fname + ".arguments." + parnum;}}
+						return {type: PARAMETER, number: parnum, fname: fname, toString: function() {return fname + ".argumentsXX." + parnum;}}
 				}
 
 				/** Make <acp>-Property
@@ -340,11 +364,16 @@
 						return {type: PROP, property: pname, effect: effect, toString: function() {return effect.toString + "." + pname;}}
 				}
 
-				// TODO: make difference between function and object mode
-				// current mode: only object
-				var tmp = makeVariable(pathArray[0]);
-				for( var k=1; k<pathArray.length; k++ ) {
-						tmp = {type: PROP, property:  pathArray[k], effect: tmp}
+				if(pathArray[1] == "arguments") {
+						var tmp = makeParameter(pathArray[2], pathArray[0]);
+						var i = 3;
+				} else {
+						var tmp = makeVariable(pathArray[0]);
+						var i = 1;
+				}
+
+				for(; i<pathArray.length; i++ ) {
+						tmp = {type: PROP, property:  pathArray[i], effect: tmp}
 				}
 				return tmp;
 		}

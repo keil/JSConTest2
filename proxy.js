@@ -254,15 +254,17 @@
 		 * @param contract Access Permission Contract
 		 * @return FunctionHandler
 		 */
-		function __FunctionHandler(contract) {
+		function __FunctionHandler(contract, path) {
 				return {
 						/** extend contract
-						 * @param extPath Access Permission Contract
 						 * @param extContract Access Permission Contract
+						 * @param extPath Access Permission Contract
 						 */
-						extend: function(extContract) {
+						extend: function(extContract, extPath) {
 								/* C = C&C' */
 								contract = new APC.Contract.AndContract(contract, extContract).reduce();
+								/* P = P;P' */
+								path = new APC.TracePath.TraceSet(path, extPath);
 						},
 
 
@@ -280,8 +282,12 @@
 						 * @return Any
 						 */
 						apply: function(target, thisArg, args) {
-								args = __createMembrane(args, contract.derive("arguments"), "arguments");
-								thisArg = __createMembrane(thisArg, contract, "this");
+								/* Trace Path *************************************** */
+								tracePathArguments =  new APC.TracePath.TraceArgument(path, new APC.TracePath.TraceProperty("arguments"));
+								tracePathThis =  new APC.TracePath.TraceArgument(path, new APC.TracePath.TraceProperty("this"));
+
+								args = __createMembrane(args, contract.derive("arguments"), tracePathArguments);
+								thisArg = __createMembrane(thisArg, contract.derive("this"), tracePathThis);
 
 								return target.apply(thisArg, args);
 						},
@@ -350,7 +356,7 @@
 		 * @param contract Access Permission Contract
 		 * @return wrapped object
 		 */
-		function __createFunctionMembrane(init, contract) {
+		function __createFunctionMembrane(init, contract, path) {
 				/** Wrap Object
 				 * @param target Target value to wrap
 				 * @return  Proxy | Primitive
@@ -362,7 +368,7 @@
 						}
 
 						/* Access Handler *********************************** */
-						var functionHandler = __FunctionHandler(contract.reduce());
+						var functionHandler = __FunctionHandler(contract.reduce(), path);
 
 						/* Proxy ******************************************** */
 						var proxy = new Proxy(target, functionHandler);
@@ -375,7 +381,7 @@
 				 * @return  Proxy
 				 */
 				function extend(target) {
-						_fcache.get(target).extend(contract);
+						_fcache.get(target).extend(contract, path);
 						return target;
 				}
 
