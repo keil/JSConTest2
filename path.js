@@ -252,6 +252,7 @@
 
 		function __clearAccess() {
 				__accessLogger = new __AccessLogger();
+				APC.Access.Logger = __accessLogger;
 		}
 
 		function __dumpAccess() {

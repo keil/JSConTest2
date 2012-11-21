@@ -100,6 +100,7 @@ WRITE: {value: 1, name: "WRITE VIOLATION", toString: function() { return this.na
 
 		function __clearViolation() {
 				__violationLogger = new __ViolationLogger();
+				APC.Violation.Logger = __violationLogger;
 		}
 
 		function __dumpViolation() {
