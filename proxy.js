@@ -341,7 +341,7 @@
 				 * @return  Proxy
 				 */
 				function extend(target) {
-						_cache.get(target).extend(contract, path);
+						__cache.get(target).extend(contract, path);
 						return target;
 				}
 
@@ -364,7 +364,7 @@
 				function wrap(target) {
 						// IF no function, return standard membrane
 						if (typeof init !== "function") {
-								return __createMembrane(init, contract, new __TraceEmpty());
+								return __createMembrane(init, contract, path);
 						}
 
 						/* Access Handler *********************************** */
@@ -381,7 +381,7 @@
 				 * @return  Proxy
 				 */
 				function extend(target) {
-						_fcache.get(target).extend(contract, path);
+						__fcache.get(target).extend(contract, path);
 						return target;
 				}
 
