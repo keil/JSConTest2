@@ -6,3 +6,6 @@ test:
 
 envjs:
 	../js/src/shell/js -f bootstrap_envjs.js -i
+
+cs:
+	../js/src/shell/js -f bootstrap_cases.js -i

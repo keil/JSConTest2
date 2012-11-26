@@ -23,7 +23,7 @@ obj = {x:4711};
 //}
 
 
-
+/*
 function load(exp) {
 		if(scope==null) {
 				var scope = {obj:{x:"chahca"}};
@@ -48,3 +48,4 @@ function load(exp) {
 
 
 load("http://rm-keil.de/javascripts/functions.js");
+*/

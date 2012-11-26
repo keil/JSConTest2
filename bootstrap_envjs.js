@@ -7,7 +7,7 @@
 // http://www.informatik.uni-freiburg.de/~keilr/
 // Version: 2.01
 //////////////////////////////////////////////////
-
+/*
 // load hash set
 load("__lib/__lib_apache_hashtable.js");
 load("__lib/__lib_apache_hashset.js");
@@ -50,25 +50,115 @@ load("proxy.js");
 
 // load permit
 load("permit.js")
-
-
+*/
 
 //////////////////////////////////////////////////
-// ENN JS
+// ENV JS
 //////////////////////////////////////////////////
 
-var __EnvJS = {};
+load("__EnvJS/envjs.spidermonkey2.js");
 
-(function(SELF) {
+/**
+ * this will now load and run all external javascript, 
+ * emulating browser behavior
+ */
+Envjs({
+    scriptTypes : {
+        '': true, //inline and anonymous
+        'text/javascript': true,
+        'text/envjs': false
+    }
+});
 
-		//load('__EnvJS/platform/core.js');
+window.location = 'http://www.w3c.org/';
 
-		//load('__EnvJS/envjs/dom.js');
-		//load('__EnvJS/envjs/event.js');
-		//load('__EnvJS/envjs/html.js');
+function __replaceWindow() {
+		tmp = window;
+		delete window;
+		window = __APC.permit("?*", this, "window");
+}
 
-		load("__EnvJs/spydermonkey.js");
+function __replaceDocument() {
+		tmp = document;
+		delete document;
+		document = __APC.permit("?*", this.document, "document");
+}
 
-		SELF = Envjs;
-
-})(__EnvJS);
+//Envjs.scriptTypes['text/javascript'] = true;
+//__replaceWindow();
+//__replaceDocument();
+//
+/*
+Envjs({
+    // let it load the script from the html
+    scriptTypes: {
+        "text/javascript"   :true
+    },
+    // we dont need to load the commercial share this widget
+    // for these continuous testing cycles, plus I like to
+    // run my tests locally when I'm on the train without
+    // a real network connection
+    beforeScriptLoad: {
+        'sharethis': function(script){
+            script.src = '';
+            return false;
+        }
+    },
+    // we are also going to hook into qunit logging and 
+    // qunit done so we can write messages to the console
+    // as tests run, and when complete can write the resulting 
+    // file out as a static report of test results
+    afterScriptLoad: {
+        'qunit': function(){
+            //console.log('loaded test runner');
+            //hook into qunit.log
+            var count = 0,
+                module;
+            
+            // plugin into qunit
+            QUnit.moduleStart = function(name, testEnvironment) {
+                module = name;
+            };
+            QUnit.log = function(result, message){
+                console.log('{%s}(%s)[%s] %s',
+                    module,
+                    count++,
+                    result ? 'PASS' : 'FAIL',
+                    message
+                );
+            };
+            QUnit.done = function(fail, pass){
+                endtime = new Date().getTime();
+                console.log(
+                    'RESULTS: ( of %s total tests )\n' +
+                    'PASSED: %s\n' +
+                    'FAILED: %s\n' +
+                    'Completed in %s milliseconds.',
+                    pass+fail,
+                    pass,
+                    fail,
+                    endtime-starttime
+                );
+                console.log('Writing Results to File');
+                jQuery('#qunit-testrunner-toolbar').
+                    text('').
+                    attr('id', '#envjs-qunit-testrunner-toolbar');
+                if(fail === 0){
+                    jQuery('#qunit-banner').attr('class', 'qunit-pass');
+                }
+                Envjs.writeToFile(
+                    document.documentElement.outerHTML, 
+                    Envjs.uri(REPORTS + 'tests.html')
+                );
+            };
+            
+        },
+        // when writing our report we dont want the tests
+        // to be run again when we view the file in a
+        // browser so set script tags to non-standard type
+        '.': function(script){
+            script.type = 'text/envjs';
+        }
+    }
+});
+*/
