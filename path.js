@@ -20,7 +20,7 @@
 		/** Empty Trace Property
 		*/
 		function __TraceEmpty() {
-				return {
+				return __cache.c({
 						/* Dump
 						 * @return Array<String>
 						 */
@@ -29,20 +29,20 @@
 								return array;
 						},
 
-						/* To String
-						 * @return String
-						 */
-						toString : function () {
-								return "";
-						}
-				}
+					   /* To String
+						* @return String
+						*/
+					   toString : function () {
+							   return "";
+					   }
+				});
 		}
 
 		/** Trace Property
 		 * @param variable Variable name
 		 */
 		function __TraceProperty(property) {
-				return {
+				return __cache.c({
 						/* Dump
 						 * @return Array<String>
 						 */
@@ -58,13 +58,13 @@
 								return array;
 						},
 
-						/* To String
-						 * @return String
-						 */
-						toString : function () {
-								return property;
-						}
-				}
+					   /* To String
+						* @return String
+						*/
+					   toString : function () {
+							   return property;
+					   }
+				});
 		}
 
 		/** Trace Argument
@@ -72,7 +72,7 @@
 		 * @param property Argument name
 		 */
 		function __TraceArgument(path, property) {
-				return {
+				return __cache.c({
 						/* Dump
 						 * @return Array<String>
 						 */
@@ -82,13 +82,13 @@
 								return array;
 						},
 
-						/* To String
-						 * @return String
-						 */
-						toString : function () {
-								return "function " + path.toString() + ": " + property.toString();
-						}
-				}
+					   /* To String
+						* @return String
+						*/
+					   toString : function () {
+							   return "function " + path.toString() + ": " + property.toString();
+					   }
+				});
 		}
 
 		/** Trace Path
@@ -96,7 +96,7 @@
 		 * @param property Path property
 		 */
 		function __TracePath(path, property) {
-				return {
+				return __cache.c({
 						/* Dump
 						 * @return Array<String>
 						 */
@@ -106,13 +106,13 @@
 								return array;
 						},
 
-						/* To String
-						 * @return String
-						 */
-						toString : function () {
-								return path.toString() + "." + property.toString();
-						}
-				}
+					   /* To String
+						* @return String
+						*/
+					   toString : function () {
+							   return path.toString() + "." + property.toString();
+					   }
+				});
 		}
 
 		/** Trace Path Set
@@ -120,7 +120,7 @@
 		 * @param path1 Trace Path 1
 		 */
 		function __TraceSet(path0, path1) {
-				return {
+				return __cache.c({
 
 						/* Dump
 						 * @return Array<String>
@@ -138,13 +138,13 @@
 								return set0.concat(set1);
 						},
 
-						/* To String
-						 * @return String
-						 */
+					   /* To String
+						* @return String
+						*/
 						toString : function () {
 								return "( " + path0.toString() + " ; " + path1.toString() + " )";
 						}
-				}
+				});
 		}
 
 		//////////////////////////////////////////////////
@@ -156,6 +156,70 @@
 		APC.TracePath.TraceArgument	= __TraceArgument;
 		APC.TracePath.TracePath		= __TracePath;
 		APC.TracePath.TraceSet		= __TraceSet;
+
+
+
+
+
+		//////////////////////////////////////////////////
+		//  PATH CACHE
+		//  cache for access (trace)paths
+		//////////////////////////////////////////////////
+
+		/** Path Cache 
+		*/
+		function __PathCache() {
+				// cache array
+				var cache = new Array();
+
+				return {
+
+						/* cache function
+						 * @param path trace path
+						 * @return trace path
+						 */
+						c: function(path) {
+								if(this.contains(path.toString())) {
+										return this.get(path.toString());
+								} else {
+										return this.put(path.toString(), path);
+								}
+						},
+
+								/* put
+								 * @param key cache key
+								 * @param value cache value
+								 * $return value
+								 */
+								put: function(key, value) {
+										//__sysout("PUT::key " + key);
+										//__sysout("PUT::key " + key);
+										cache[key] = value;
+										return value;
+								},
+
+								/* get
+								 * @param key cache key
+								 * $return value
+								 */
+								get: function(key) {
+										return cache[key];
+								},
+
+								/* contains
+								 * @param key cache key
+								 * $return true, if key in cache, false otherwise
+								 */
+								contains: function(key) {
+										return (cache[key]!==undefined) ? true : false;
+								},
+
+
+				}
+		}
+
+		// current path cache
+		var __cache = new __PathCache();
 
 
 
