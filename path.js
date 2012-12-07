@@ -51,7 +51,7 @@
 						*/
 					   isSubSetEqOf: function (arg) {
 							   // TODO
-							   return arg == this;
+							   return this == arg;
 					   },
 
 					   /* Flattening
@@ -115,7 +115,7 @@
 						*/
 					   isSubSetEqOf: function (arg) {
 							   // TODO
-							   return arg == this;
+							   return this == arg;
 					   },
 
 					   /* Flattening
@@ -191,7 +191,7 @@
 						*/
 					   reduce: function () {
 							   // TODO
-							   //return this;
+							   return new __TraceArgument(path.reduce(), property.reduce());
 					   }
 				});
 		}
@@ -224,7 +224,7 @@
 						*/
 					   isSuperSetEqOf: function (arg) {
 							   // TODO
-							   return arg == this;
+							   return (arg == this) || path.isSuperSetEqOf(arg);
 					   },
 
 					   /* Is SubSet or Equals
@@ -233,7 +233,7 @@
 						*/
 					   isSubSetEqOf: function (arg) {
 							   // TODO
-							   return arg == this;
+							   return (arg == this) || arg.isSuperSetOf(this);
 					   },
 
 					   /* Flattening
@@ -250,7 +250,7 @@
 						*/
 					   reduce: function () {
 							   // TODO
-							   return this;
+							   return new __TracePath(path.reduce(), property.reduce());
 					   }
 				});
 		}
@@ -291,7 +291,7 @@
 						 */
 						isSuperSetEqOf: function (arg) {
 								// TODO
-								return arg == this;
+								return arg.isSubSetEqOf(this);
 						},
 
 						/* Is SubSet or Equals
@@ -300,7 +300,7 @@
 						 */
 						isSubSetEqOf: function (arg) {
 								// TODO
-								return arg == this;
+								return path0.isSubsetOf(arg) && path1.isSubsetOf(arg);
 						},
 
 						/* Flattening
@@ -318,7 +318,12 @@
 						 */
 						reduce: function () {
 								// TODO
-								return this;
+								if(path0.isSuperSetEqOf(path1))
+										return path0.reduce();
+								else if(path1.isSuperSetEqOf(path0))
+										return path1.reduce();
+								else 
+										return new __TraceSet(path0.reduce(), path1.reduce());
 						}
 				});
 		}
