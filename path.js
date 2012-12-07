@@ -32,8 +32,43 @@
 					   /* To String
 						* @return String
 						*/
-					   toString : function () {
+					   toString: function () {
 							   return "";
+					   },
+
+					   /* Is SuperSet or Equals
+						* @param arg Trace Path
+						* @return boolean, (arg <= this)
+						*/
+					   isSuperSetEqOf: function (arg) {
+							   // TODO
+							   return arg == this;
+					   },
+
+					   /* Is SubSet or Equals
+						* @param arg Trace Path
+						* @return boolean, (this <= arg)
+						*/
+					   isSubSetEqOf: function (arg) {
+							   // TODO
+							   return arg == this;
+					   },
+
+					   /* Flattening
+						* @param arg Trace Path
+						* @return Trace Path
+						*/
+					   flattening: function (arg) {
+							   // TODO
+							   return arg;
+					   },
+
+					   /** Reduce Path
+						* @return subseteq-reduced contract
+						*/
+					   reduce: function () {
+							   // TODO
+							   return this;
 					   }
 				});
 		}
@@ -61,8 +96,43 @@
 					   /* To String
 						* @return String
 						*/
-					   toString : function () {
+					   toString: function () {
 							   return property;
+					   },
+
+					   /* Is SuperSet or Equals
+						* @param arg Trace Path
+						* @return boolean, (arg <= this)
+						*/
+					   isSuperSetEqOf: function (arg) {
+							   // TODO
+							   return arg == this;
+					   },
+
+					   /* Is SubSet or Equals
+						* @param arg Trace Path
+						* @return boolean, (this <= arg)
+						*/
+					   isSubSetEqOf: function (arg) {
+							   // TODO
+							   return arg == this;
+					   },
+
+					   /* Flattening
+						* @param arg Trace Path
+						* @return Trace Path
+						*/
+					   flattening: function (arg) {
+							   // TODO
+							   return new __TracePath(this, arg);
+					   },
+
+					   /** Reduce Path
+						* @return subseteq-reduced contract
+						*/
+					   reduce: function () {
+							   // TODO
+							   return this;
 					   }
 				});
 		}
@@ -85,8 +155,43 @@
 					   /* To String
 						* @return String
 						*/
-					   toString : function () {
+					   toString: function () {
 							   return "function " + path.toString() + ": " + property.toString();
+					   },
+
+					   /* Is SuperSet or Equals
+						* @param arg Trace Path
+						* @return boolean, (arg <= this)
+						*/
+					   isSuperSetEqOf: function (arg) {
+							   // TODO
+							   return arg == this;
+					   },
+
+					   /* Is SubSet or Equals
+						* @param arg Trace Path
+						* @return boolean, (this <= arg)
+						*/
+					   isSubSetEqOf: function (arg) {
+							   // TODO
+							   return arg == this;
+					   },
+
+					   /* Flattening
+						* @param arg Trace Path
+						* @return Trace Path
+						*/
+					   flattening: function (arg) {
+							   // TODO
+							   //return new __TracePath(this, arg);
+					   },
+
+					   /** Reduce Path
+						* @return subseteq-reduced contract
+						*/
+					   reduce: function () {
+							   // TODO
+							   //return this;
 					   }
 				});
 		}
@@ -109,8 +214,43 @@
 					   /* To String
 						* @return String
 						*/
-					   toString : function () {
+					   toString: function () {
 							   return path.toString() + "." + property.toString();
+					   },
+
+					   /* Is SuperSet or Equals
+						* @param arg Trace Path
+						* @return boolean, (arg <= this)
+						*/
+					   isSuperSetEqOf: function (arg) {
+							   // TODO
+							   return arg == this;
+					   },
+
+					   /* Is SubSet or Equals
+						* @param arg Trace Path
+						* @return boolean, (this <= arg)
+						*/
+					   isSubSetEqOf: function (arg) {
+							   // TODO
+							   return arg == this;
+					   },
+
+					   /* Flattening
+						* @param arg Trace Path
+						* @return Trace Path
+						*/
+					   flattening: function (arg) {
+							   // TODO
+							   return new __TracePath(path.flattening(), arg);
+					   },
+
+					   /** Reduce Path
+						* @return subseteq-reduced contract
+						*/
+					   reduce: function () {
+							   // TODO
+							   return this;
 					   }
 				});
 		}
@@ -141,8 +281,44 @@
 					   /* To String
 						* @return String
 						*/
-						toString : function () {
+						toString: function () {
 								return "( " + path0.toString() + " ; " + path1.toString() + " )";
+						},
+
+						/* Is SuperSet or Equals
+						 * @param arg Trace Path
+						 * @return boolean, (arg <= this)
+						 */
+						isSuperSetEqOf: function (arg) {
+								// TODO
+								return arg == this;
+						},
+
+						/* Is SubSet or Equals
+						 * @param arg Trace Path
+						 * @return boolean, (this <= arg)
+						 */
+						isSubSetEqOf: function (arg) {
+								// TODO
+								return arg == this;
+						},
+
+						/* Flattening
+						 * @param arg Trace Path
+						 * @return Trace Path
+						 */
+						flattening: function (arg) {
+								// TODO
+								return new __TraceSet(path0.flattening(arg), )
+										new __TracePath(this, arg);
+						},
+
+						/** Reduce Path
+						 * @return subseteq-reduced contract
+						 */
+						reduce: function () {
+								// TODO
+								return this;
 						}
 				});
 		}
