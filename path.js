@@ -41,7 +41,6 @@
 						* @return boolean, (this >= arg)
 						*/
 					   isSuperSetEqOf: function (arg) {
-							   // TODO
 							   return (this == arg);
 					   },
 
@@ -51,7 +50,7 @@
 						*/
 					   isSubSetEqOf: function (arg) {
 							   // TODO
-							   return arg.isSuperSetOf(this);
+							   return arg.isSuperSetEqOf(this);
 					   },
 
 					   /* Flattening
@@ -63,13 +62,27 @@
 							   return arg;
 					   },
 
-					   /** Reduce Path
-						* @return subseteq-reduced contract
+					   /* Flattening Reduction
+						* @return Trace Path
 						*/
-					   reduce: function () {
+					   freduce: function() {
 							   // TODO
 							   return this;
+					   },
+
+					   /** SubSet Reduction
+						* @return subseteq-reduced contract
+						*/
+					   sreduce: function () {
+							   // TODO
+							   return this;
+					   },
+
+					   // TODO
+					   forAllPath: function(callback, thisArg) {
+					   		callback.call(thisArg, this);
 					   }
+
 				});
 		}
 
@@ -106,7 +119,7 @@
 						*/
 					   isSuperSetEqOf: function (arg) {
 							   // TODO
-							   return (this == arg);
+								return (this == arg);
 					   },
 
 					   /* Is SubSet or Equals
@@ -115,7 +128,7 @@
 						*/
 					   isSubSetEqOf: function (arg) {
 							   // TODO
-							   return arg.isSuperSetOf(this);
+							   return arg.isSuperSetEqOf(this);
 					   },
 
 					   /* Flattening
@@ -127,13 +140,27 @@
 							   return new __TracePath(this, arg);
 					   },
 
-					   /** Reduce Path
-						* @return subseteq-reduced contract
+					   /* Flattening Reduction
+						* @return Trace Path
 						*/
-					   reduce: function () {
+					   freduce: function() {
 							   // TODO
 							   return this;
+					   },
+
+					   /** SubSet Reduction
+						* @return subseteq-reduced contract
+						*/
+					   sreduce: function () {
+							   // TODO
+							   return this;
+					   },
+
+					   // TODO
+					   forAllPath: function(callback, thisArg) {
+					   		callback.call(thisArg, this);
 					   }
+
 				});
 		}
 
@@ -183,15 +210,28 @@
 						*/
 					   flattening: function (arg) {
 							   // TODO
-							   return new __TraceArgument(path, property.flattening(arg)));
+							   return new __TraceArgument(path, property.flattening(arg));
 					   },
 
-					   /** Reduce Path
+					   /* Flattening Reduction
+						* @return Trace Path
+						*/
+					   freduce: function() {
+							   // TODO
+							   return new __TraceArgument(path.freduce(), property.freduce());
+					   },
+
+					   /** SubSet Reduction
 						* @return subseteq-reduced contract
 						*/
-					   reduce: function () {
+					   sreduce: function () {
 							   // TODO
-							   return new __TraceArgument(path.reduce(), property.reduce());
+							   return new __TraceArgument(path.sreduce(), property.sreduce());
+					   },
+
+					   // TODO
+					   forAllPath: function(callback, thisArg) {
+					   		callback.call(thisArg, this);
 					   }
 				});
 		}
@@ -233,7 +273,7 @@
 						*/
 					   isSubSetEqOf: function (arg) {
 							   // TODO
-							   return arg.isSuperSetOf(this);
+							   return arg.isSuperSetEqOf(this);
 					   },
 
 					   /* Flattening
@@ -242,17 +282,27 @@
 						*/
 					   flattening: function (arg) {
 							   // TODO
-							   return new __TracePath(path.flattening(property), arg);
+							   //return new __TracePath(path.flattening(property), arg);
+							   return path.flattening(new __TracePath(property, arg));
 					   },
 
-					   /** Reduce Path
+					   /* Flattening Reduction
+						* @return Trace Path
+						*/
+					   freduce: function() {
+							   // TODO
+							   return path.flattening(property);
+					   },
+
+					   /** SubSet Reduction
 						* @return subseteq-reduced contract
 						*/
-					   reduce: function () {
+					   sreduce: function () {
 							   // TODO
-							   return new __TracePath(path.reduce(), property.reduce());
-					   }
-				});
+							   return new __TracePath(path.sreduce(), property.sreduce());
+					   },
+
+					});
 		}
 
 		/** Trace Path Set
@@ -290,8 +340,17 @@
 						 * @return boolean, (this >= arg)
 						 */
 						isSuperSetEqOf: function (arg) {
+								//var isSuperset = true;
+								//callback = function(p) {
+								//		__sysout("@@@@@@@@@@@@" + p);
+								//	isSuperset &= this.isSuperSetEqOf(p);
+								//}
+
+								//arg.forAllPath(callback, this);
+
+								//return isSuperset;
 								// TODO
-								return arg.isSubSetEqOf(this);
+								return path0.isSuperSetEqOf(arg) || path1.isSuperSetEqOf(arg);// || arg.isSubSetEqOf(this);
 						},
 
 						/* Is SubSet or Equals
@@ -300,7 +359,7 @@
 						 */
 						isSubSetEqOf: function (arg) {
 								// TODO
-								return path0.isSubsetOf(arg) && path1.isSubsetOf(arg);
+								return path0.isSubSetEqOf(arg) && path1.isSubSetEqOf(arg);
 						},
 
 						/* Flattening
@@ -312,18 +371,33 @@
 								return new __TraceSet(path0.flattening(arg), path1.flattening(arg));
 						},
 
-						/** Reduce Path
+					   /* Flattening Reduction
+						* @return Trace Path
+						*/
+					   freduce: function() {
+							   // TODO
+							   return new __TraceSet(path0.freduce(), path1.freduce());;
+					   },
+
+						/** SubSet Reduction
 						 * @return subseteq-reduced contract
 						 */
-						reduce: function () {
+						sreduce: function () {
 								// TODO
 								if(path0.isSuperSetEqOf(path1))
-										return path0.reduce();
+										return path0.sreduce();
 								else if(path1.isSuperSetEqOf(path0))
-										return path1.reduce();
+										return path1.sreduce();
 								else 
-										return new __TraceSet(path0.reduce(), path1.reduce());
-						}
+										return new __TraceSet(path0.sreduce(), path1.sreduce());
+						},
+
+					   // TODO
+					   forAllPath: function(callback, thisArg) {
+					   		callback.call(thisArg, path0);
+							callback.call(thisArg, path1);
+					   }
+
 				});
 		}
 
@@ -362,25 +436,24 @@
 								if(this.contains(path.toString())) {
 										return this.get(path.toString());
 								} else {
-										return this.put(path.toString(), path);
+										this.put(path.toString(), path);
+										return path;
 								}
 						},
 
 								/* put
 								 * @param key cache key
 								 * @param value cache value
-								 * $return value
+								 * @return value
 								 */
 								put: function(key, value) {
-										//__sysout("PUT::key " + key);
-										//__sysout("PUT::key " + key);
 										cache[key] = value;
 										return value;
 								},
 
 								/* get
 								 * @param key cache key
-								 * $return value
+								 * @return value
 								 */
 								get: function(key) {
 										return cache[key];
@@ -388,10 +461,10 @@
 
 								/* contains
 								 * @param key cache key
-								 * $return true, if key in cache, false otherwise
+								 * @return true, if key in cache, false otherwise
 								 */
 								contains: function(key) {
-										return (cache[key]!==undefined) ? true : false;
+										return (cache[key]!=undefined) ? true : false;
 								},
 
 
