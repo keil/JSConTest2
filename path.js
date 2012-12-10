@@ -38,11 +38,11 @@
 
 					   /* Is SuperSet or Equals
 						* @param arg Trace Path
-						* @return boolean, (arg <= this)
+						* @return boolean, (this >= arg)
 						*/
 					   isSuperSetEqOf: function (arg) {
 							   // TODO
-							   return arg == this;
+							   return (this == arg);
 					   },
 
 					   /* Is SubSet or Equals
@@ -51,7 +51,7 @@
 						*/
 					   isSubSetEqOf: function (arg) {
 							   // TODO
-							   return this == arg;
+							   return arg.isSuperSetOf(this);
 					   },
 
 					   /* Flattening
@@ -102,11 +102,11 @@
 
 					   /* Is SuperSet or Equals
 						* @param arg Trace Path
-						* @return boolean, (arg <= this)
+						* @return boolean, (this >= arg)
 						*/
 					   isSuperSetEqOf: function (arg) {
 							   // TODO
-							   return arg == this;
+							   return (this == arg);
 					   },
 
 					   /* Is SubSet or Equals
@@ -115,7 +115,7 @@
 						*/
 					   isSubSetEqOf: function (arg) {
 							   // TODO
-							   return this == arg;
+							   return arg.isSuperSetOf(this);
 					   },
 
 					   /* Flattening
@@ -161,11 +161,11 @@
 
 					   /* Is SuperSet or Equals
 						* @param arg Trace Path
-						* @return boolean, (arg <= this)
+						* @return boolean, (this >= arg)
 						*/
 					   isSuperSetEqOf: function (arg) {
 							   // TODO
-							   return arg == this;
+							   return (this == arg);
 					   },
 
 					   /* Is SubSet or Equals
@@ -174,7 +174,7 @@
 						*/
 					   isSubSetEqOf: function (arg) {
 							   // TODO
-							   return arg == this;
+							   return (arg == this);
 					   },
 
 					   /* Flattening
@@ -183,7 +183,7 @@
 						*/
 					   flattening: function (arg) {
 							   // TODO
-							   //return new __TracePath(this, arg);
+							   return new __TraceArgument(path, property.flattening(arg)));
 					   },
 
 					   /** Reduce Path
@@ -220,11 +220,11 @@
 
 					   /* Is SuperSet or Equals
 						* @param arg Trace Path
-						* @return boolean, (arg <= this)
+						* @return boolean, (this >= arg)
 						*/
 					   isSuperSetEqOf: function (arg) {
 							   // TODO
-							   return (arg == this) || path.isSuperSetEqOf(arg);
+							   return (this == arg) || path.isSuperSetEqOf(arg);
 					   },
 
 					   /* Is SubSet or Equals
@@ -233,7 +233,7 @@
 						*/
 					   isSubSetEqOf: function (arg) {
 							   // TODO
-							   return (arg == this) || arg.isSuperSetOf(this);
+							   return arg.isSuperSetOf(this);
 					   },
 
 					   /* Flattening
@@ -242,7 +242,7 @@
 						*/
 					   flattening: function (arg) {
 							   // TODO
-							   return new __TracePath(path.flattening(), arg);
+							   return new __TracePath(path.flattening(property), arg);
 					   },
 
 					   /** Reduce Path
@@ -287,7 +287,7 @@
 
 						/* Is SuperSet or Equals
 						 * @param arg Trace Path
-						 * @return boolean, (arg <= this)
+						 * @return boolean, (this >= arg)
 						 */
 						isSuperSetEqOf: function (arg) {
 								// TODO
@@ -309,8 +309,7 @@
 						 */
 						flattening: function (arg) {
 								// TODO
-								return new __TraceSet(path0.flattening(arg), )
-										new __TracePath(this, arg);
+								return new __TraceSet(path0.flattening(arg), path1.flattening(arg));
 						},
 
 						/** Reduce Path
