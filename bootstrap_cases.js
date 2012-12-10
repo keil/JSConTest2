@@ -68,16 +68,3 @@ load("permit.js")
 
 load("../casestudy/trunk/google.v7/run.js");
 
-/*load("../casestudy/trunk/google.v7/base.js");
-load("../casestudy/trunk/google.v7/revisions.html");
-load("../casestudy/trunk/google.v7/raytrace.js");
-load("../casestudy/trunk/google.v7/style.css");
-load("../casestudy/trunk/google.v7/crypto.js");
-load("../casestudy/trunk/oogle.v7/splay.js");
-load("../casestudy/trunk/oogle.v7/navier-stokes.js");
-load("../casestudy/trunk/google.v7/regexp.js");
-load("../casestudy/trunk/google.v7/earley-boyer.js");
-load("../casestudy/trunk/google.v7/richards.js");
-load("../casestudy/trunk/google.v7/deltablue.js");
-load("../casestudy/trunk/google.v7/v8-logo.png");
-*/
