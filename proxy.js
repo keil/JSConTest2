@@ -28,7 +28,7 @@
 								/* C = C&C' */
 								contract = new APC.Contract.AndContract(contract, extContract).reduce();
 								/* P = P;P' */
-								path = new APC.TracePath.TraceSet(path, extPath);
+								path = new APC.TracePath.TraceSet(path, extPath).sreduce();
 						},
 
 
@@ -47,6 +47,7 @@
 						getOwnPropertyDescriptor: function(target, name) {
 								/* Trace Path *************************************** */
 								tracePath =  new APC.TracePath.TracePath(path, new APC.TracePath.TraceProperty(name));
+								tracePath = (APC.Config.FlatteningMode == APC.Flatening.Mode.ON) ? tracePath.freduce() : tracePath;
 								APC.Access.Logger.put(APC.Access.Type.READ, tracePath);
 
 								/* Access Permission Contract *********************** */
@@ -84,6 +85,7 @@
 						defineProperty: function(target, name, desc) {
 								/* Trace Path *************************************** */
 								tracePath =  new APC.TracePath.TracePath(path, new APC.TracePath.TraceProperty(name));
+								tracePath = (APC.Config.FlatteningMode == APC.Flatening.Mode.ON) ? tracePath.freduce() : tracePath;
 								APC.Access.Logger.put(APC.Access.Type.WRITE, tracePath);
 
 								/* Access Permission Contract *********************** */
@@ -102,6 +104,7 @@
 						deleteProperty: function(target, name) {
 								/* Trace Path *************************************** */
 								tracePath =  new APC.TracePath.TracePath(path, new APC.TracePath.TraceProperty(name));
+								tracePath = (APC.Config.FlatteningMode == APC.Flatening.Mode.ON) ? tracePath.freduce() : tracePath;
 								APC.Access.Logger.put(APC.Access.Type.WRITE, tracePath);
 
 								/* Access Permission Contract *********************** */
@@ -180,6 +183,7 @@
 						get: function(target, name, receiver) {
 								/* Trace Path *************************************** */
 								tracePath =  new APC.TracePath.TracePath(path, new APC.TracePath.TraceProperty(name));
+								tracePath = (APC.Config.FlatteningMode == APC.Flatening.Mode.ON) ? tracePath.freduce() : tracePath;
 								APC.Access.Logger.put(APC.Access.Type.READ, tracePath);
 
 								/* Access Permission Contract *********************** */
@@ -200,6 +204,7 @@
 						set: function(target, name, value, receiver) {
 								/* Trace Path *************************************** */
 								tracePath =  new APC.TracePath.TracePath(path, new APC.TracePath.TraceProperty(name));
+								tracePath = (APC.Config.FlatteningMode == APC.Flatening.Mode.ON) ? tracePath.freduce() : tracePath;
 								APC.Access.Logger.put(APC.Access.Type.WRITE, tracePath);
 
 								/* Access Permission Contract *********************** */
@@ -264,7 +269,7 @@
 								/* C = C&C' */
 								contract = new APC.Contract.AndContract(contract, extContract).reduce();
 								/* P = P;P' */
-								path = new APC.TracePath.TraceSet(path, extPath);
+								path = new APC.TracePath.TraceSet(path, extPath).sreduce();
 						},
 
 

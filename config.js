@@ -26,11 +26,30 @@
 		APC.Evaluation.Mode = __EvaluationMode;
 
 
+		//////////////////////////////////////////////////
+		// FLATTENING MODE
+		// PROTECTOR: return undefined, if property access in not allowed
+		// OBSERVER: recorded access violations
+		//////////////////////////////////////////////////
+
+		// Violation Mode
+		var __FlatteningMode = { ON: true, OFF: false }
+
+		//////////////////////////////////////////////////
+		// APC . Config
+		//////////////////////////////////////////////////
+		APC.Flattening = {};
+		APC.Flattening.Mode = __FlatteningMode;
+
+
+
+
 
 		//////////////////////////////////////////////////
 		// APC . Config
 		//////////////////////////////////////////////////
 		APC.Config = {};
 		APC.Config.EvaluationMode = __EvaluationMode.OBSERVER;
+		APC.Config.FlatteningMode = __FlatteningMode.ON;
 
 })(__APC);
