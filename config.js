@@ -26,10 +26,28 @@
 		APC.Evaluation.Mode = __EvaluationMode;
 
 
+
+		//////////////////////////////////////////////////
+		// EMPTY REDUCTION MODE
+		// ON: subset reduction enabled
+		// OFF: subset reduction disabled
+		//////////////////////////////////////////////////
+
+		// Violation Mode
+		var __EmptyReductionMode = { ON: true, OFF: false }
+
+		//////////////////////////////////////////////////
+		// APC . Config
+		//////////////////////////////////////////////////
+		APC.EmptyReduction = {};
+		APC.EmptyReduction.Mode = __EmptyReductionMode;
+
+
+
 		//////////////////////////////////////////////////
 		// FLATTENING MODE
-		// PROTECTOR: return undefined, if property access in not allowed
-		// OBSERVER: recorded access violations
+		// ON: flattening enabled
+		// OFF: flattening disabled
 		//////////////////////////////////////////////////
 
 		// Violation Mode
@@ -43,6 +61,23 @@
 
 
 
+		//////////////////////////////////////////////////
+		// SUBSET REDUCTION MODE
+		// ON: subset reduction enabled
+		// OFF: subset reduction disabled
+		//////////////////////////////////////////////////
+
+		// Violation Mode
+		var __SubsetReductionMode = { ON: true, OFF: false }
+
+		//////////////////////////////////////////////////
+		// APC . Config
+		//////////////////////////////////////////////////
+		APC.SubsetReduction = {};
+		APC.SubsetReduction.Mode = __SubsetReductionMode;
+
+
+
 
 
 		//////////////////////////////////////////////////
@@ -50,6 +85,8 @@
 		//////////////////////////////////////////////////
 		APC.Config = {};
 		APC.Config.EvaluationMode = __EvaluationMode.OBSERVER;
+		APC.Config.EmptyReductionMode = __EmptyReductionMode.ON;
 		APC.Config.FlatteningMode = __FlatteningMode.ON;
+		APC.Config.SubsetReductionMode = __SubsetReductionMode.ON;
 
 })(__APC);
