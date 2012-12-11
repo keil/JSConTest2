@@ -81,7 +81,7 @@
 
 					   // TODO
 					   forAllPath: function(callback, thisArg) {
-					   		callback.call(thisArg, this);
+							   callback.call(thisArg, this);
 					   }
 
 				});
@@ -120,7 +120,7 @@
 						*/
 					   isSuperSetEqOf: function (arg) {
 							   // TODO
-								return (this == arg);
+							   return (this == arg);
 					   },
 
 					   /* Is SubSet or Equals
@@ -159,7 +159,7 @@
 
 					   // TODO
 					   forAllPath: function(callback, thisArg) {
-					   		callback.call(thisArg, this);
+							   callback.call(thisArg, this);
 					   }
 
 				});
@@ -232,7 +232,7 @@
 
 					   // TODO
 					   forAllPath: function(callback, thisArg) {
-					   		callback.call(thisArg, this);
+							   callback.call(thisArg, this);
 					   }
 				});
 		}
@@ -303,7 +303,7 @@
 							   return new __TracePath(path.sreduce(), property.sreduce());
 					   },
 
-					});
+				});
 		}
 
 		/** Trace Path Set
@@ -319,11 +319,11 @@
 						dump: function(array) {
 								// dump path 0
 								var set0 = new Array(array);
-								path0.dump(set0);
+								set0 = path0.dump(set0);
 
 								// dump path 1
 								var set1 = new Array(array);
-								path1.dump(set1);
+								set1 = path1.dump(set1);
 
 								// merge sets
 								return set0.concat(set1);
@@ -372,13 +372,13 @@
 								return new __TraceSet(path0.flattening(arg), path1.flattening(arg));
 						},
 
-					   /* Flattening Reduction
-						* @return Trace Path
-						*/
-					   freduce: function() {
-							   // TODO
-							   return new __TraceSet(path0.freduce(), path1.freduce());;
-					   },
+						/* Flattening Reduction
+						 * @return Trace Path
+						 */
+						freduce: function() {
+								// TODO
+								return new __TraceSet(path0.freduce(), path1.freduce());;
+						},
 
 						/** SubSet Reduction
 						 * @return subseteq-reduced contract
@@ -393,11 +393,11 @@
 										return new __TraceSet(path0.sreduce(), path1.sreduce());
 						},
 
-					   // TODO
-					   forAllPath: function(callback, thisArg) {
-					   		callback.call(thisArg, path0);
-							callback.call(thisArg, path1);
-					   }
+						// TODO
+						forAllPath: function(callback, thisArg) {
+								callback.call(thisArg, path0);
+								callback.call(thisArg, path1);
+						}
 
 				});
 		}
@@ -468,12 +468,23 @@
 										return (cache[key]!=undefined) ? true : false;
 								},
 
-
+								/* clear cache
+								*/
+								clear: function() {
+										cache = new Array();
+								}
 				}
 		}
 
 		// current path cache
 		var __cache = new __PathCache();
+
+
+
+		//////////////////////////////////////////////////
+		// APC . Path
+		//////////////////////////////////////////////////
+		APC.TracePath.Cache = __cache;
 
 
 
@@ -607,7 +618,7 @@
 				var rEffects = new Array();
 				__accessLogger.foreach(function(v) {
 						if(v.type == APC.Access.Type.READ) {
-								(v.path.dump(new Array())).foreach(function(k, v){
+								(v.path.dump(new Array())).foreach(function(k, v) {
 										rEffects.push(__makeEffectPath(v.split(".")));
 								});
 						}

@@ -29,7 +29,7 @@
 								contract = new APC.Contract.AndContract(contract, extContract);
 								contract = (APC.Config.EmptyReductionMode == APC.EmptyReduction.Mode.ON) ? contract.reduce() : contract;
 								/* P = P;P' */
-								path = new APC.TracePath.TraceSet(path, extPath).sreduce();
+								path = new APC.TracePath.TraceSet(path, extPath);
 								path = (APC.Config.SubsetReductionMode == APC.SubsetReduction.Mode.ON) ? path.sreduce() : path;
 						},
 
@@ -269,10 +269,10 @@
 						 */
 						extend: function(extContract, extPath) {
 								/* C = C&C' */
-								contract = new APC.Contract.AndContract(contract, extContract).reduce();
+								contract = new APC.Contract.AndContract(contract, extContract);
 								contract = (APC.Config.EmptyReductionMode == APC.EmptyReduction.Mode.ON) ? contract.reduce() : contract;
 								/* P = P;P' */
-								path = new APC.TracePath.TraceSet(path, extPath).sreduce();
+								path = new APC.TracePath.TraceSet(path, extPath);
 								path = (APC.Config.SubsetReductionMode == APC.SubsetReduction.Mode.ON) ? path.sreduce() : path;
 						},
 

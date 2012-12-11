@@ -650,11 +650,26 @@
 								 */
 								contains: function(key) {
 										return (cache["\"" + key + "\""]!==undefined) ? true : false;
+								},
+
+								/* clear cache
+								*/
+								clear: function() {
+										cache = new Array();
 								}
 				}
 		}
 
 		// current path cache
 		var __cache = new __ContractCache();
+
+
+
+		//////////////////////////////////////////////////
+		// APC . Contract
+		//////////////////////////////////////////////////
+		APC.Contract.Cache = __cache;
+
+
 
 })(__APC);
