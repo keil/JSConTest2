@@ -70,7 +70,31 @@
 						*/
 					   reduce: function() {
 							   return this;
-					   }
+					   },
+
+					   // TEST
+					   /** fst('') ::= '' */
+					   fst: function() { return new Array(this); },
+
+					   /** m('') ::= false */
+					   isTop: function() { return false; },
+
+
+					   isSuperSetOf: function(arg, ctx) {
+					   
+							   /** C <= '' |= true  | C='' */
+							   return (arg==this);
+					   },
+
+					   isSubSetOf: function(arg, ctx) {
+					   			
+							   if(arg.isNullable())
+									   return arg.isSuperSetOf(this, ctx);
+							   else
+										/** C <= C' |= false  | v(C) and ~v(C') */
+									   return false;
+					   
+					   },
 				});
 		}
 
@@ -116,7 +140,35 @@
 						*/
 					   reduce: function() {
 							   return this;
-					   }
+					   },
+
+
+					   // TEST
+					   /** fst(@) ::= @ */
+					   fst: function() { return new Array(this); },
+
+
+					   /** m('') ::= false */
+					   isTop: function() { return false; },
+
+
+					   isSuperSetOf: function(arg, ctx) {
+							   /** C <= @ |= true  | C=@ */
+							   return (arg==this);
+						},
+
+					   isSubSetOf: function(arg, ctx) {
+					   	
+							   if(arg.isEmpty())
+									   return true;
+							   else
+										/** C <= C' |= false  | n(C) and ~n(C') */
+									   return false;
+					   
+					   },
+
+
+
 				});
 		}
 
@@ -162,7 +214,33 @@
 						*/
 					   reduce: function() {
 							   return this;
-					   }
+					   },
+
+
+					   // TEST
+					   /** fst(?) ::= ? */
+					   fst: function() { return new Array(this); },
+
+					   /** m('') ::= false */
+					   isTop: function() { return false; },
+
+
+					   isSuperSetOf: function(arg, ctx) {
+							   // TODO axiom
+							   /** C <= ? |= true  | C=@ */
+							   /** C <= ? |= true  | C=Name */
+							   /** C <= ? |= true  | C=RegEx */
+							   /** C <= ? |= true  | C=? */
+							  return (arg==new AtLiteral()) || (arg==new NameLiteral()) || (arg==new RegExLiteral()) || (arg==this);
+					   },
+
+					   isSubSetOf: function(arg, ctx) {
+					   		return arg.isSuperSetOf(this, ctx);
+					   },
+
+
+
+
 				});
 		}
 
@@ -208,7 +286,27 @@
 						*/
 					   reduce: function() {
 							   return this;
-					   }
+					   },
+
+					   // TEST
+					   /** fst(varname) ::= varname */
+					   fst: function() { return new Array(this); },
+
+					   /** m('') ::= false */
+					   isTop: function() { return false; },
+
+
+					   isSuperSetOf: function(arg, ctx) {
+					   			 /** C <= varname |= true  | C=varname */
+								return (arg==this);
+					   },
+
+					   isSubSetOf: function(arg, ctx) {
+					   	return arg.isSuperSetOf(this, ctx);
+					   },
+
+
+
 				});
 		}
 
@@ -254,7 +352,26 @@
 						*/
 					   reduce: function() {
 							   return this;
-					   }
+					   },
+
+					   // TEST
+					   /** fst(RegEx) ::= RegEx */
+					   fst: function() { return new Array(this); },
+
+					   /** m('') ::= false */
+					   isTop: function() { return false; },
+
+
+					   isSuperSetOf: function(arg, ctx) {
+					   			 /** C <= RegEx |= true  | C=RegEx */
+								return (arg==this);
+					   },
+
+					   isSubSetOf: function(arg, ctx) {
+					   	return arg.isSuperSetOf(this, ctx);
+					   },
+
+
 				});
 		}
 
@@ -306,7 +423,32 @@
 						*/
 					   reduce: function() {
 							   return new __QMarkContract(contract.reduce());
-					   }
+					   },
+
+					   // TEST
+					   /** fst(C?) ::= fst(C) */
+					   fst: function() { return contract.fst(); },
+
+					   /** m('') ::= false */
+					   isTop: function() { return contract.isTop(); },
+
+
+					   isSuperSetOf: function(arg, ctx) {
+							   // TODO axiom
+							   var reault = true;
+								fst = arg.fst();
+								fst.foreach(function(k, v) {
+										reault &= this.derive(v).isSuperSetOf(arg.derive(v));
+								});
+								return result;
+					   },
+
+					   isSubSetOf: function(arg, ctx) {
+					   			return arg.isSuperSetOf(this, ctx);
+					   },
+
+
+
 				});
 		}
 
@@ -352,7 +494,34 @@
 						*/
 					   reduce: function() {
 							   return new __StarContract(contract.reduce());
-					   }
+					   },
+
+					   // TEST
+					   /** fst(C?) ::= fst(C) */
+					   fst: function() { return contract.fst(); },
+
+					   /** m('') ::= false */
+					   isTop: function() { return (contract==new __QMarkLiteral()); },
+
+
+					   isSuperSetOf: function(arg, ctx) {
+							   // TODO axiom
+							   var reault = true;
+								fst = arg.fst();
+								fst.foreach(function(k, v) {
+										reault &= this.derive(v).isSuperSetOf(arg.derive(v));
+								});
+								return result;
+					   },
+
+					   isSubSetOf: function(arg, ctx) {
+					   			return arg.isSuperSetOf(this, ctx);
+
+					   },
+
+
+
+
 				});
 		}
 
@@ -411,7 +580,29 @@
 									   return contract0.reduce();
 							   else 
 									   return new  __OrContract(contract0.reduce(), contract1.reduce());
-					   }
+					   },
+
+					   // TEST
+					   /** fst(C?) ::= fst(C) */
+					   fst: function() { return contract0.fst().concat(contract1.fst()); },
+
+					   /** m('') ::= false */
+					   isTop: function() { return (contract0.isTop() || contract1.isTop()); },
+
+					   isSuperSetOf: function(arg, ctx) {
+							   // TODO axiom
+							   var reault = true;
+								fst = arg.fst();
+								fst.foreach(function(k, v) {
+										reault &= this.derive(v).isSuperSetOf(arg.derive(v));
+								});
+					   },
+
+					   isSubSetOf: function(arg, ctx) {
+					   		return arg.isSuperSetOf(this, ctx);
+
+					   },
+
 				});
 		}
 
@@ -460,7 +651,40 @@
 									   return new __AtLiteral();
 							   else 
 									   return new  __AndContract(contract0.reduce(), contract1.reduce());
-					   }
+					   },
+
+					   // TEST
+					   /** fst(C?) ::= fst(C) */
+					   fst: function() { 
+							   var result = new Array();
+							   arr0 = contract0.fst();
+							   arr1 = contract1.fst();
+							   arr0.foreach(function(k0, v0) {
+									   arr1.foreach(function(k1, v1) {
+											   if(v0==v1)
+											   result.push(v0);
+									   });
+							   });
+					   },
+
+					   /** m('') ::= false */
+					   isTop: function() { return (contract0.isTop() && contract1.isTop()); },
+
+
+					   isSuperSetOf: function(arg, ctx) {
+							   // TODO axiom
+							   var reault = true;
+								fst = arg.fst();
+								fst.foreach(function(k, v) {
+										reault &= this.derive(v).isSuperSetOf(arg.derive(v));
+								});
+					   },
+
+					   isSubSetOf: function(arg, ctx) {
+					   		return arg.isSuperSetOf(this, ctx);
+
+					   },
+
 				});
 		}
 
@@ -513,7 +737,29 @@
 									   return new __AtLiteral();
 							   else 
 									   return new  __NegContract(contract.reduce());
-					   }
+					   },
+
+					   // TEST
+					   /** fst(C?) ::= fst(C) */
+					   fst: function() { return contract.fst(); },
+
+					   /** m('') ::= false */
+					   isTop: function() { return (contract==new EmptyLiteral()) },
+
+
+					   isSuperSetOf: function(arg, ctx) {
+							   // TODO axiom
+							   var reault = true;
+								fst = arg.fst();
+								fst.foreach(function(k, v) {
+										reault &= this.derive(v).isSuperSetOf(arg.derive(v));
+								});
+					   },
+
+					   isSubSetOf: function(arg, ctx) {
+					   		return arg.isSuperSetOf(this, ctx);
+
+					   },
 				});
 		}
 
@@ -573,7 +819,31 @@
 									   return new __AtLiteral();
 							   else 
 									   return new  __ConcatContract(contract0.reduce(), contract1.reduce());
-					   }
+					   },
+
+					   // TEST
+					   /** fst(C?) ::= fst(C) */
+					   fst: function() { return contract0.fst(); },
+
+					   /** m('') ::= false */
+					   isTop: function() { return (contract0.isTop() && contract1.isNullable()) || (contract1.isTop() && contract0.isNullable()) },
+
+
+					  isSuperSetOf: function(arg, ctx) {
+							   // TODO axiom
+							   var reault = true;
+								fst = arg.fst();
+								fst.foreach(function(k, v) {
+										reault &= this.derive(v).isSuperSetOf(arg.derive(v));
+								});
+					   },
+
+					   isSubSetOf: function(arg, ctx) {
+					   		return arg.isSuperSetOf(this, ctx);
+
+					   },
+
+
 				});
 		}
 
