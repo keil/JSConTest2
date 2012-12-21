@@ -85,6 +85,8 @@
 
 							   /** C <= C' |= true  | C=C' */
 							   if(arg==this) return true;
+							   /** '' <= C' |= true  | v(C') */
+								else if((arg==new __EmptyLiteral()) && this.isNullable()) return true;
 							   /** C <= C' |= false  | v(C) and ~v(C') */
 							   else if(arg.isNullable() && !this.isNullable()) return false;
 							   /** C <= C' |= true  | n(C) */
@@ -108,6 +110,7 @@
 
 					   lderive: function(larg) {
 							   __sysout("(d_" + larg + " " + this + ")");
+							   // return (larg==this) ? new __EmptyLiteral() : new __AtLiteral();
 							   return new __AtLiteral();
 					   },
 				});
@@ -172,6 +175,8 @@
 
 							   /** C <= C' |= true  | C=C' */
 							   if(arg==this) return true;
+							   /** '' <= C' |= true  | v(C') */
+								else if((arg==new __EmptyLiteral()) && this.isNullable()) return true;
 							   /** C <= C' |= false  | v(C) and ~v(C') */
 							   else if(arg.isNullable() && !this.isNullable()) return false;
 							   /** C <= C' |= true  | n(C) */
@@ -259,6 +264,8 @@
 
 							   /** C <= C' |= true  | C=C' */
 							   if(arg==this) return true;
+							   /** '' <= C' |= true  | v(C') */
+								else if((arg==new __EmptyLiteral()) && this.isNullable()) return true;
 							   /** C <= C' |= false  | v(C) and ~v(C') */
 							   else if(arg.isNullable() && !this.isNullable()) return false;
 							   /** C <= C' |= true  | n(C) */
@@ -356,6 +363,8 @@
 
 							   /** C <= C' |= true  | C=C' */
 							   if(arg==this) return true;
+							   /** '' <= C' |= true  | v(C') */
+								else if((arg==new __EmptyLiteral()) && this.isNullable()) return true;
 							   /** C <= C' |= false  | v(C) and ~v(C') */
 							   else if(arg.isNullable() && !this.isNullable()) return false;
 							   /** C <= C' |= true  | n(C) */
@@ -439,6 +448,8 @@
 
 							   /** C <= C' |= true  | C=C' */
 							   if(arg==this) return true;
+							   /** '' <= C' |= true  | v(C') */
+								else if((arg==new __EmptyLiteral()) && this.isNullable()) return true;
 							   /** C <= C' |= false  | v(C) and ~v(C') */
 							   else if(arg.isNullable() && !this.isNullable()) return false;
 							   /** C <= C' |= true  | n(C) */
@@ -525,6 +536,8 @@
 
 							   /** C <= C' |= true  | C=C' */
 							   if(arg==this) return true;
+							   /** '' <= C' |= true  | v(C') */
+								else if((arg==new __EmptyLiteral()) && this.isNullable()) return true;
 							   /** C <= C' |= false  | v(C) and ~v(C') */
 							   else if(arg.isNullable() && !this.isNullable()) return false;
 							   /** C <= C' |= true  | n(C) */
@@ -621,6 +634,8 @@
 
 							   /** C <= C' |= true  | C=C' */
 							   if(arg==this) return true;
+							   /** '' <= C' |= true  | v(C') */
+								else if((arg==new __EmptyLiteral()) && this.isNullable()) return true;
 							   /** C <= C' |= false  | v(C) and ~v(C') */
 							   else if(arg.isNullable() && !this.isNullable()) return false;
 							   /** C <= C' |= true  | n(C) */
@@ -732,6 +747,8 @@
 
 							   /** C <= C' |= true  | C=C' */
 							   if(arg==this) return true;
+							   /** '' <= C' |= true  | v(C') */
+								else if((arg==new __EmptyLiteral()) && this.isNullable()) return true;
 							   /** C <= C' |= false  | v(C) and ~v(C') */
 							   else if(arg.isNullable() && !this.isNullable()) return false;
 							   /** C <= C' |= true  | n(C) */
@@ -845,6 +862,8 @@
 
 							   /** C <= C' |= true  | C=C' */
 							   if(arg==this) return true;
+							   /** '' <= C' |= true  | v(C') */
+								else if((arg==new __EmptyLiteral()) && this.isNullable()) return true;
 							   /** C <= C' |= false  | v(C) and ~v(C') */
 							   else if(arg.isNullable() && !this.isNullable()) return false;
 							   /** C <= C' |= true  | n(C) */
@@ -947,16 +966,28 @@
 
 					   isSuperSetOf: function(arg, ctx) {
 							   /* TODO */ __sysout(this + " >= " + arg);
+							   
 
 							   /** C <= C' |= true  | C=C' */
 							   if(arg==this) return true;
+							   	/** C <= C' |= true  | C'=!(C) */
+							   else if(arg==contract) return false;
+								/** '' <= C' |= true  | v(C') */
+								else if((arg==new __EmptyLiteral()) && this.isNullable()) return true;
 							   /** C <= C' |= false  | v(C) and ~v(C') */
 							   else if(arg.isNullable() && !this.isNullable()) return false;
 							   /** C <= C' |= true  | n(C) */
 							   else if (arg.isEmpty()) return true;
 							   /** C <= C' |= true  | n(C) and !n(C') */
 							   else if(this.isEmpty()) return false;
+								// TODO
+							   else if (contract.isSuperSetOf(arg, new Array())) return false;
+							   	// TODO
+							   else if (arg.isSuperSetOf(contract, new Array())) return false;
 
+								//	   return !;
+							
+							   else
 
 							   /** otherwise */
 							   /** C <= C' |= true  |  */
@@ -1062,6 +1093,8 @@
 
 							   /** C <= C' |= true  | C=C' */
 							   if(arg==this) return true;
+							   	/** '' <= C' |= true  | v(C') */
+								else if((arg==new __EmptyLiteral()) && this.isNullable()) return true;
 							   /** C <= C' |= false  | v(C) and ~v(C') */
 							   else if(arg.isNullable() && !this.isNullable()) return false;
 							   /** C <= C' |= true  | n(C) */
