@@ -85,6 +85,8 @@
 
 							   /** C <= C' |= true  | C=C' */
 							   if(arg==this) return true;
+							   /** C <= C' |= false  | v(C) and ~v(C') */
+							   else if(arg.isNullable() && !this.isNullable()) return false;
 							   /** C <= C' |= true  | n(C) */
 							   else if (arg.isEmpty()) return true;
 							   /** C <= C' |= true  | n(C) and !n(C') */
@@ -170,6 +172,8 @@
 
 							   /** C <= C' |= true  | C=C' */
 							   if(arg==this) return true;
+							   /** C <= C' |= false  | v(C) and ~v(C') */
+							   else if(arg.isNullable() && !this.isNullable()) return false;
 							   /** C <= C' |= true  | n(C) */
 							   else if (arg.isEmpty()) return true;
 							   /** C <= C' |= true  | n(C) and !n(C') */
@@ -255,6 +259,8 @@
 
 							   /** C <= C' |= true  | C=C' */
 							   if(arg==this) return true;
+							   /** C <= C' |= false  | v(C) and ~v(C') */
+							   else if(arg.isNullable() && !this.isNullable()) return false;
 							   /** C <= C' |= true  | n(C) */
 							   else if (arg.isEmpty()) return true;
 							   /** C <= C' |= true  | n(C) and !n(C') */
@@ -350,6 +356,8 @@
 
 							   /** C <= C' |= true  | C=C' */
 							   if(arg==this) return true;
+							   /** C <= C' |= false  | v(C) and ~v(C') */
+							   else if(arg.isNullable() && !this.isNullable()) return false;
 							   /** C <= C' |= true  | n(C) */
 							   else if (arg.isEmpty()) return true;
 							   /** C <= C' |= true  | n(C) and !n(C') */
@@ -431,6 +439,8 @@
 
 							   /** C <= C' |= true  | C=C' */
 							   if(arg==this) return true;
+							   /** C <= C' |= false  | v(C) and ~v(C') */
+							   else if(arg.isNullable() && !this.isNullable()) return false;
 							   /** C <= C' |= true  | n(C) */
 							   else if (arg.isEmpty()) return true;
 							   /** otherwise */
@@ -515,6 +525,8 @@
 
 							   /** C <= C' |= true  | C=C' */
 							   if(arg==this) return true;
+							   /** C <= C' |= false  | v(C) and ~v(C') */
+							   else if(arg.isNullable() && !this.isNullable()) return false;
 							   /** C <= C' |= true  | n(C) */
 							   else if (arg.isEmpty()) return true;
 							   /** C <= C' |= true  | n(C) and !n(C') */
@@ -609,6 +621,8 @@
 
 							   /** C <= C' |= true  | C=C' */
 							   if(arg==this) return true;
+							   /** C <= C' |= false  | v(C) and ~v(C') */
+							   else if(arg.isNullable() && !this.isNullable()) return false;
 							   /** C <= C' |= true  | n(C) */
 							   else if (arg.isEmpty()) return true;
 							   /** C <= C' |= true  | n(C) and !n(C') */
@@ -718,6 +732,8 @@
 
 							   /** C <= C' |= true  | C=C' */
 							   if(arg==this) return true;
+							   /** C <= C' |= false  | v(C) and ~v(C') */
+							   else if(arg.isNullable() && !this.isNullable()) return false;
 							   /** C <= C' |= true  | n(C) */
 							   else if (arg.isEmpty()) return true;
 							   /** C <= C' |= true  | n(C) and !n(C') */
@@ -829,6 +845,8 @@
 
 							   /** C <= C' |= true  | C=C' */
 							   if(arg==this) return true;
+							   /** C <= C' |= false  | v(C) and ~v(C') */
+							   else if(arg.isNullable() && !this.isNullable()) return false;
 							   /** C <= C' |= true  | n(C) */
 							   else if (arg.isEmpty()) return true;
 							   /** C <= C' |= true  | n(C) and !n(C') */
@@ -932,6 +950,8 @@
 
 							   /** C <= C' |= true  | C=C' */
 							   if(arg==this) return true;
+							   /** C <= C' |= false  | v(C) and ~v(C') */
+							   else if(arg.isNullable() && !this.isNullable()) return false;
 							   /** C <= C' |= true  | n(C) */
 							   else if (arg.isEmpty()) return true;
 							   /** C <= C' |= true  | n(C) and !n(C') */
