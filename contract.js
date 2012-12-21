@@ -1081,9 +1081,6 @@
 							   if(contract0.isNullable()) return new __OrContract(__ConcatContract(contract0.lderive(larg), contract1), contract1.lderive(larg));
 							   else return new __ConcatContract(contract0.lderive(larg), contract1);
 					   },
-
-
-
 				});
 		}
 
