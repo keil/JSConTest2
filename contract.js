@@ -263,12 +263,12 @@
 
 							   /** otherwise */
 							   /** C <= C' |= true  |  */
-							   if(ctx[this][arg]) return true;
+							   if(ctx[this]!=undefined && ctx[this][arg]) return true;
 
 							   var result = true;
 							   var thisContract = this;
 							   arg.fst().foreach(function(k, v) {
-									   /* TODO */ ctx[this][arg]=true;
+									   ctx[this] = (ctx[this]!=undefined) ? (ctx[this])[arg]=true : (new Array())[arg]=true;
 									   result = result && thisContract.lderive(v).isSuperSetOf(arg.lderive(v), ctx);
 									   // for all derivable literals in C: 
 									   // (d_literal C >= C') |= (d_literal C) >= (d_literal C')
@@ -523,12 +523,12 @@
 
 							   /** otherwise */
 							   /** C <= C' |= true  |  */
-							   if(ctx[this][arg]) return true;
+							   if(ctx[this]!=undefined && ctx[this][arg]) return true;
 
 							   var result = true;
 							   var thisContract = this;
 							   arg.fst().foreach(function(k, v) {
-									   /* TODO */ ctx[this][arg]=true;
+									   ctx[this] = (ctx[this]!=undefined) ? (ctx[this])[arg]=true : (new Array())[arg]=true;
 									   result = result && thisContract.lderive(v).isSuperSetOf(arg.lderive(v), ctx);
 									   // for all derivable literals in C: 
 									   // (d_literal C >= C') |= (d_literal C) >= (d_literal C')
@@ -617,12 +617,12 @@
 
 							   /** otherwise */
 							   /** C <= C' |= true  |  */
-							   if(ctx[this][arg]) return true;
+							   if(ctx[this]!=undefined && ctx[this][arg]) return true;
 
 							   var result = true;
 							   var thisContract = this;
 							   arg.fst().foreach(function(k, v) {
-									   /* TODO */ ctx[this][arg]=true;
+									   ctx[this] = (ctx[this]!=undefined) ? (ctx[this])[arg]=true : (new Array())[arg]=true;
 									   result = result && thisContract.lderive(v).isSuperSetOf(arg.lderive(v), ctx);
 									   // for all derivable literals in C: 
 									   // (d_literal C >= C') |= (d_literal C) >= (d_literal C')
@@ -726,12 +726,12 @@
 
 							   /** otherwise */
 							   /** C <= C' |= true  |  */
-							   if(ctx[this][arg]) return true;
+							   if(ctx[this]!=undefined && ctx[this][arg]) return true;
 
 							   var result = true;
 							   var thisContract = this;
 							   arg.fst().foreach(function(k, v) {
-									   /* TODO */ ctx[this][arg]=true;
+									   ctx[this] = (ctx[this]!=undefined) ? (ctx[this])[arg]=true : (new Array())[arg]=true;
 									   result = result && thisContract.lderive(v).isSuperSetOf(arg.lderive(v), ctx);
 									   // for all derivable literals in C: 
 									   // (d_literal C >= C') |= (d_literal C) >= (d_literal C')
@@ -837,12 +837,12 @@
 
 							   /** otherwise */
 							   /** C <= C' |= true  |  */
-							   if(ctx[this][arg]) return true;
+							   if(ctx[this]!=undefined && ctx[this][arg]) return true;
 
 							   var result = true;
 							   var thisContract = this;
 							   arg.fst().foreach(function(k, v) {
-									   /* TODO */ ctx[this][arg]=true;
+									   ctx[this] = (ctx[this]!=undefined) ? (ctx[this])[arg]=true : (new Array())[arg]=true;
 									   result = result && thisContract.lderive(v).isSuperSetOf(arg.lderive(v), ctx);
 									   // for all derivable literals in C: 
 									   // (d_literal C >= C') |= (d_literal C) >= (d_literal C')
@@ -940,12 +940,12 @@
 
 							   /** otherwise */
 							   /** C <= C' |= true  |  */
-							   if(ctx[this][arg]) return true;
+							   if(ctx[this]!=undefined && ctx[this][arg]) return true;
 
 							   var result = true;
 							   var thisContract = this;
 							   arg.fst().foreach(function(k, v) {
-									   /* TODO */ ctx[this][arg]=true;
+									   ctx[this] = (ctx[this]!=undefined) ? (ctx[this])[arg]=true : (new Array())[arg]=true;
 									   result = result && thisContract.lderive(v).isSuperSetOf(arg.lderive(v), ctx);
 									   // for all derivable literals in C: 
 									   // (d_literal C >= C') |= (d_literal C) >= (d_literal C')
@@ -1051,12 +1051,12 @@
 
 							   /** otherwise */
 							   /** C <= C' |= true  |  */
-							   if(ctx[this][arg]) return true;
+							   if(ctx[this]!=undefined && ctx[this][arg]) return true;
 
 							   var result = true;
 							   var thisContract = this;
 							   arg.fst().foreach(function(k, v) {
-									   /* TODO */ ctx[this][arg]=true;
+									   ctx[this] = (ctx[this]!=undefined) ? (ctx[this])[arg]=true : (new Array())[arg]=true;
 									   result = result && thisContract.lderive(v).isSuperSetOf(arg.lderive(v), ctx);
 									   // for all derivable literals in C: 
 									   // (d_literal C >= C') |= (d_literal C) >= (d_literal C')
