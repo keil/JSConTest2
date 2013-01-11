@@ -86,13 +86,16 @@
 							   /** C <= C' |= true  | C=C' */
 							   if(arg==this) return true;
 							   /** '' <= C' |= true  | v(C') */
-								else if((arg==new __EmptyLiteral()) && this.isNullable()) return true;
+							   else if((arg==new __EmptyLiteral()) && this.isNullable()) return true;
 							   /** C <= C' |= false  | v(C) and ~v(C') */
 							   else if(arg.isNullable() && !this.isNullable()) return false;
 							   /** C <= C' |= true  | n(C) */
 							   else if (arg.isEmpty()) return true;
 							   /** C <= C' |= true  | n(C) and !n(C') */
 							   else if(this.isEmpty()) return false;
+							   /** C <= C' |= false  | m(C) and !m(C') */
+							   else if(arg.isTop()) return false;
+
 							   /** otherwise */
 							   else return false;
 
@@ -110,8 +113,8 @@
 
 					   lderive: function(larg) {
 							   __sysout("(d_" + larg + " " + this + ")");
-							   // return (larg==this) ? new __EmptyLiteral() : new __AtLiteral();
-							   return new __AtLiteral();
+							   return (larg==this) ? new __EmptyLiteral() : new __AtLiteral();
+							   //return new __AtLiteral();
 					   },
 				});
 		}
@@ -176,13 +179,15 @@
 							   /** C <= C' |= true  | C=C' */
 							   if(arg==this) return true;
 							   /** '' <= C' |= true  | v(C') */
-								else if((arg==new __EmptyLiteral()) && this.isNullable()) return true;
+							   else if((arg==new __EmptyLiteral()) && this.isNullable()) return true;
 							   /** C <= C' |= false  | v(C) and ~v(C') */
 							   else if(arg.isNullable() && !this.isNullable()) return false;
 							   /** C <= C' |= true  | n(C) */
 							   else if (arg.isEmpty()) return true;
 							   /** C <= C' |= true  | n(C) and !n(C') */
 							   else if(this.isEmpty()) return false;
+							   /** C <= C' |= false  | m(C) and !m(C') */
+							   else if(arg.isTop()) return false;
 
 							   /** otherwise */
 							   else return false;
@@ -265,13 +270,16 @@
 							   /** C <= C' |= true  | C=C' */
 							   if(arg==this) return true;
 							   /** '' <= C' |= true  | v(C') */
-								else if((arg==new __EmptyLiteral()) && this.isNullable()) return true;
+							   else if((arg==new __EmptyLiteral()) && this.isNullable()) return true;
 							   /** C <= C' |= false  | v(C) and ~v(C') */
 							   else if(arg.isNullable() && !this.isNullable()) return false;
 							   /** C <= C' |= true  | n(C) */
 							   else if (arg.isEmpty()) return true;
 							   /** C <= C' |= true  | n(C) and !n(C') */
 							   else if(this.isEmpty()) return false;
+
+							   /** C <= C' |= false  | m(C) and !m(C') */
+							   else if(arg.isTop()) return false;
 
 
 							   /** otherwise */
@@ -285,10 +293,12 @@
 									   result = result && thisContract.lderive(v).isSuperSetOf(arg.lderive(v), ctx);
 									   // for all derivable literals in C: 
 									   // (d_literal C >= C') |= (d_literal C) >= (d_literal C')
-									   if(result==false) return false;
+									   if(result==false) {
+											   /* TODO */ ctx[this][arg]=false;
+											   return false;
+									   }
 
-									   /* TODO */ ctx[this][arg]=false;
-							   });
+									   							   });
 							   return result;
 					   },
 
@@ -300,7 +310,8 @@
 
 					   lderive: function(larg) {
 							   __sysout("(d_" + larg + " " + this + ")");
-							   return new __EmptyLiteral();
+							   //return new __EmptyLiteral();
+							   return (!larg.isEmpty()) ? new __EmptyLiteral() : new __AtLiteral();
 					   },
 
 
@@ -364,13 +375,16 @@
 							   /** C <= C' |= true  | C=C' */
 							   if(arg==this) return true;
 							   /** '' <= C' |= true  | v(C') */
-								else if((arg==new __EmptyLiteral()) && this.isNullable()) return true;
+							   else if((arg==new __EmptyLiteral()) && this.isNullable()) return true;
 							   /** C <= C' |= false  | v(C) and ~v(C') */
 							   else if(arg.isNullable() && !this.isNullable()) return false;
 							   /** C <= C' |= true  | n(C) */
 							   else if (arg.isEmpty()) return true;
 							   /** C <= C' |= true  | n(C) and !n(C') */
 							   else if(this.isEmpty()) return false;
+							   /** C <= C' |= false  | m(C) and !m(C') */
+							   else if(arg.isTop()) return false;
+
 							   /** otherwise */
 							   else return false;
 					   },
@@ -449,11 +463,14 @@
 							   /** C <= C' |= true  | C=C' */
 							   if(arg==this) return true;
 							   /** '' <= C' |= true  | v(C') */
-								else if((arg==new __EmptyLiteral()) && this.isNullable()) return true;
+							   else if((arg==new __EmptyLiteral()) && this.isNullable()) return true;
 							   /** C <= C' |= false  | v(C) and ~v(C') */
 							   else if(arg.isNullable() && !this.isNullable()) return false;
 							   /** C <= C' |= true  | n(C) */
 							   else if (arg.isEmpty()) return true;
+							   /** C <= C' |= false  | m(C) and !m(C') */
+							   else if(arg.isTop()) return false;
+
 							   /** otherwise */
 							   else return false;
 
@@ -537,7 +554,7 @@
 							   /** C <= C' |= true  | C=C' */
 							   if(arg==this) return true;
 							   /** '' <= C' |= true  | v(C') */
-								else if((arg==new __EmptyLiteral()) && this.isNullable()) return true;
+							   else if((arg==new __EmptyLiteral()) && this.isNullable()) return true;
 							   /** C <= C' |= false  | v(C) and ~v(C') */
 							   else if(arg.isNullable() && !this.isNullable()) return false;
 							   /** C <= C' |= true  | n(C) */
@@ -545,6 +562,10 @@
 							   /** C <= C' |= true  | n(C) and !n(C') */
 							   else if(this.isEmpty()) return false;
 
+							   /** C <= C' |= true  | m(C') */
+							   else if(this.isTop()) return true;
+							   /** C <= C' |= false  | m(C) and !m(C') */
+							   else if(!this.isTop() && arg.isTop()) return false;
 
 							   /** otherwise */
 							   /** C <= C' |= true  |  */
@@ -557,9 +578,10 @@
 									   result = result && thisContract.lderive(v).isSuperSetOf(arg.lderive(v), ctx);
 									   // for all derivable literals in C: 
 									   // (d_literal C >= C') |= (d_literal C) >= (d_literal C')
-									   if(result==false) return false;
-
-									   /* TODO */ ctx[this][arg]=false;
+									  if(result==false) {
+											   /* TODO */ ctx[this][arg]=false;
+											   return false;
+									   }
 							   });
 							   return result;
 					   },
@@ -626,7 +648,9 @@
 					   fst: function() { return contract.fst(); },
 
 					   /** m('') ::= false */
-					   isTop: function() { return (contract==new __QMarkLiteral()); },
+					   isTop: function() {
+							   return (contract==new __QMarkLiteral()) ||  contract.isTop();
+					   },
 
 
 					   isSuperSetOf: function(arg, ctx) {
@@ -635,7 +659,7 @@
 							   /** C <= C' |= true  | C=C' */
 							   if(arg==this) return true;
 							   /** '' <= C' |= true  | v(C') */
-								else if((arg==new __EmptyLiteral()) && this.isNullable()) return true;
+							   else if((arg==new __EmptyLiteral()) && this.isNullable()) return true;
 							   /** C <= C' |= false  | v(C) and ~v(C') */
 							   else if(arg.isNullable() && !this.isNullable()) return false;
 							   /** C <= C' |= true  | n(C) */
@@ -643,6 +667,10 @@
 							   /** C <= C' |= true  | n(C) and !n(C') */
 							   else if(this.isEmpty()) return false;
 
+							   /** C <= C' |= true  | m(C') */
+							   else if(this.isTop()) return true;
+							   /** C <= C' |= false  | m(C) and !m(C') */
+							   else if(!this.isTop() && arg.isTop()) return false;
 
 							   /** otherwise */
 							   /** C <= C' |= true  |  */
@@ -655,9 +683,10 @@
 									   result = result && thisContract.lderive(v).isSuperSetOf(arg.lderive(v), ctx);
 									   // for all derivable literals in C: 
 									   // (d_literal C >= C') |= (d_literal C) >= (d_literal C')
-									   if(result==false) return false;
-
-									   /* TODO */ ctx[this][arg]=false;
+									  if(result==false) {
+											   /* TODO */ ctx[this][arg]=false;
+											   return false;
+									   }
 							   });
 							   return result;
 					   },
@@ -688,6 +717,9 @@
 		 * C0+C1 Contract (logical or)
 		 */
 		function __OrContract(contract0, contract1) {
+				if(contract0.isSuperSetOf(contract1, new Array())) return contract0;
+				else if(contract1.isSuperSetOf(contract0, new Array())) return contract1;
+
 				return __cache.c({
 						/** n(C0+C1) ::= n(C0) & n(C1) */
 						isEmpty: function() {
@@ -748,7 +780,7 @@
 							   /** C <= C' |= true  | C=C' */
 							   if(arg==this) return true;
 							   /** '' <= C' |= true  | v(C') */
-								else if((arg==new __EmptyLiteral()) && this.isNullable()) return true;
+							   else if((arg==new __EmptyLiteral()) && this.isNullable()) return true;
 							   /** C <= C' |= false  | v(C) and ~v(C') */
 							   else if(arg.isNullable() && !this.isNullable()) return false;
 							   /** C <= C' |= true  | n(C) */
@@ -756,6 +788,10 @@
 							   /** C <= C' |= true  | n(C) and !n(C') */
 							   else if(this.isEmpty()) return false;
 
+							   /** C <= C' |= true  | m(C') */
+							   else if(this.isTop()) return true;
+							   /** C <= C' |= false  | m(C) and !m(C') */
+							   else if(!this.isTop() && arg.isTop()) return false;
 
 							   /** otherwise */
 							   /** C <= C' |= true  |  */
@@ -768,9 +804,10 @@
 									   result = result && thisContract.lderive(v).isSuperSetOf(arg.lderive(v), ctx);
 									   // for all derivable literals in C: 
 									   // (d_literal C >= C') |= (d_literal C) >= (d_literal C')
-									   if(result==false) return false;
-
-									   /* TODO */ ctx[this][arg]=false;
+									   if(result==false) {
+											   /* TODO */ ctx[this][arg]=false;
+											   return false;
+									   }
 							   });
 							   return result;
 
@@ -796,6 +833,9 @@
 		 * C0&C1 Contract (logical and)
 		 */
 		function __AndContract(contract0, contract1) {
+				if(contract0.isSubSetOf(contract1, new Array())) return contract0;
+				else if(contract1.isSubSetOf(contract0, new Array())) return contract1;
+
 				return __cache.c({
 						/** n(C0+C1) ::= n(C0) + n(C1) */
 						isEmpty: function() {
@@ -863,7 +903,7 @@
 							   /** C <= C' |= true  | C=C' */
 							   if(arg==this) return true;
 							   /** '' <= C' |= true  | v(C') */
-								else if((arg==new __EmptyLiteral()) && this.isNullable()) return true;
+							   else if((arg==new __EmptyLiteral()) && this.isNullable()) return true;
 							   /** C <= C' |= false  | v(C) and ~v(C') */
 							   else if(arg.isNullable() && !this.isNullable()) return false;
 							   /** C <= C' |= true  | n(C) */
@@ -871,6 +911,10 @@
 							   /** C <= C' |= true  | n(C) and !n(C') */
 							   else if(this.isEmpty()) return false;
 
+							   /** C <= C' |= true  | m(C') */
+							   else if(this.isTop()) return true;
+							   /** C <= C' |= false  | m(C) and !m(C') */
+							   else if(!this.isTop() && arg.isTop()) return false;
 
 							   /** otherwise */
 							   /** C <= C' |= true  |  */
@@ -883,9 +927,10 @@
 									   result = result && thisContract.lderive(v).isSuperSetOf(arg.lderive(v), ctx);
 									   // for all derivable literals in C: 
 									   // (d_literal C >= C') |= (d_literal C) >= (d_literal C')
-									   if(result==false) return false;
-
-									   /* TODO */ ctx[this][arg]=false;
+									  if(result==false) {
+											   /* TODO */ ctx[this][arg]=false;
+											   return false;
+									   }
 							   });
 							   return result;
 					   },
@@ -961,37 +1006,50 @@
 					   fst: function() { return contract.fst(); },
 
 					   /** m('') ::= false */
-					   isTop: function() { return (contract==new EmptyLiteral()) },
+					   isTop: function() { return (contract.isEmpty()) },
 
 
 					   isSuperSetOf: function(arg, ctx) {
 							   /* TODO */ __sysout(this + " >= " + arg);
-							   
+
 
 							   /** C <= C' |= true  | C=C' */
 							   if(arg==this) return true;
-							   	/** C <= C' |= true  | C'=!(C) */
-							   else if(arg==contract) return false;
-								/** '' <= C' |= true  | v(C') */
-								else if((arg==new __EmptyLiteral()) && this.isNullable()) return true;
+//							   /** C <= C' |= true  | C'=!(C) */
+//							   else if(arg==contract) return false;
+							   /** '' <= C' |= true  | v(C') */
+							   else if((arg==new __EmptyLiteral()) && this.isNullable()) return true;
 							   /** C <= C' |= false  | v(C) and ~v(C') */
 							   else if(arg.isNullable() && !this.isNullable()) return false;
 							   /** C <= C' |= true  | n(C) */
 							   else if (arg.isEmpty()) return true;
 							   /** C <= C' |= true  | n(C) and !n(C') */
 							   else if(this.isEmpty()) return false;
-								// TODO
-							   else if (contract.isSuperSetOf(arg, new Array())) return false;
-							   	// TODO
-							   else if (arg.isSuperSetOf(contract, new Array())) return false;
 
-								//	   return !;
-							
-							   else
+						
+							   // TODO
+							   //  else if (contract.isSuperSetOf(arg, new Array())) return false;
+							   // TODO
+							   //  else if (arg.isSuperSetOf(contract, new Array())) return false;
 
-							   /** otherwise */
-							   /** C <= C' |= true  |  */
-							   if(ctx[this]!=undefined && ctx[this][arg]) return true;
+							   //	   return !;
+
+							   /** C <= C' |= true  | m(C') */
+							   else if(this.isTop()) return true;
+							   /** C <= C' |= false  | m(C) and !m(C') */
+							   else if(!this.isTop() && arg.isTop()) return false;
+
+							   		
+
+							   else if(contract.isSuperSetOf(arg, ctx) || arg.isSuperSetOf(contract, ctx)) return false;
+
+
+
+							 //  else
+
+									   /** otherwise */
+									   /** C <= C' |= true  |  */
+							//		   if(ctx[this]!=undefined && ctx[this][arg]) return true;
 
 							   var result = true;
 							   var thisContract = this;
@@ -1000,9 +1058,10 @@
 									   result = result && thisContract.lderive(v).isSuperSetOf(arg.lderive(v), ctx);
 									   // for all derivable literals in C: 
 									   // (d_literal C >= C') |= (d_literal C) >= (d_literal C')
-									   if(result==false) return false;
-
-									   /* TODO */ ctx[this][arg]=false;
+									  if(result==false) {
+											   /* TODO */ ctx[this][arg]=false;
+											   return false;
+									   }
 							   });
 							   return result;
 					   },
@@ -1033,6 +1092,9 @@
 		 * C.C Contract (concatenation)
 		 */
 		function __ConcatContract(contract0, contract1) {
+				if(contract0.isEmpty()) return new __AtLiteral();
+				else if(contract0 == new __EmptyLiteral()) return contract1;
+
 				return __cache.c({
 						/** n(C0.C1) ::= n(C0) */
 						isEmpty: function() {
@@ -1085,7 +1147,11 @@
 					   fst: function() { return contract0.fst(); },
 
 					   /** m('') ::= false */
-					   isTop: function() { return (contract0.isTop() && contract1.isNullable()) || (contract1.isTop() && contract0.isNullable()) },
+					   isTop: function() {
+							   return (contract0.isTop() && contract1.isNullable()) || (contract1.isTop() && contract0.isNullable()) || (contract0.isTop() && contract1.isTop()) 
+
+
+					   },
 
 
 					   isSuperSetOf: function(arg, ctx) {
@@ -1093,14 +1159,20 @@
 
 							   /** C <= C' |= true  | C=C' */
 							   if(arg==this) return true;
-							   	/** '' <= C' |= true  | v(C') */
-								else if((arg==new __EmptyLiteral()) && this.isNullable()) return true;
+							   /** '' <= C' |= true  | v(C') */
+							   else if((arg==new __EmptyLiteral()) && this.isNullable()) return true;
 							   /** C <= C' |= false  | v(C) and ~v(C') */
 							   else if(arg.isNullable() && !this.isNullable()) return false;
 							   /** C <= C' |= true  | n(C) */
 							   else if(arg.isEmpty()) return true;
 							   /** C <= C' |= true  | n(C) and !n(C') */
 							   else if(this.isEmpty()) return false;
+
+							   /** C <= C' |= true  | m(C') */
+							   else if(this.isTop()) return true;
+							   /** C <= C' |= false  | m(C) and !m(C') */
+							   else if(!this.isTop() && arg.isTop()) return false;
+
 
 							   /** otherwise */
 							   /** C <= C' |= true  |  */
@@ -1113,9 +1185,10 @@
 									   result = result && thisContract.lderive(v).isSuperSetOf(arg.lderive(v), ctx);
 									   // for all derivable literals in C: 
 									   // (d_literal C >= C') |= (d_literal C) >= (d_literal C')
-									   if(result==false) return false;
-
-									   /* TODO */ ctx[this][arg]=false;
+									  if(result==false) {
+											   /* TODO */ ctx[this][arg]=false;
+											   return false;
+									   }
 							   });
 							   return result;
 
