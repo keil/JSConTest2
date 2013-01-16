@@ -81,24 +81,13 @@
 					   },
 					   /** ctx |- C <= this */
 					   isSuperSetOf: function(arg, ctx) {
-							   /* TODO */ __sysout(this + " >= " + arg);
-
 							   /** C <= C' |= true  | C=C' */
 							   if(arg==this) return true;
-							   //							   /** '' <= C' |= true  | v(C') */
-							   //							   else if((arg==new __EmptyLiteral()) && this.isNullable()) return true;
-							   //							   /** C <= C' |= false  | v(C) and ~v(C') */
-							   //							   else if(arg.isNullable() && !this.isNullable()) return false;
 							   /** C <= C' |= true  | n(C) */
 							   else if (arg.isEmpty()) return true;
-							   //							   /** C <= C' |= true  | n(C) and !n(C') */
-							   //							   else if(this.isEmpty()) return false;
-							   //							   /** C <= C' |= false  | m(C) and !m(C') */
-							   //							   else if(arg.isUniversal()) return false;
 
 							   /** otherwise */
 							   else return false;
-
 					   },
 					   /** ctx |- C >= this */
 					   isSubSetOf: function(arg, ctx) {
@@ -176,24 +165,15 @@
 					   },
 					   /** ctx |- C <= this */
 					   isSuperSetOf: function(arg, ctx) {
-							   /* TODO */ __sysout(this + " >= " + arg);
-
 							   /** C <= C' |= true  | C=C' */
 							   if(arg==this) return true;
-							   //							   /** '' <= C' |= true  | v(C') */
-							   //							   else if((arg==new __EmptyLiteral()) && this.isNullable()) return true;
 							   /** C <= C' |= false  | v(C) and ~v(C') */
 							   else if(arg.isNullable() && !this.isNullable()) return false;
 							   /** C <= C' |= true  | n(C) */
 							   else if (arg.isEmpty()) return true;
-							   //							   /** C <= C' |= true  | n(C) and !n(C') */
-							   //							   else if(this.isEmpty()) return false;
-							   //							   /** C <= C' |= false  | m(C) and !m(C') */
-							   //							   else if(arg.isUniversal()) return false;
 
 							   /** otherwise */
 							   else return false;
-
 					   },
 					   /** ctx |- C >= this */
 					   isSubSetOf: function(arg, ctx) {
@@ -269,22 +249,14 @@
 					   },
 					   /** ctx |- C <= this */
 					   isSuperSetOf: function(arg, ctx) {
-							   /* TODO */ __sysout(this + " >= " + arg);
-
 							   /** C <= C' |= true  | C=C' */
 							   if(arg==this) return true;
-							   //							   /** '' <= C' |= true  | v(C') */
-							   //							   else if((arg==new __EmptyLiteral()) && this.isNullable()) return true;
 							   /** C <= C' |= false  | v(C) and ~v(C') */
 							   else if(arg.isNullable()) return false;
 							   /** C <= C' |= true  | n(C) */
 							   else if (arg.isEmpty()) return true;
-							   //							   /** C <= C' |= true  | n(C) and !n(C') */
-							   //							   else if(this.isEmpty()) return false;
-
 							   /** C <= C' |= false  | m(C) and !m(C') */
 							   else if(arg.isUniversal()) return false;
-
 
 							   /** otherwise */
 							   /** C <= C' |= true  |  */
