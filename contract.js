@@ -43,7 +43,7 @@
 					   },
 					   /** m('') ::= false */
 					   isIndifferent: function() {
-							   // TODO
+							   return false;
 					   },
 					   /** m*('') ::= false */
 					   isUniversal: function() {
@@ -138,11 +138,11 @@
 					   isNullable: function() {
 							   return false;
 					   },
-					   /** m('') ::= false */
+					   /** m(@) ::= false */
 					   isIndifferent: function() {
-							   // TODO
+							   return false;
 					   },
-					   /** m*('') ::= false */
+					   /** m*(@) ::= false */
 					   isUniversal: function() {
 							   return false;
 					   },
@@ -231,11 +231,11 @@
 					   isNullable: function() {
 							   return false;
 					   },
-					   /** m('') ::= false */
+					   /** m(?) ::= false */
 					   isIndifferent: function() {
-							   // TODO
+							   return true;
 					   },
-					   /** m*('') ::= false */
+					   /** m*(?) ::= false */
 					   isUniversal: function() {
 							   return false;
 					   },
@@ -342,11 +342,11 @@
 					   isNullable: function() {
 							   return false;
 					   },
-					   /** m('') ::= false */
+					   /** m(varname) ::= false */
 					   isIndifferent: function() {
-							   // TODO
+							   return false;
 					   },
-					   /** m*('') ::= false */
+					   /** m*(varname) ::= false */
 					   isUniversal: function() {
 							   return false;
 					   },
@@ -431,11 +431,11 @@
 					   isNullable: function() {
 							   return false;
 					   },
-					   /** m('') ::= false */
+					   /** m(RegEx) ::= false */
 					   isIndifferent: function() {
-							   // TODO
+							   return false;
 					   },
-					   /** m*('') ::= false */
+					   /** m*(RegEx) ::= false */
 					   isUniversal: function() {
 							   return false;
 					   },
@@ -526,11 +526,11 @@
 					   isNullable: function() {
 							   return true;
 					   },
-					   /** m('') ::= false */
+					   /** m(C?) ::= m(C) */
 					   isIndifferent: function() {
-							   // TODO
+							   return contract.isIndifferent();
 					   },
-					   /** m*('') ::= false */
+					   /** m*(C?) ::= m*(C) */
 					   isUniversal: function() {
 							   return contract.isUniversal();
 					   },
@@ -634,14 +634,13 @@
 					   isNullable: function() {
 							   return true;
 					   },
-					   /** m('') ::= false */
+					   /** m(C*) ::= m(C) */
 					   isIndifferent: function() {
-							   // TODO
+							   return  contract.isIndifferent();
 					   },
-					   /** m*('') ::= false */
+					   /** m*(C*) ::= m*(C) + m() */
 					   isUniversal: function() {
-							   // TODO change to indifferent
-							   return (contract==new __QMarkLiteral()) ||  contract.isUniversal();
+							   return (contract.isIndifferent() ||  contract.isUniversal());
 					   },
 					   //////////////////////////////////////////////////
 					   /** r(C*) ::= r(C) */
@@ -753,11 +752,11 @@
 					   isNullable: function() {
 							   return (contract0.isNullable() || contract1.isNullable());
 					   },
-					   /** m('') ::= false */
+					   /** m(C0+C1) ::= m(C0) + m(C1) */
 					   isIndifferent: function() {
-							   // TODO
+							   return  (contract0.isIndifferent() ||  contract1.isIndifferent());
 					   },
-					   /** m*('') ::= false */
+					   /** m*(C0+C1) ::= m*(C0) + m*(C1) */
 					   isUniversal: function() {
 							   return (contract0.isUniversal() || contract1.isUniversal());
 					   },
@@ -876,11 +875,11 @@
 					   isNullable: function() {
 							   return (contract0.isNullable() && contract1.isNullable());
 					   },
-					   /** m('') ::= false */
+					   /** m(C0&C1) ::= m(C0) & m(C1) */
 					   isIndifferent: function() {
-							   // TODO
+							   return (contract0.isIndifferent() && contract1.isIndifferent());
 					   },
-					   /** m*('') ::= false */
+					   /** m*(C0&C1) ::= m*(C0) & m*(C1) */
 					   isUniversal: function() {
 							   return (contract0.isUniversal() && contract1.isUniversal());
 					   },
@@ -990,23 +989,20 @@
 		 */
 		function __NegContract(contract) {
 				return __cache.c({
-						/** n(!C) ::= true if C=?, false otherwise */
+						/** n(!C) ::= m(C) + m*(C) */
 						isEmpty: function() {
-								// TODO
-								if(contract.toString()=="?")
-						return true;
-								else 
-						return false;
+								// negation only effects to literals
+								return (contract.isUniversal() || contract.isIndifferent());
 						},
 					   /** v(!C) ::= false if v(C), false otherwise */
 					   isNullable: function() {
 							   return contract.isNullable() ? false : true;
 					   },
-					   /** m('') ::= false */
+					   /** m(!C) ::= v(C) + n(C) */
 					   isIndifferent: function() {
-							   // TODO
+							   return (contract.isNullable() || contract.isEmpty());
 					   },
-					   /** m*('') ::= false */
+					   /** m*(!C) ::= false */
 					   isUniversal: function() {
 							   return (contract.isEmpty())
 					   },
@@ -1145,11 +1141,12 @@
 					   isNullable: function() {
 							   return (contract0.isNullable() && contract1.isNullable());
 					   },
-					   /** m('') ::= false */
+					   /** m(C0.C1) ::= false */
 					   isIndifferent: function() {
-							   // TODO
+							   if(contract0.isNullable()) return contract1.isIndifferent();
+							   else return contract0.isIndifferent();
 					   },
-					   /** m*('') ::= false */
+					   /** m*(C0.C1) ::= false */
 					   isUniversal: function() {
 							   return (contract0.isUniversal() && contract1.isNullable())
 						|| (contract1.isUniversal() && contract0.isNullable())
