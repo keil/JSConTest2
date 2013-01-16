@@ -16,8 +16,8 @@
 		//
 		// RegEx              = /.../
 		// Name               = x...
-		// Literal            = '' | @ | ? | Name | RegEx
-		// Set                = Literal | (Contract+Contract) | (Contract&Contract) | !(Contract)
+		// Literal            = '' | @ | ? | Name | RegEx | !(Literal)
+		// Set                = Literal | (Contract) | (Contract+Contract) | (Contract&Contract) | 
 		// Quantifiable       = Set | Set? | Set*
 		// Contract           = Quantifiable | Quantifiable.Contract 
 		//////////////////////////////////////////////////
@@ -85,16 +85,16 @@
 
 							   /** C <= C' |= true  | C=C' */
 							   if(arg==this) return true;
-							   /** '' <= C' |= true  | v(C') */
-							   else if((arg==new __EmptyLiteral()) && this.isNullable()) return true;
-							   /** C <= C' |= false  | v(C) and ~v(C') */
-							   else if(arg.isNullable() && !this.isNullable()) return false;
+//							   /** '' <= C' |= true  | v(C') */
+//							   else if((arg==new __EmptyLiteral()) && this.isNullable()) return true;
+//							   /** C <= C' |= false  | v(C) and ~v(C') */
+//							   else if(arg.isNullable() && !this.isNullable()) return false;
 							   /** C <= C' |= true  | n(C) */
 							   else if (arg.isEmpty()) return true;
-							   /** C <= C' |= true  | n(C) and !n(C') */
-							   else if(this.isEmpty()) return false;
-							   /** C <= C' |= false  | m(C) and !m(C') */
-							   else if(arg.isTop()) return false;
+//							   /** C <= C' |= true  | n(C) and !n(C') */
+//							   else if(this.isEmpty()) return false;
+//							   /** C <= C' |= false  | m(C) and !m(C') */
+//							   else if(arg.isTop()) return false;
 
 							   /** otherwise */
 							   else return false;
@@ -178,16 +178,16 @@
 
 							   /** C <= C' |= true  | C=C' */
 							   if(arg==this) return true;
-							   /** '' <= C' |= true  | v(C') */
-							   else if((arg==new __EmptyLiteral()) && this.isNullable()) return true;
+//							   /** '' <= C' |= true  | v(C') */
+//							   else if((arg==new __EmptyLiteral()) && this.isNullable()) return true;
 							   /** C <= C' |= false  | v(C) and ~v(C') */
 							   else if(arg.isNullable() && !this.isNullable()) return false;
 							   /** C <= C' |= true  | n(C) */
 							   else if (arg.isEmpty()) return true;
-							   /** C <= C' |= true  | n(C) and !n(C') */
-							   else if(this.isEmpty()) return false;
-							   /** C <= C' |= false  | m(C) and !m(C') */
-							   else if(arg.isTop()) return false;
+//							   /** C <= C' |= true  | n(C) and !n(C') */
+//							   else if(this.isEmpty()) return false;
+//							   /** C <= C' |= false  | m(C) and !m(C') */
+//							   else if(arg.isTop()) return false;
 
 							   /** otherwise */
 							   else return false;
@@ -269,14 +269,14 @@
 
 							   /** C <= C' |= true  | C=C' */
 							   if(arg==this) return true;
-							   /** '' <= C' |= true  | v(C') */
-							   else if((arg==new __EmptyLiteral()) && this.isNullable()) return true;
+//							   /** '' <= C' |= true  | v(C') */
+//							   else if((arg==new __EmptyLiteral()) && this.isNullable()) return true;
 							   /** C <= C' |= false  | v(C) and ~v(C') */
-							   else if(arg.isNullable() && !this.isNullable()) return false;
+							   else if(arg.isNullable()) return false;
 							   /** C <= C' |= true  | n(C) */
 							   else if (arg.isEmpty()) return true;
-							   /** C <= C' |= true  | n(C) and !n(C') */
-							   else if(this.isEmpty()) return false;
+//							   /** C <= C' |= true  | n(C) and !n(C') */
+//							   else if(this.isEmpty()) return false;
 
 							   /** C <= C' |= false  | m(C) and !m(C') */
 							   else if(arg.isTop()) return false;
@@ -310,8 +310,10 @@
 
 					   lderive: function(larg) {
 							   __sysout("(d_" + larg + " " + this + ")");
-							   //return new __EmptyLiteral();
-							   return (!larg.isEmpty()) ? new __EmptyLiteral() : new __AtLiteral();
+							   
+							   // TODO, correct is the empty word
+							   return new __EmptyLiteral();
+							   //return (!larg.isEmpty()) ? new __EmptyLiteral() : new __AtLiteral();
 					   },
 
 
@@ -374,16 +376,16 @@
 
 							   /** C <= C' |= true  | C=C' */
 							   if(arg==this) return true;
-							   /** '' <= C' |= true  | v(C') */
-							   else if((arg==new __EmptyLiteral()) && this.isNullable()) return true;
-							   /** C <= C' |= false  | v(C) and ~v(C') */
-							   else if(arg.isNullable() && !this.isNullable()) return false;
+//							   /** '' <= C' |= true  | v(C') */
+//							   else if((arg==new __EmptyLiteral()) && this.isNullable()) return true;
+//							   /** C <= C' |= false  | v(C) and ~v(C') */
+//							   else if(arg.isNullable() && !this.isNullable()) return false;
 							   /** C <= C' |= true  | n(C) */
 							   else if (arg.isEmpty()) return true;
-							   /** C <= C' |= true  | n(C) and !n(C') */
-							   else if(this.isEmpty()) return false;
-							   /** C <= C' |= false  | m(C) and !m(C') */
-							   else if(arg.isTop()) return false;
+//							   /** C <= C' |= true  | n(C) and !n(C') */
+//							   else if(this.isEmpty()) return false;
+//							   /** C <= C' |= false  | m(C) and !m(C') */
+//							   else if(arg.isTop()) return false;
 
 							   /** otherwise */
 							   else return false;
@@ -462,14 +464,14 @@
 
 							   /** C <= C' |= true  | C=C' */
 							   if(arg==this) return true;
-							   /** '' <= C' |= true  | v(C') */
-							   else if((arg==new __EmptyLiteral()) && this.isNullable()) return true;
-							   /** C <= C' |= false  | v(C) and ~v(C') */
-							   else if(arg.isNullable() && !this.isNullable()) return false;
+//							   /** '' <= C' |= true  | v(C') */
+//							   else if((arg==new __EmptyLiteral()) && this.isNullable()) return true;
+//							   /** C <= C' |= false  | v(C) and ~v(C') */
+//							   else if(arg.isNullable() && !this.isNullable()) return false;
 							   /** C <= C' |= true  | n(C) */
 							   else if (arg.isEmpty()) return true;
-							   /** C <= C' |= false  | m(C) and !m(C') */
-							   else if(arg.isTop()) return false;
+//							   /** C <= C' |= false  | m(C) and !m(C') */
+//							   else if(arg.isTop()) return false;
 
 							   /** otherwise */
 							   else return false;
@@ -554,13 +556,13 @@
 							   /** C <= C' |= true  | C=C' */
 							   if(arg==this) return true;
 							   /** '' <= C' |= true  | v(C') */
-							   else if((arg==new __EmptyLiteral()) && this.isNullable()) return true;
-							   /** C <= C' |= false  | v(C) and ~v(C') */
-							   else if(arg.isNullable() && !this.isNullable()) return false;
+							   else if((arg==new __EmptyLiteral()) /*&& this.isNullable()*/) return true;
+//							   /** C <= C' |= false  | v(C) and ~v(C') */
+//							   else if(arg.isNullable() && !this.isNullable()) return false;
 							   /** C <= C' |= true  | n(C) */
 							   else if (arg.isEmpty()) return true;
-							   /** C <= C' |= true  | n(C) and !n(C') */
-							   else if(this.isEmpty()) return false;
+//							   /** C <= C' |= true  | n(C) and !n(C') */
+//							   else if(this.isEmpty()) return false;
 
 							   /** C <= C' |= true  | m(C') */
 							   else if(this.isTop()) return true;
@@ -649,6 +651,7 @@
 
 					   /** m('') ::= false */
 					   isTop: function() {
+							   // TODO change to indifferent
 							   return (contract==new __QMarkLiteral()) ||  contract.isTop();
 					   },
 
@@ -659,13 +662,13 @@
 							   /** C <= C' |= true  | C=C' */
 							   if(arg==this) return true;
 							   /** '' <= C' |= true  | v(C') */
-							   else if((arg==new __EmptyLiteral()) && this.isNullable()) return true;
-							   /** C <= C' |= false  | v(C) and ~v(C') */
-							   else if(arg.isNullable() && !this.isNullable()) return false;
+							   else if((arg==new __EmptyLiteral()) /*&& this.isNullable()*/) return true;
+//							   /** C <= C' |= false  | v(C) and ~v(C') */
+//							   else if(arg.isNullable() && !this.isNullable()) return false;
 							   /** C <= C' |= true  | n(C) */
 							   else if (arg.isEmpty()) return true;
-							   /** C <= C' |= true  | n(C) and !n(C') */
-							   else if(this.isEmpty()) return false;
+//							   /** C <= C' |= true  | n(C) and !n(C') */
+//							   else if(this.isEmpty()) return false;
 
 							   /** C <= C' |= true  | m(C') */
 							   else if(this.isTop()) return true;
@@ -786,7 +789,7 @@
 							   /** C <= C' |= true  | n(C) */
 							   else if (arg.isEmpty()) return true;
 							   /** C <= C' |= true  | n(C) and !n(C') */
-							   else if(this.isEmpty()) return false;
+							   else if(!arg.isEmpty() && this.isEmpty()) return false;
 
 							   /** C <= C' |= true  | m(C') */
 							   else if(this.isTop()) return true;
@@ -909,7 +912,7 @@
 							   /** C <= C' |= true  | n(C) */
 							   else if (arg.isEmpty()) return true;
 							   /** C <= C' |= true  | n(C) and !n(C') */
-							   else if(this.isEmpty()) return false;
+							   else if(!arg.isEmpty() && this.isEmpty()) return false;
 
 							   /** C <= C' |= true  | m(C') */
 							   else if(this.isTop()) return true;
@@ -1022,9 +1025,9 @@
 							   /** C <= C' |= false  | v(C) and ~v(C') */
 							   else if(arg.isNullable() && !this.isNullable()) return false;
 							   /** C <= C' |= true  | n(C) */
-							   else if (arg.isEmpty()) return true;
+							   else if(arg.isEmpty()) return true;
 							   /** C <= C' |= true  | n(C) and !n(C') */
-							   else if(this.isEmpty()) return false;
+							   else if(!arg.isEmpty() && this.isEmpty()) return false;
 
 						
 							   // TODO
@@ -1166,7 +1169,7 @@
 							   /** C <= C' |= true  | n(C) */
 							   else if(arg.isEmpty()) return true;
 							   /** C <= C' |= true  | n(C) and !n(C') */
-							   else if(this.isEmpty()) return false;
+							   else if(!arg.isEmpty() && this.isEmpty()) return false;
 
 							   /** C <= C' |= true  | m(C') */
 							   else if(this.isTop()) return true;
