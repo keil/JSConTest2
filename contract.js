@@ -78,7 +78,7 @@
 					   reduce: function() {
 							   return this;
 					   },
-					   // TODO
+					   /** ctx |- C <= this */
 					   isSuperSetOf: function(arg, ctx) {
 							   /* TODO */ __sysout(this + " >= " + arg);
 
@@ -99,15 +99,12 @@
 							   else return false;
 
 					   },
-					   // TODO
+					   /** ctx |- C >= this */
 					   isSubSetOf: function(arg, ctx) {
-							   /* TODO */ __sysout(this + " <= " + arg);
-
 							   /** C <= C' |= true  | n(C') */
 							   if(arg.isNullable()) return true;
 							   /** C <= C' |= false  | v(C) and ~v(C') */
 							   else return false;
-
 					   },
 					   //////////////////////////////////////////////////
 					   /** Dump
@@ -175,7 +172,7 @@
 					   reduce: function() {
 							   return this;
 					   },
-					   // TODO
+					   /** ctx |- C <= this */
 					   isSuperSetOf: function(arg, ctx) {
 							   /* TODO */ __sysout(this + " >= " + arg);
 
@@ -196,10 +193,8 @@
 							   else return false;
 
 					   },
-					   // TODO
+					   /** ctx |- C >= this */
 					   isSubSetOf: function(arg, ctx) {
-							   /* TODO */ __sysout(this + " <= " + arg);
-
 							   /** C <= C' |= true  | n(C) */
 							   return true;
 					   },
@@ -269,7 +264,7 @@
 					   reduce: function() {
 							   return this;
 					   },
-					   // TODO
+					   /** ctx |- C <= this */
 					   isSuperSetOf: function(arg, ctx) {
 							   /* TODO */ __sysout(this + " >= " + arg);
 
@@ -307,9 +302,8 @@
 							   });
 							   return result;
 					   },
-					   // TODO
+					   /** ctx |- C >= this */
 					   isSubSetOf: function(arg, ctx) {
-							   /* TODO */ __sysout(this + " <= " + arg);
 							   return arg.isSuperSetOf(this, ctx);
 					   },
 					   //////////////////////////////////////////////////
@@ -378,7 +372,7 @@
 					   reduce: function() {
 							   return this;
 					   },
-					   // TODO
+					   /** ctx |- C <= this */
 					   isSuperSetOf: function(arg, ctx) {
 							   /* TODO */ __sysout(this + " >= " + arg);
 
@@ -398,9 +392,8 @@
 							   /** otherwise */
 							   else return false;
 					   },
-					   // TODO
+					   /** ctx |- C >= this */
 					   isSubSetOf: function(arg, ctx) {
-							   /* TODO */ __sysout(this + " <= " + arg);
 							   return arg.isSuperSetOf(this, ctx);
 					   },
 					   //////////////////////////////////////////////////
@@ -468,7 +461,7 @@
 					   reduce: function() {
 							   return this;
 					   },
-					   // TODO
+					   /** ctx |- C <= this */
 					   isSuperSetOf: function(arg, ctx) {
 							   /* TODO */ __sysout(this + " >= " + arg);
 
@@ -487,9 +480,8 @@
 							   else return false;
 
 					   },
-					   // TODO
+					   /** ctx |- C >= this */
 					   isSubSetOf: function(arg, ctx) {
-							   /* TODO */ __sysout(this + " <= " + arg);
 							   return arg.isSuperSetOf(this, ctx);
 					   },
 					   //////////////////////////////////////////////////
@@ -564,7 +556,7 @@
 					   reduce: function() {
 							   return new __QMarkContract(contract.reduce());
 					   },
-					   // TODO
+					   /** ctx |- C <= this */
 					   isSuperSetOf: function(arg, ctx) {
 							   /* TODO */ __sysout(this + " >= " + arg);
 
@@ -602,9 +594,8 @@
 							   });
 							   return result;
 					   },
-					   // TODO
+					   /** ctx |- C >= this */
 					   isSubSetOf: function(arg, ctx) {
-							   /* TODO */ __sysout(this + " <= " + arg);
 							   return arg.isSuperSetOf(this, ctx);
 					   },
 					   //////////////////////////////////////////////////
@@ -673,7 +664,7 @@
 					   reduce: function() {
 							   return new __StarContract(contract.reduce());
 					   },
-					   // TODO
+					   /** ctx |- C <= this */
 					   isSuperSetOf: function(arg, ctx) {
 							   /* TODO */ __sysout(this + " >= " + arg);
 
@@ -711,11 +702,9 @@
 							   });
 							   return result;
 					   },
-					   // TODO
+					   /** ctx |- C >= this */
 					   isSubSetOf: function(arg, ctx) {
-							   /* TODO */ __sysout(this + " <= " + arg);
 							   return arg.isSuperSetOf(this, ctx);
-
 					   },
 					   //////////////////////////////////////////////////
 					   /** Dump
@@ -799,7 +788,7 @@
 							   else 
 									   return new  __OrContract(contract0.reduce(), contract1.reduce());
 					   },
-					   // TODO
+					   /** ctx |- C <= this */
 					   isSuperSetOf: function(arg, ctx) {
 							   /* TODO */ __sysout(this + " >= " + arg);
 
@@ -840,11 +829,9 @@
 
 							   __sysout(this + " >= " + arg);
 					   },
-					   // TODO
+					   /** ctx |- C >= this */
 					   isSubSetOf: function(arg, ctx) {
-							   /* TODO */ __sysout(this + " <= " + arg);
 							   return arg.isSuperSetOf(this, ctx);
-
 					   },
 					   //////////////////////////////////////////////////
 					   /** Dump
@@ -926,7 +913,7 @@
 							   else 
 									   return new  __AndContract(contract0.reduce(), contract1.reduce());
 					   },
-					   // TODO
+					   /** ctx |- C <= this */
 					   isSuperSetOf: function(arg, ctx) {
 							   /* TODO */ __sysout(this + " >= " + arg);
 
@@ -964,11 +951,9 @@
 							   });
 							   return result;
 					   },
-					   // TODO
+					   /** ctx |- C >= this */
 					   isSubSetOf: function(arg, ctx) {
-							   /* TODO */ __sysout(this + " <= " + arg);
 							   return arg.isSuperSetOf(this, ctx);
-
 					   },
 					   //////////////////////////////////////////////////
 					   /** Dump
@@ -1041,7 +1026,7 @@
 							   else 
 									   return new  __NegContract(contract.reduce());
 					   },
-					   // TODO
+					   /** ctx |- C <= this */
 					   isSuperSetOf: function(arg, ctx) {
 							   /* TODO */ __sysout(this + " >= " + arg);
 
@@ -1098,11 +1083,9 @@
 							   });
 							   return result;
 					   },
-					   // TODO
+					   /** ctx |- C >= this */
 					   isSubSetOf: function(arg, ctx) {
-							   /* TODO */ __sysout(this + " <= " + arg);
 							   return arg.isSuperSetOf(this, ctx);
-
 					   },
 					   //////////////////////////////////////////////////
 					   /** Dump
@@ -1192,7 +1175,7 @@
 							   else 
 									   return new  __ConcatContract(contract0.reduce(), contract1.reduce());
 					   },
-					   // TODO
+					   /** ctx |- C <= this */
 					   isSuperSetOf: function(arg, ctx) {
 							   /* TODO */ __sysout(this + " >= " + arg);
 
@@ -1233,11 +1216,9 @@
 
 
 					   },
-					   // TODO
+					   /** ctx |- C >= this */
 					   isSubSetOf: function(arg, ctx) {
-							   /* TODO */ __sysout(this + " <= " + arg);
 							   return arg.isSuperSetOf(this, ctx);
-
 					   },
 					   //////////////////////////////////////////////////
 					   /** Dump
