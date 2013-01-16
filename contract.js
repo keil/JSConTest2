@@ -59,17 +59,17 @@
 							   return false;
 					   },
 					   //////////////////////////////////////////////////
-					   /** first(@) ::= @ */
-					   first: function() { return new Array(this); },
+					   /** first('') ::= '' */
+					   first: function() {
+							   return new Array(this);
+					   },
 					   /** (d_name '') ::= @ */
 					   derive: function(name) {
 							   return new __AtLiteral();
 					   },
-					   // TODO
+					   /** (d_literal '') ::= '' if literal == '', @ oterhwise */
 					   lderive: function(larg) {
-							   __sysout("(d_" + larg + " " + this + ")");
 							   return (larg==this) ? new __EmptyLiteral() : new __AtLiteral();
-							   //return new __AtLiteral();
 					   },
 					   //////////////////////////////////////////////////
 					   /** Reduce Contract
@@ -157,14 +157,15 @@
 					   },
 					   //////////////////////////////////////////////////
 					   /** first(@) ::= @ */
-					   first: function() { return new Array(this); },
+					   first: function() {
+							   return new Array(this);
+					   },
 					   /** (d_name @) ::= @ */
 					   derive: function(name) {
 							   return new __AtLiteral();
 					   },
-					   // TODO
+					    /** (d_literal @) ::= @ */
 					   lderive: function(larg) {
-							   __sysout("(d_" + larg + " " + this + ")");
 							   return new __AtLiteral();
 					   },
 					   //////////////////////////////////////////////////
@@ -250,18 +251,16 @@
 					   },
 					   //////////////////////////////////////////////////
 					   /** first(?) ::= ? */
-					   first: function() { return new Array(this); },
+					   first: function() {
+							   return new Array(this);
+					   },
 					   /** (d_name ?) ::= '' */
 					   derive: function(name) {
 							   return new __EmptyLiteral();
 					   },
-					   // TODO
+					    /** (d_literal ?) ::= '' */
 					   lderive: function(larg) {
-							   __sysout("(d_" + larg + " " + this + ")");
-
-							   // TODO, correct is the empty word
 							   return new __EmptyLiteral();
-							   //return (!larg.isEmpty()) ? new __EmptyLiteral() : new __AtLiteral();
 					   },
 					   //////////////////////////////////////////////////
 					   /** Reduce Contract
@@ -361,14 +360,15 @@
 					   },
 					   //////////////////////////////////////////////////
 					   /** first(varname) ::= varname */
-					   first: function() { return new Array(this); },
+					   first: function() {
+							   return new Array(this);
+					   },
 					   /** (d_name varname) ::= '' if varname == name, @ otherwise */
 					   derive: function(name) {
 							   return (name == varname) ? new __EmptyLiteral() : new __AtLiteral();
 					   },
-					   // TODO
+					    /** (d_literal varname) ::= '' if literal == varname, @ oterhwise */
 					   lderive: function(larg) {
-							   __sysout("(d_" + larg + " " + this + ")");
 							   return (larg==this) ? new __EmptyLiteral() : new __AtLiteral();
 					   },
 					   //////////////////////////////////////////////////
@@ -450,14 +450,15 @@
 					   },
 					   //////////////////////////////////////////////////
 					   /** first(RegEx) ::= RegEx */
-					   first: function() { return new Array(this); },
+					   first: function() {
+							   return new Array(this);
+					   },
 					   /** (d_name RegEx) ::= '' if RegEx ~ name, @ otherwise */
 					   derive: function(name) {
 							   return (new RegExp(regex)).test(name) ? new __EmptyLiteral() : new __AtLiteral();
 					   },
-					   // TODO
+					    /** (d_literal RegEx) ::= '' if literal == RegEx, @ oterhwise */
 					   lderive: function(larg) {
-							   __sysout("(d_" + larg + " " + this + ")");
 							   return (larg==this) ? new __EmptyLiteral() : new __AtLiteral();
 					   },
 					   //////////////////////////////////////////////////
@@ -545,14 +546,15 @@
 					   },
 					   //////////////////////////////////////////////////
 					   /** first(C?) ::= first(C) */
-					   first: function() { return contract.first(); },
-
+					   first: function() {
+							   return contract.first();
+					   },
 					   /** (d_name C?) ::= (d_name C) */
 					   derive: function(name) {
 							   return  contract.derive(name);
 					   },
+					    /** (d_literal C?) ::= (d_literal C) */
 					   lderive: function(larg) {
-							   __sysout("(d_" + larg + " " + this + ")");
 							   return  contract.lderive(larg);
 					   },
 					   //////////////////////////////////////////////////
@@ -652,15 +654,16 @@
 							   return contract.isWriteable(name);
 					   },
 					   //////////////////////////////////////////////////
-					   /** first(C?) ::= first(C) */
-					   first: function() { return contract.first(); },
+					   /** first(C*) ::= first(C) */
+					   first: function() {
+							   return contract.first();
+					   },
 					   /** (d_name C*) ::= (d_name C).C* */
 					   derive: function(name) {
 							   return new __ConcatContract(contract.derive(name), this);
 					   },
-					   // TODO
+					   /** (d_literal C*) ::= (d_literal C).C* */
 					   lderive: function(larg) {
-							   __sysout("(d_" + larg + " " + this + ")");
 							   return new __ConcatContract(contract.lderive(larg), this);
 					   },
 					   //////////////////////////////////////////////////
@@ -770,16 +773,16 @@
 							   return (contract0.isWriteable(name) || contract1.isWriteable(name));
 					   },
 					   //////////////////////////////////////////////////
-					   /** first(C?) ::= first(C) */
-					   first: function() { return contract0.first().concat(contract1.first()); },
-
+					   /** first(C0+C1) ::= first(C0) + first(C1) */
+					   first: function() {
+							   return contract0.first().concat(contract1.first());
+					   },
 					   /** (d_name C0+C1) :== (d_name C0) + (d_name C1) */
 					   derive: function(name) {
 							   return new __OrContract(contract0.derive(name), contract1.derive(name));
 					   },
-					   // TODO
+					   /** (d_literal C0+C1) ::= (d_literal C0) + (d_literal C1) */
 					   lderive: function(larg) {
-							   __sysout("(d_" + larg + " " + this + ")");
 							   return new __OrContract(contract0.lderive(larg), contract1.lderive(larg));
 					   },
 					   //////////////////////////////////////////////////
@@ -893,7 +896,7 @@
 							   return (contract0.isWriteable(name) && contract1.isWriteable(name));
 					   },
 					   //////////////////////////////////////////////////
-					   /** first(C?) ::= first(C) */
+					   /** first(C0&C1) ::= first(C0) & first(C1) */
 					   first: function() { 
 							   var result = new Array();
 							   arr0 = contract0.first();
@@ -909,9 +912,8 @@
 					   derive: function(name) {
 							   return new __AndContract(contract0.derive(name), contract1.derive(name));
 					   },
-					   // TODO
+					   /** (d_literal C0&C1) ::= (d_literal C0) & (d_literal C1) */
 					   lderive: function(larg) {
-							   __sysout("(d_" + larg + " " + this + ")");
 							   return new __AndContract(contract0.lderive(larg), contract1.lderive(larg));
 					   },
 					   //////////////////////////////////////////////////
@@ -1017,16 +1019,16 @@
 							   return contract.isWriteable(name) ? false : true;
 					   },
 					   //////////////////////////////////////////////////
-					   /** first(C?) ::= first(C) */
-					   first: function() { return contract.first(); },
+					   /** first(!C) ::= first(C) */
+					   first: function() {
+							   return contract.first();
+					   },
 					   /** (d_name !C) :== !(d_name C) */
 					   derive: function(name) {
 							   return new __NegContract(contract.derive(name));
 					   },
-					   // TODO
+					   /** (d_literal !C) ::= !(d_literal C) */
 					   lderive: function(larg) {
-							   __sysout("$" + this.toString());
-
 							   return new __NegContract(contract.lderive(larg));
 					   },
 					   //////////////////////////////////////////////////
@@ -1165,17 +1167,18 @@
 							   else return false;
 					   },
 					   //////////////////////////////////////////////////
-					   /** first(C?) ::= first(C) */
-					   first: function() { return contract0.first(); },
-					   /** (d_name C0.C1) :== (D_name C0).C1 + (D_name C1) if V(C0), (D_name C0).C1 otherwise */
+					   /** first(C0.C1) ::= first(C1) if v(C0), first(C0) otherwise */
+					   first: function() {
+							   if(contract0.isNullable()) return contract1.first();
+							   else contract0.first();
+					   },
+					   /** (d_name C0.C1) :== (d_name C0).C1 + (d_name C1) if v(C0), (d_name C0).c1 otherwise */
 					   derive: function(name) {
 							   if(contract0.isNullable()) return new __OrContract(__ConcatContract(contract0.derive(name), contract1), contract1.derive(name));
 							   else return new __ConcatContract(contract0.derive(name), contract1);
 					   },
-					   // TODO
+					   /** (d_literal C0.C1) ::= (d_literal C0).C1 + (d_literal C1) if v(C0), (d_literal C0).c1 otherwise */
 					   lderive: function(larg) {
-							   __sysout("(d_" + larg + " " + this + ")");
-
 							   if(contract0.isNullable()) return new __OrContract(__ConcatContract(contract0.lderive(larg), contract1), contract1.lderive(larg));
 							   else return new __ConcatContract(contract0.lderive(larg), contract1);
 					   },
