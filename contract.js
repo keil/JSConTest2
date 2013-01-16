@@ -76,6 +76,7 @@
 						* @return n-reduced contract
 						*/
 					   reduce: function() {
+							   // TODO
 							   return this;
 					   },
 					   /** ctx |- C <= this */
@@ -170,6 +171,7 @@
 						* @return n-reduced contract
 						*/
 					   reduce: function() {
+							   // TODO
 							   return this;
 					   },
 					   /** ctx |- C <= this */
@@ -262,6 +264,7 @@
 						* @return n-reduced contract
 						*/
 					   reduce: function() {
+							   // TODO
 							   return this;
 					   },
 					   /** ctx |- C <= this */
@@ -370,6 +373,7 @@
 						* @return n-reduced contract
 						*/
 					   reduce: function() {
+							   // TODO
 							   return this;
 					   },
 					   /** ctx |- C <= this */
@@ -459,6 +463,7 @@
 						* @return n-reduced contract
 						*/
 					   reduce: function() {
+							   // TODO
 							   return this;
 					   },
 					   /** ctx |- C <= this */
@@ -554,6 +559,7 @@
 						* @return n-reduced contract
 						*/
 					   reduce: function() {
+							   // TODO
 							   return new __QMarkContract(contract.reduce());
 					   },
 					   /** ctx |- C <= this */
@@ -662,6 +668,7 @@
 						* @return n-reduced contract
 						*/
 					   reduce: function() {
+							   // TODO
 							   return new __StarContract(contract.reduce());
 					   },
 					   /** ctx |- C <= this */
@@ -779,6 +786,7 @@
 						* @return n-reduced contract
 						*/
 					   reduce: function() {
+							   // TODO
 							   if(this.isEmpty())
 									   return new __AtLiteral();
 							   else if(contract0.isEmpty())
@@ -908,6 +916,7 @@
 						* @return n-reduced contract
 						*/
 					   reduce: function() {
+							   // TODO
 							   if(this.isEmpty())
 									   return new __AtLiteral();
 							   else 
@@ -1021,6 +1030,7 @@
 						* @return n-reduced contract
 						*/
 					   reduce: function() {
+							   // TODO
 							   if(this.isEmpty())
 									   return new __AtLiteral();
 							   else 
@@ -1170,6 +1180,7 @@
 						* @return n-reduced contract
 						*/
 					   reduce: function() {
+							   // TODO
 							   if(this.isEmpty())
 									   return new __AtLiteral();
 							   else 
@@ -1255,6 +1266,142 @@
 		APC.Contract.AndContract	= __AndContract;
 		APC.Contract.NegContract	= __NegContract;
 		APC.Contract.ConcatContract	= __ConcatContract;
+
+
+
+
+
+		//////////////////////////////////////////////////
+		//  CONTAINMENT CALCULUS
+		//  context and expressions
+		//////////////////////////////////////////////////
+
+		/** Containment Calculus
+		 * Expression: C0 <= C1
+		 */
+		function __CcExp(contract0, contract1) {
+				return {
+						/** To String
+						 * @return string
+						 */
+						toString: function() {
+								return contract0.toString() + "<=" + contract1.toString();
+						}
+				}
+		}
+
+		/** Containment Calculus
+		 * Context: {} | <Context, Expression>
+		 */
+		function __CcContext() {	
+				// cache array
+				var context = new Array();
+
+				return {
+
+						/* context function
+						 * @param CC Expression
+						 * @return CC Expression
+						 */
+						ctx: function(exp) {
+								if(this.contains(exp.toString())) {
+										return this.get(exp.toString());
+								} else {
+										return this.put(exp.toString(), contract);
+								}
+						},
+
+								/* put
+								 * @param key cache key
+								 * @param value cahe value
+								 * $return value
+								 */
+								put: function(key, value) {
+										context["\"" + key + "\""] = value;
+										return value;
+								},
+
+								/* get
+								 * @param key cache key
+								 * $return value
+								 */
+								get: function(key) {
+										return context["\"" + key + "\""];
+								},
+
+								/* contains
+								 * @param key cache key
+								 * $return true, if key in cache, false otherwise
+								 */
+								contains: function(key) {
+										return (context["\"" + key + "\""]!==undefined) ? true : false;
+								},
+
+								/* clear cache
+								*/
+								clear: function() {
+										context = new Array();
+								}
+				}
+		};
+
+		/** Containment Calculus
+		 * Cache
+		 */
+		function __CcCache() {
+				// cache array
+				var cache = new Array();
+
+				return {
+
+						/* cache function
+						 * @param CC Expression
+						 * @return CC Expression
+						 */
+						c: function(contract) {
+								if(this.contains(contract.toString())) {
+										return this.get(contract.toString());
+								} else {
+										return this.put(contract.toString(), contract);
+								}
+						},
+
+								/* put
+								 * @param key cache key
+								 * @param value cahe value
+								 * $return value
+								 */
+								put: function(key, value) {
+										cache["\"" + key + "\""] = value;
+										return value;
+								},
+
+								/* get
+								 * @param key cache key
+								 * $return value
+								 */
+								get: function(key) {
+										return cache["\"" + key + "\""];
+								},
+
+								/* contains
+								 * @param key cache key
+								 * $return true, if key in cache, false otherwise
+								 */
+								contains: function(key) {
+										return (cache["\"" + key + "\""]!==undefined) ? true : false;
+								},
+
+								/* clear cache
+								*/
+								clear: function() {
+										cache = new Array();
+								}
+				}
+		}
+
+		// current cc cache
+		var __ccCache = new __CcCache();
 
 
 
