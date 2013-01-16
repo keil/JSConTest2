@@ -164,7 +164,7 @@
 					   derive: function(name) {
 							   return new __AtLiteral();
 					   },
-					    /** (d_literal @) ::= @ */
+					   /** (d_literal @) ::= @ */
 					   lderive: function(larg) {
 							   return new __AtLiteral();
 					   },
@@ -258,7 +258,7 @@
 					   derive: function(name) {
 							   return new __EmptyLiteral();
 					   },
-					    /** (d_literal ?) ::= '' */
+					   /** (d_literal ?) ::= '' */
 					   lderive: function(larg) {
 							   return new __EmptyLiteral();
 					   },
@@ -367,7 +367,7 @@
 					   derive: function(name) {
 							   return (name == varname) ? new __EmptyLiteral() : new __AtLiteral();
 					   },
-					    /** (d_literal varname) ::= '' if literal == varname, @ oterhwise */
+					   /** (d_literal varname) ::= '' if literal == varname, @ oterhwise */
 					   lderive: function(larg) {
 							   return (larg==this) ? new __EmptyLiteral() : new __AtLiteral();
 					   },
@@ -457,7 +457,7 @@
 					   derive: function(name) {
 							   return (new RegExp(regex)).test(name) ? new __EmptyLiteral() : new __AtLiteral();
 					   },
-					    /** (d_literal RegEx) ::= '' if literal == RegEx, @ oterhwise */
+					   /** (d_literal RegEx) ::= '' if literal == RegEx, @ oterhwise */
 					   lderive: function(larg) {
 							   return (larg==this) ? new __EmptyLiteral() : new __AtLiteral();
 					   },
@@ -553,7 +553,7 @@
 					   derive: function(name) {
 							   return  contract.derive(name);
 					   },
-					    /** (d_literal C?) ::= (d_literal C) */
+					   /** (d_literal C?) ::= (d_literal C) */
 					   lderive: function(larg) {
 							   return  contract.lderive(larg);
 					   },
