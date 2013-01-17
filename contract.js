@@ -76,7 +76,6 @@
 						* @return n-reduced contract
 						*/
 					   reduce: function() {
-							   // TODO
 							   return this;
 					   },
 					   /** ctx |- C <= this */
@@ -160,7 +159,6 @@
 						* @return n-reduced contract
 						*/
 					   reduce: function() {
-							   // TODO
 							   return this;
 					   },
 					   /** ctx |- C <= this */
@@ -244,7 +242,6 @@
 						* @return n-reduced contract
 						*/
 					   reduce: function() {
-							   // TODO
 							   return this;
 					   },
 					   /** ctx |- C <= this */
@@ -263,7 +260,7 @@
 							   if(ctx.contains(ccExp)) return true;
 							   /** otherwise */
 							   var thisContract = this
-							   var result = true;
+									   var result = true;
 							   arg.first().foreach(function(k, literal) {
 									   result = result && thisContract.lderive(literal).isSuperSetOf(arg.lderive(literal), ctx.bind(ccExp));
 							   });
@@ -338,7 +335,6 @@
 						* @return n-reduced contract
 						*/
 					   reduce: function() {
-							   // TODO
 							   return this;
 					   },
 					   /** ctx |- C <= this */
@@ -360,7 +356,8 @@
 						* @return string
 						*/
 					   dump: function() {
-							   return " [" + varname + "] ";					   },
+							   return " [" + varname + "] ";
+					   },
 					   /** To String
 						* @return string
 						*/
@@ -418,7 +415,6 @@
 						* @return n-reduced contract
 						*/
 					   reduce: function() {
-							   // TODO
 							   return this;
 					   },
 					   /** ctx |- C <= this */
@@ -462,6 +458,9 @@
 		 * C? Contract (optional)
 		 */
 		function __QMarkContract(contract) {
+				// REDUCTION RULES
+				if(contract.isEmpty()) return new __OrContract(__EmptyLiteral, __AtLiteral());
+
 				return __cache.c({
 						/** n(C?) ::= false */
 						isEmpty: function() {
@@ -506,8 +505,8 @@
 						* @return n-reduced contract
 						*/
 					   reduce: function() {
-							   // TODO
-							   return new __QMarkContract(contract.reduce());
+							   if(contract.isEmpty()) return new __OrContract(__EmptyLiteral, __AtLiteral());
+							   else new __QMarkContract(contract.reduce());
 					   },
 					   /** ctx |- C <= this */
 					   isSuperSetOf: function(arg, ctx) {
@@ -528,7 +527,7 @@
 							   if(ctx.contains(ccExp)) return true;
 							   /** otherwise */
 							   var thisContract = this
-							   var result = true;
+									   var result = true;
 							   arg.first().foreach(function(k, literal) {
 									   result = result && thisContract.lderive(literal).isSuperSetOf(arg.lderive(literal), ctx.bind(ccExp));
 							   });
@@ -559,6 +558,9 @@
 		 * C* Contract (kleene star)
 		 */
 		function __StarContract(contract) {
+				// REDUCTION RULES
+				if(contract.isEmpty()) return new __OrContract(__EmptyLiteral, __AtLiteral());
+
 				return __cache.c({
 						/** n(C*) ::= false */
 						isEmpty: function() {
@@ -603,7 +605,7 @@
 						* @return n-reduced contract
 						*/
 					   reduce: function() {
-							   // TODO
+							   if(contract.isEmpty()) return new __OrContract(__EmptyLiteral, __AtLiteral());
 							   return new __StarContract(contract.reduce());
 					   },
 					   /** ctx |- C <= this */
@@ -625,7 +627,7 @@
 							   if(ctx.contains(ccExp)) return true;
 							   /** otherwise */
 							   var thisContract = this
-							   var result = true;
+									   var result = true;
 							   arg.first().foreach(function(k, literal) {
 									   result = result && thisContract.lderive(literal).isSuperSetOf(arg.lderive(literal), ctx.bind(ccExp));
 							   });
@@ -662,7 +664,9 @@
 		 * C0+C1 Contract (logical or)
 		 */
 		function __OrContract(contract0, contract1) {
-				if(contract0.isSuperSetOf(contract1, new __CcContext())) return contract0;
+				// REDUCTION RULES
+				if(contract0.isEmpty() && contract1.isEmpty()) return new __AtLiteral();
+				else if(contract0.isSuperSetOf(contract1, new __CcContext())) return contract0;
 				else if(contract1.isSuperSetOf(contract0, new __CcContext())) return contract1;
 
 				return __cache.c({
@@ -709,15 +713,10 @@
 						* @return n-reduced contract
 						*/
 					   reduce: function() {
-							   // TODO
-							   if(this.isEmpty())
-									   return new __AtLiteral();
-							   else if(contract0.isEmpty())
-									   return contract1.reduce();
-							   else if(contract1.isEmpty())
-									   return contract0.reduce();
-							   else 
-									   return new  __OrContract(contract0.reduce(), contract1.reduce());
+							   if(contract0.isEmpty() && contract1.isEmpty()) return new __AtLiteral();
+							   else if(contract0.isSuperSetOf(contract1, new __CcContext())) return contract0;
+							   else if(contract1.isSuperSetOf(contract0, new __CcContext())) return contract1;
+							   else return new  __OrContract(contract0.reduce(), contract1.reduce());
 					   },
 					   /** ctx |- C <= this */
 					   isSuperSetOf: function(arg, ctx) {
@@ -742,7 +741,7 @@
 							   if(ctx.contains(ccExp)) return true;
 							   /** otherwise */
 							   var thisContract = this
-							   var result = true;
+									   var result = true;
 							   arg.first().foreach(function(k, literal) {
 									   result = result && thisContract.lderive(literal).isSuperSetOf(arg.lderive(literal), ctx.bind(ccExp));
 							   });
@@ -773,7 +772,9 @@
 		 * C0&C1 Contract (logical and)
 		 */
 		function __AndContract(contract0, contract1) {
-				if(contract0.isSubSetOf(contract1, new __CcContext())) return contract0;
+				// REDUCTION RULES
+				if(contract0.isEmpty() || contract1.isEmpty()) return new __AtLiteral();
+				else if(contract0.isSubSetOf(contract1, new __CcContext())) return contract0;
 				else if(contract1.isSubSetOf(contract0, new __CcContext())) return contract1;
 
 				return __cache.c({
@@ -828,11 +829,10 @@
 						* @return n-reduced contract
 						*/
 					   reduce: function() {
-							   // TODO
-							   if(this.isEmpty())
-									   return new __AtLiteral();
-							   else 
-									   return new  __AndContract(contract0.reduce(), contract1.reduce());
+							   if(contract0.isEmpty() || contract1.isEmpty()) return new __AtLiteral();
+							   else if(contract0.isSubSetOf(contract1, new __CcContext())) return contract0;
+							   else if(contract1.isSubSetOf(contract0, new __CcContext())) return contract1;
+							   else return new  __AndContract(contract0.reduce(), contract1.reduce());
 					   },
 					   /** ctx |- C <= this */
 					   isSuperSetOf: function(arg, ctx) {
@@ -857,7 +857,7 @@
 							   if(ctx.contains(ccExp)) return true;
 							   /** otherwise */
 							   var thisContract = this
-							   var result = true;
+									   var result = true;
 							   arg.first().foreach(function(k, literal) {
 									   result = result && thisContract.lderive(literal).isSuperSetOf(arg.lderive(literal), ctx.bind(ccExp));
 							   });
@@ -888,6 +888,10 @@
 		 * !C Contract (negation)
 		 */
 		function __NegContract(contract) {
+				// REDUCTION RULES
+				// negation only effects to literals
+				if(contract.isUniversal() || contract.isIndifferent()) return new __AtLiteral();
+
 				return __cache.c({
 						/** n(!C) ::= m(C) + m*(C) */
 						isEmpty: function() {
@@ -933,11 +937,9 @@
 						* @return n-reduced contract
 						*/
 					   reduce: function() {
-							   // TODO
-							   if(this.isEmpty())
-									   return new __AtLiteral();
-							   else 
-									   return new  __NegContract(contract.reduce());
+							   // negation only effects to literals
+							   if(contract.isUniversal() || contract.isIndifferent()) return new __AtLiteral();
+							   else return new  __NegContract(contract.reduce());
 					   },
 					   /** ctx |- C <= this */
 					   isSuperSetOf: function(arg, ctx) {
@@ -965,7 +967,7 @@
 							   if(ctx.contains(ccExp)) return true;
 							   /** otherwise */
 							   var thisContract = this
-							   var result = true;
+									   var result = true;
 							   arg.first().foreach(function(k, literal) {
 									   result = result && thisContract.lderive(literal).isSuperSetOf(arg.lderive(literal), ctx.bind(ccExp));
 							   });
@@ -1003,6 +1005,7 @@
 		 * C.C Contract (concatenation)
 		 */
 		function __ConcatContract(contract0, contract1) {
+				// REDUCTION RULES
 				if(contract0.isEmpty()) return new __AtLiteral();
 				else if(contract0 == new __EmptyLiteral()) return contract1;
 
@@ -1059,11 +1062,9 @@
 						* @return n-reduced contract
 						*/
 					   reduce: function() {
-							   // TODO
-							   if(this.isEmpty())
-									   return new __AtLiteral();
-							   else 
-									   return new  __ConcatContract(contract0.reduce(), contract1.reduce());
+							   if(contract0.isEmpty()) return new __AtLiteral();
+							   else if(contract0 == new __EmptyLiteral()) return contract1;
+							   else return new  __ConcatContract(contract0.reduce(), contract1.reduce());
 					   },
 					   /** ctx |- C <= this */
 					   isSuperSetOf: function(arg, ctx) {
@@ -1088,7 +1089,7 @@
 							   if(ctx.contains(ccExp)) return true;
 							   /** otherwise */
 							   var thisContract = this
-							   var result = true;
+									   var result = true;
 							   arg.first().foreach(function(k, literal) {
 									   result = result && thisContract.lderive(literal).isSuperSetOf(arg.lderive(literal), ctx.bind(ccExp));
 							   });
