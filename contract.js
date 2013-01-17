@@ -459,7 +459,7 @@
 		 */
 		function __QMarkContract(contract) {
 				// REDUCTION RULES
-				if(contract.isEmpty()) return new __OrContract(__EmptyLiteral, __AtLiteral());
+				if(contract.isEmpty()) return new __OrContract(new __EmptyLiteral(), new __AtLiteral());
 
 				return __cache.c({
 						/** n(C?) ::= false */
@@ -505,7 +505,7 @@
 						* @return n-reduced contract
 						*/
 					   reduce: function() {
-							   if(contract.isEmpty()) return new __OrContract(__EmptyLiteral, __AtLiteral());
+							   if(contract.isEmpty()) return new __OrContract(new __EmptyLiteral(), new __AtLiteral());
 							   else new __QMarkContract(contract.reduce());
 					   },
 					   /** ctx |- C <= this */
@@ -559,7 +559,7 @@
 		 */
 		function __StarContract(contract) {
 				// REDUCTION RULES
-				if(contract.isEmpty()) return new __OrContract(__EmptyLiteral, __AtLiteral());
+				if(contract.isEmpty()) return new __OrContract(new __EmptyLiteral(), new __AtLiteral());
 
 				return __cache.c({
 						/** n(C*) ::= false */
@@ -605,7 +605,7 @@
 						* @return n-reduced contract
 						*/
 					   reduce: function() {
-							   if(contract.isEmpty()) return new __OrContract(__EmptyLiteral, __AtLiteral());
+							   if(contract.isEmpty()) return new __OrContract(new __EmptyLiteral(), new __AtLiteral());
 							   return new __StarContract(contract.reduce());
 					   },
 					   /** ctx |- C <= this */
