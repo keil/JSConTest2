@@ -259,8 +259,8 @@
 							   ccExp = new __CcExp(arg, this);
 							   if(ctx.contains(ccExp)) return true;
 							   /** otherwise */
-							   var thisContract = this
-									   var result = true;
+							   var thisContract = this;
+							   var result = true;
 							   arg.first().foreach(function(k, literal) {
 									   result = result && thisContract.lderive(literal).isSuperSetOf(arg.lderive(literal), ctx.bind(ccExp));
 							   });
@@ -526,8 +526,8 @@
 							   ccExp = new __CcExp(arg, this);
 							   if(ctx.contains(ccExp)) return true;
 							   /** otherwise */
-							   var thisContract = this
-									   var result = true;
+							   var thisContract = this;
+							   var result = true;
 							   arg.first().foreach(function(k, literal) {
 									   result = result && thisContract.lderive(literal).isSuperSetOf(arg.lderive(literal), ctx.bind(ccExp));
 							   });
@@ -626,8 +626,8 @@
 							   ccExp = new __CcExp(arg, this);
 							   if(ctx.contains(ccExp)) return true;
 							   /** otherwise */
-							   var thisContract = this
-									   var result = true;
+							   var thisContract = this;
+							   var result = true;
 							   arg.first().foreach(function(k, literal) {
 									   result = result && thisContract.lderive(literal).isSuperSetOf(arg.lderive(literal), ctx.bind(ccExp));
 							   });
@@ -740,8 +740,8 @@
 							   ccExp = new __CcExp(arg, this);
 							   if(ctx.contains(ccExp)) return true;
 							   /** otherwise */
-							   var thisContract = this
-									   var result = true;
+							   var thisContract = this;
+							   var result = true;
 							   arg.first().foreach(function(k, literal) {
 									   result = result && thisContract.lderive(literal).isSuperSetOf(arg.lderive(literal), ctx.bind(ccExp));
 							   });
@@ -815,6 +815,7 @@
 											   result.push(v0);
 									   });
 							   });
+							   return result;
 					   },
 					   /** (d_name C0&C1) :== (d_name C0) & (d_name C1) */
 					   derive: function(name) {
@@ -856,8 +857,8 @@
 							   ccExp = new __CcExp(arg, this);
 							   if(ctx.contains(ccExp)) return true;
 							   /** otherwise */
-							   var thisContract = this
-									   var result = true;
+							   var thisContract = this;
+							   var result = true;
 							   arg.first().foreach(function(k, literal) {
 									   result = result && thisContract.lderive(literal).isSuperSetOf(arg.lderive(literal), ctx.bind(ccExp));
 							   });
@@ -966,8 +967,8 @@
 							   ccExp = new __CcExp(arg, this);
 							   if(ctx.contains(ccExp)) return true;
 							   /** otherwise */
-							   var thisContract = this
-									   var result = true;
+							   var thisContract = this;
+							   var result = true;
 							   arg.first().foreach(function(k, literal) {
 									   result = result && thisContract.lderive(literal).isSuperSetOf(arg.lderive(literal), ctx.bind(ccExp));
 							   });
@@ -1045,7 +1046,7 @@
 					   /** first(C0.C1) ::= first(C1) if v(C0), first(C0) otherwise */
 					   first: function() {
 							   if(contract0.isNullable()) return contract1.first();
-							   else contract0.first();
+							   else return contract0.first();
 					   },
 					   /** (d_name C0.C1) :== (d_name C0).C1 + (d_name C1) if v(C0), (d_name C0).c1 otherwise */
 					   derive: function(name) {
@@ -1088,8 +1089,8 @@
 							   ccExp = new __CcExp(arg, this);
 							   if(ctx.contains(ccExp)) return true;
 							   /** otherwise */
-							   var thisContract = this
-									   var result = true;
+							   var thisContract = this;
+							   var result = true; 
 							   arg.first().foreach(function(k, literal) {
 									   result = result && thisContract.lderive(literal).isSuperSetOf(arg.lderive(literal), ctx.bind(ccExp));
 							   });
