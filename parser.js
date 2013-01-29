@@ -485,12 +485,57 @@ __APC.Parser = (function(APC){
 										}
 										if (result0 === null) {
 												pos0 = pos;
-												result0 = parse_Literal();
+												pos1 = pos;
+												if (input.charCodeAt(pos) === 40) {
+														result0 = "(";
+														pos++;
+												} else {
+														result0 = null;
+														if (reportFailures === 0) {
+																matchFailed("\"(\"");
+														}
+												}
 												if (result0 !== null) {
-														result0 = (function(offset, s) { return s; })(pos0, result0);
+														result1 = parse_Contract();
+														if (result1 !== null) {
+																if (input.charCodeAt(pos) === 41) {
+																		result2 = ")";
+																		pos++;
+																} else {
+																		result2 = null;
+																		if (reportFailures === 0) {
+																				matchFailed("\")\"");
+																		}
+																}
+																if (result2 !== null) {
+																		result0 = [result0, result1, result2];
+																} else {
+																		result0 = null;
+																		pos = pos1;
+																}
+														} else {
+																result0 = null;
+																pos = pos1;
+														}
+												} else {
+														result0 = null;
+														pos = pos1;
+												}
+												if (result0 !== null) {
+														result0 = (function(offset, s) { return s; })(pos0, result0[1]);
 												}
 												if (result0 === null) {
 														pos = pos0;
+												}
+												if (result0 === null) {
+														pos0 = pos;
+														result0 = parse_Literal();
+														if (result0 !== null) {
+																result0 = (function(offset, s) { return s; })(pos0, result0);
+														}
+														if (result0 === null) {
+																pos = pos0;
+														}
 												}
 										}
 								}
