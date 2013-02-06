@@ -59,12 +59,13 @@ load("permit.js")
 //////////////////////////////////////////////////
 
 // load assert
-//load("__lib/__lib_apache_assert.js");
+load("__lib/__lib_apache_assert.js");
 
 // load testcase
 //load("__test/__test_.js");
 
-	contract = __APC.Parser.parse("(a.?&b.@)");
+/* Containment Calculus */
+load("__test/__test_contract_subset.js");
 
 
 quit();

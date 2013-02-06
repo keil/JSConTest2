@@ -37,6 +37,10 @@
 						isEmpty: function() {
 								return true;
 						},
+					   /** w({}) ::= false */
+					   isBlank: function() {
+							   return false;
+					   },
 					   /** v({}) ::= false */
 					   isNullable: function() {
 							   return false;
@@ -123,6 +127,10 @@
 						isEmpty: function() {
 								return false;
 						},
+					   /** w({}) ::= false */
+					   isBlank: function() {
+							   return false;
+					   },
 					   /** v(^) ::= true */
 					   isNullable: function() {
 							   return true;
@@ -200,6 +208,10 @@
 						isEmpty: function() {
 								return false;
 						},
+					   /** w({}) ::= false */
+					   isBlank: function() {
+							   return true;
+					   },
 					   /** v(@) ::= false */
 					   isNullable: function() {
 							   return false;
@@ -274,6 +286,10 @@
 						isEmpty: function() {
 								return false;
 						},
+					   /** w({}) ::= false */
+					   isBlank: function() {
+							   return false;
+					   },
 					   /** v(?) ::= false */
 					   isNullable: function() {
 							   return false;
@@ -361,6 +377,10 @@
 						isEmpty: function() {
 								return false;
 						},
+					   /** w({}) ::= false */
+					   isBlank: function() {
+							   return false;
+					   },
 					   /** v(varname) ::= false */
 					   isNullable: function() {
 							   return false;
@@ -435,6 +455,10 @@
 						isEmpty: function() {
 								return false;
 						},
+					   /** w({}) ::= false */
+					   isBlank: function() {
+							   return false;
+					   },
 					   /** v(RegEx) ::= false */
 					   isNullable: function() {
 							   return false;

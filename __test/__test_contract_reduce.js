@@ -10,7 +10,7 @@
 
 function testR(cstring, pstring) {
 		// parse contracts
-		contract = __APC.Parser.parse(cstring).reduce();
+		contract = __APC.Parser.parse(cstring);
 
 		// test
 		result = assertTrue(cstring, contract.isReadable(pstring));
@@ -25,7 +25,7 @@ function testR(cstring, pstring) {
 
 function testNR(cstring, pstring) {
 		// parse contracts
-		contract = __APC.Parser.parse(cstring).reduce();
+		contract = __APC.Parser.parse(cstring);
 
 		// test
 		result = assertFalse(cstring, contract.isReadable(pstring));
@@ -40,7 +40,7 @@ function testNR(cstring, pstring) {
 
 function testW(cstring, pstring) {
 		// parse contracts
-		contract = __APC.Parser.parse(cstring).reduce();
+		contract = __APC.Parser.parse(cstring);
 
 		// test
 		result = assertTrue(cstring, contract.isWriteable(pstring));
@@ -55,7 +55,7 @@ function testW(cstring, pstring) {
 
 function testNW(cstring, pstring) {
 		// parse contracts
-		contract = __APC.Parser.parse(cstring).reduce();
+		contract = __APC.Parser.parse(cstring);
 
 		// test
 		result = assertFalse(cstring, contract.isWriteable(pstring));
