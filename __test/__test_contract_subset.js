@@ -15,8 +15,8 @@ function testS(cstring0, cstring1) {
 		contract1 = __APC.Parser.parse(cstring1);
 
 		__sysout("\n##########");
-		__sysout("C0: " + contract0);
-		__sysout("C1: " + contract1);
+		__sysout("C0: \"" + cstring0 + "\" = " + contract0);
+		__sysout("C1: \"" + cstring1 + "\" = " + contract1);
 		__sysout(contract0 + " <= " + contract1 + ": " + contract0.isSubSetOf(contract1, new __APC.Contract.Containment.Context()));
 		__sysout(contract1 + " >= " + contract0 + ": " + contract1.isSuperSetOf(contract0, new __APC.Contract.Containment.Context()));
 
@@ -36,8 +36,8 @@ function testN(cstring0, cstring1) {
 
 
 		__sysout("\n##########");
-		__sysout("C0: " + contract0);
-		__sysout("C1: " + contract1);
+		__sysout("C0: \"" + cstring0 + "\"" + contract0);
+		__sysout("C1: \"" + cstring1 + "\"" + contract1);
 		__sysout(contract0 + " <= " + contract1 + ": " + contract0.isSubSetOf(contract1, new __APC.Contract.Containment.Context()));
 		__sysout(contract1 + " >= " + contract0 + ": " + contract1.isSuperSetOf(contract0, new __APC.Contract.Containment.Context()));
 

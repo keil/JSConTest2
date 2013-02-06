@@ -64,8 +64,6 @@ load("__lib/__lib_apache_assert.js");
 // load testcase
 //load("__test/__test_.js");
 
-/* Containment Calculus */
-load("__test/__test_contract_subset.js");
 
 
 quit();
