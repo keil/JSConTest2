@@ -27,7 +27,6 @@
 						extend: function(extContract, extPath) {
 								/* C = C&C' */
 								contract = new APC.Contract.AndContract(contract, extContract);
-								contract = (APC.Config.EmptyReductionMode == APC.EmptyReduction.Mode.ON) ? contract.reduce() : contract;
 								/* P = P;P' */
 								path = new APC.TracePath.TraceSet(path, extPath);
 								path = (APC.Config.SubsetReductionMode == APC.SubsetReduction.Mode.ON) ? path.sreduce() : path;
@@ -270,7 +269,6 @@
 						extend: function(extContract, extPath) {
 								/* C = C&C' */
 								contract = new APC.Contract.AndContract(contract, extContract);
-								contract = (APC.Config.EmptyReductionMode == APC.EmptyReduction.Mode.ON) ? contract.reduce() : contract;
 								/* P = P;P' */
 								path = new APC.TracePath.TraceSet(path, extPath);
 								path = (APC.Config.SubsetReductionMode == APC.SubsetReduction.Mode.ON) ? path.sreduce() : path;
@@ -337,7 +335,7 @@
 						}
 
 						/* Access Handler *********************************** */
-						var accessHandler = __AccessHandler(contract.reduce(), path);
+						var accessHandler = __AccessHandler(contract, path);
 
 						/* Proxy ******************************************** */
 						var proxy = new Proxy(target, accessHandler);
@@ -377,7 +375,7 @@
 						}
 
 						/* Access Handler *********************************** */
-						var functionHandler = __FunctionHandler(contract.reduce(), path);
+						var functionHandler = __FunctionHandler(contract, path);
 
 						/* Proxy ******************************************** */
 						var proxy = new Proxy(target, functionHandler);

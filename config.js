@@ -28,23 +28,6 @@
 
 
 		//////////////////////////////////////////////////
-		// EMPTY REDUCTION MODE
-		// ON: subset reduction enabled
-		// OFF: subset reduction disabled
-		//////////////////////////////////////////////////
-
-		// Violation Mode
-		var __EmptyReductionMode = { ON: true, OFF: false }
-
-		//////////////////////////////////////////////////
-		// APC . Config
-		//////////////////////////////////////////////////
-		APC.EmptyReduction = {};
-		APC.EmptyReduction.Mode = __EmptyReductionMode;
-
-
-
-		//////////////////////////////////////////////////
 		// FLATTENING MODE
 		// ON: flattening enabled
 		// OFF: flattening disabled
@@ -85,7 +68,6 @@
 		//////////////////////////////////////////////////
 		APC.Config = {};
 		APC.Config.EvaluationMode = __EvaluationMode.OBSERVER;
-		APC.Config.EmptyReductionMode = __EmptyReductionMode.ON;
 		APC.Config.FlatteningMode = __FlatteningMode.ON;
 		APC.Config.SubsetReductionMode = __SubsetReductionMode.ON;
 
