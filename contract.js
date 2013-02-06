@@ -223,7 +223,7 @@
 					   },
 					   /** (d_literal ?) ::= ? if literal='', '' otherwise */
 					   lderive: function(larg) {
-							   return (larg==new __EmptyLiteral()) this: new __EmptyLiteral();
+							   return (larg==new __EmptyLiteral()) ? this: new __EmptyLiteral();
 					   },
 					   //////////////////////////////////////////////////
 					   /** ctx |- C <= this */
@@ -310,7 +310,7 @@
 					   },
 					   /** (d_literal varname) ::= varname if literal='', '' if literal == varname, @ oterhwise */
 					   lderive: function(larg) {
-							   return (larg==new __EmptyLiteral()) this: ((larg==this) ? new __EmptyLiteral() : new __AtLiteral());
+							   return (larg==new __EmptyLiteral()) ? this: ((larg==this) ? new __EmptyLiteral() : new __AtLiteral());
 					   },
 					   //////////////////////////////////////////////////
 					   /** ctx |- C <= this */
@@ -384,7 +384,7 @@
 					   },
 					   /** (d_literal RegEx) ::= RegEx if literal='', '' if literal == RegEx, @ oterhwise */
 					   lderive: function(larg) {
-							   return (larg==new __EmptyLiteral()) this: ((larg==this) ? new __EmptyLiteral() : new __AtLiteral());
+							   return (larg==new __EmptyLiteral()) ? this: ((larg==this) ? new __EmptyLiteral() : new __AtLiteral());
 
 					   },
 					   //////////////////////////////////////////////////
