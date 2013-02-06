@@ -771,7 +771,6 @@
 					   //////////////////////////////////////////////////
 					   /** r(C0&C1) :== r(C0) & r(C1) */
 					   isReadable: function(name) {
-							   __sysout("%%%: " + contract0.isReadable(name));
 							   return (contract0.isReadable(name) && contract1.isReadable(name));
 					   },
 					   /** w(C0&C1) :== w(C0) & w(C1) */
@@ -1031,9 +1030,6 @@
 					   //////////////////////////////////////////////////
 					   /** ctx |- C <= this */
 					   isSuperSetOf: function(arg, ctx) {
-
-							   __sysout("::::::::::");
-
 							   /** C <= C' |= true  | C=C' */
 							   if(arg==this) return true;
 							   /** '' <= C' |= true  | v(C') */
@@ -1050,26 +1046,15 @@
 							   /** C <= C' |= false  | m(C) and !m(C') */
 							   else if(!this.isUniversal() && arg.isUniversal()) return false;
 
-							   __sysout(":^^^^");
-
 							   /** C <= C' |= true  | ctx(C <= C') */
 							   ccExp = new __CcExp(arg, this);
 							   if(ctx.contains(ccExp)) return true;
-
-							   __sysout(":^www^^^");
-
 
 							   /** otherwise */
 							   var thisContract = this;
 							   var result = true; 
 							   arg.first().foreach(function(k, literal) {
-									   __sysout(":adsfasdfaf: " + literal);
 									   result = result && thisContract.lderive(literal).isSuperSetOf(arg.lderive(literal), ctx.bind(ccExp));
-									   __sysout("@@@: " + thisContract);
-									   __sysout("@@@: " + thisContract.lderive(literal));
-									   __sysout("@@@: " + arg);
-									   __sysout("@@@: " + arg.lderive(literal));
-									   __sysout("@@@: " + thisContract.lderive(literal).isSuperSetOf(arg.lderive(literal), ctx.bind(ccExp)));
 							   });
 							   /** (d_literal C >= C') |= (d_literal C) >= (d_literal C') */
 							   return result;
