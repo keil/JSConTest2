@@ -105,7 +105,8 @@ load("__test/__test_superset.js");
 load("__test/__test_sreduce.js");
 load("__test/__test_flattening.js");
 
-
+/* Containment Calculus */
+load("__test/__test_contract_subset.js");
 
 
 var __end = new Date().getTime();

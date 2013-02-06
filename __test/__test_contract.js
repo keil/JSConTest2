@@ -12,14 +12,14 @@ function testR(cstring, pstring) {
 		// parse contracts
 		contract = __APC.Parser.parse(cstring);
 
-		// test
-		result = assertTrue(cstring, contract.isReadable(pstring));
-
 		__sysout("\n##########");
 		__sysout("contract: " + cstring);
 		__sysout("property: " + pstring);
 		__sysout("isReadable: " + contract.isReadable(pstring));
 		__sysout("derivation: " + contract.derive(pstring).dump());
+
+		// test
+		result = assertTrue(cstring, contract.isReadable(pstring));
 		__sysout("TEST: " + result);
 }
 
@@ -27,14 +27,17 @@ function testNR(cstring, pstring) {
 		// parse contracts
 		contract = __APC.Parser.parse(cstring);
 
-		// test
-		result = assertFalse(cstring, contract.isReadable(pstring));
-
 		__sysout("\n##########");
 		__sysout("contract: " + cstring);
+
+__sysout("   " + contract);
+
 		__sysout("property: " + pstring);
 		__sysout("isReadable: " + contract.isReadable(pstring));
 		__sysout("derivation: " + contract.derive(pstring).dump());
+
+		// test
+		result = assertFalse(cstring, contract.isReadable(pstring));
 		__sysout("TEST: " + result);
 }
 
@@ -42,14 +45,14 @@ function testW(cstring, pstring) {
 		// parse contracts
 		contract = __APC.Parser.parse(cstring);
 
-		// test
-		result = assertTrue(cstring, contract.isWriteable(pstring));
-
 		__sysout("\n##########");
 		__sysout("contract: " + cstring);
 		__sysout("property: " + pstring);
 		__sysout("isWriteable: " + contract.isWriteable(pstring));
 		__sysout("derivation: " + contract.derive(pstring).dump());
+
+		// test
+		result = assertTrue(cstring, contract.isWriteable(pstring));
 		__sysout("TEST: " + result);
 }
 
@@ -57,14 +60,14 @@ function testNW(cstring, pstring) {
 		// parse contracts
 		contract = __APC.Parser.parse(cstring);
 
-		// test
-		result = assertFalse(cstring, contract.isWriteable(pstring));
-
 		__sysout("\n##########");
 		__sysout("contract: " + cstring);
 		__sysout("property: " + pstring);
 		__sysout("isWriteable: " + contract.isWriteable(pstring));
 		__sysout("derivation: " + contract.derive(pstring).dump());
+
+		// test
+		result = assertFalse(cstring, contract.isWriteable(pstring));
 		__sysout("TEST: " + result);
 }
 
