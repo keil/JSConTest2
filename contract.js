@@ -233,9 +233,9 @@
 					   derive: function(name) {
 							   return new __EmptyLiteral();
 					   },
-					   /** (d_literal ?) ::= '' */
+					   /** (d_literal ?) ::= ? if literal='', '' otherwise */
 					   lderive: function(larg) {
-							   return new __EmptyLiteral();
+							   return (larg==new __EmptyLiteral()) this: new __EmptyLiteral();
 					   },
 					   //////////////////////////////////////////////////
 					   /** Reduce Contract
@@ -326,9 +326,9 @@
 					   derive: function(name) {
 							   return (name == varname) ? new __EmptyLiteral() : new __AtLiteral();
 					   },
-					   /** (d_literal varname) ::= '' if literal == varname, @ oterhwise */
+					   /** (d_literal varname) ::= varname if literal='', '' if literal == varname, @ oterhwise */
 					   lderive: function(larg) {
-							   return (larg==this) ? new __EmptyLiteral() : new __AtLiteral();
+							   return (larg==new __EmptyLiteral()) this: ((larg==this) ? new __EmptyLiteral() : new __AtLiteral());
 					   },
 					   //////////////////////////////////////////////////
 					   /** Reduce Contract
@@ -406,9 +406,10 @@
 					   derive: function(name) {
 							   return (new RegExp(regex)).test(name) ? new __EmptyLiteral() : new __AtLiteral();
 					   },
-					   /** (d_literal RegEx) ::= '' if literal == RegEx, @ oterhwise */
+					   /** (d_literal RegEx) ::= RegEx if literal='', '' if literal == RegEx, @ oterhwise */
 					   lderive: function(larg) {
-							   return (larg==this) ? new __EmptyLiteral() : new __AtLiteral();
+							   return (larg==new __EmptyLiteral()) this: ((larg==this) ? new __EmptyLiteral() : new __AtLiteral());
+
 					   },
 					   //////////////////////////////////////////////////
 					   /** Reduce Contract
@@ -458,8 +459,13 @@
 		 * C? Contract (optional)
 		 */
 		function __QMarkContract(contract) {
-				// REDUCTION RULES
-				if(contract.isEmpty()) return new __OrContract(new __EmptyLiteral(), new __AtLiteral());
+				// NORMALIZATION
+				/** ''? ~ '' */
+				if(contract==new __EmptyLiteral()) return new __EmptyContract();
+
+				// REDUCTION
+				/** C? ~ '' | n(C) */
+				if(contract.isEmpty()) return new __EmptyLiteral();
 
 				return __cache.c({
 						/** n(C?) ::= false */
@@ -558,8 +564,13 @@
 		 * C* Contract (kleene star)
 		 */
 		function __StarContract(contract) {
-				// REDUCTION RULES
-				if(contract.isEmpty()) return new __OrContract(new __EmptyLiteral(), new __AtLiteral());
+				// NORMALIZATION
+				/** ''* ~ '' */
+				if(contract==new __EmptyLiteral()) return new __EmptyContract();
+
+				// REDUCTION
+				/** C* ~ '' | n(C) */
+				if(contract.isEmpty()) return new __EmptyLiteral();
 
 				return __cache.c({
 						/** n(C*) ::= false */
@@ -664,10 +675,18 @@
 		 * C0+C1 Contract (logical or)
 		 */
 		function __OrContract(contract0, contract1) {
-				// REDUCTION RULES
-				if(contract0.isEmpty() && contract1.isEmpty()) return new __AtLiteral();
-				else if(contract0.isSuperSetOf(contract1, new __CcContext())) return contract0;
-				else if(contract1.isSuperSetOf(contract0, new __CcContext())) return contract1;
+				// NORMALIZATION
+				/** (C+@) ~ C */
+				if(contract0.isEmpty()) return contract1;
+				else if(contract1.isEmpty()) return contract0;
+				/** (C+C) ~ C */
+				if(contract0==contract1) return contract0;
+
+				// REDUCTION
+				/** (C+C') ~ C | C >= C' */
+				if(contract0.isSuperSetOf(contract1, new __CcContext())) return contract0;
+				/** (C+C') ~ C' | C <= C' */
+				if(contract1.isSuperSetOf(contract0, new __CcContext())) return contract1;
 
 				return __cache.c({
 						/** n(C0+C1) ::= n(C0) & n(C1) */
@@ -772,10 +791,18 @@
 		 * C0&C1 Contract (logical and)
 		 */
 		function __AndContract(contract0, contract1) {
-				// REDUCTION RULES
-				if(contract0.isEmpty() || contract1.isEmpty()) return new __AtLiteral();
-				else if(contract0.isSubSetOf(contract1, new __CcContext())) return contract0;
-				else if(contract1.isSubSetOf(contract0, new __CcContext())) return contract1;
+				// NORMALIZATION
+				/** (C&@) ~ C */
+				if(contract0.isEmpty()) return new __AtLiteral();
+				else if(contract1.isEmpty()) return new __AtLiteral();
+				/** (C&C) ~ C */
+				if(contract0==contract1) return contract0;
+
+				// REDUCTION
+				/** (C&C') ~ C' | C >= C' */
+				if(contract0.isSubSetOf(contract1, new __CcContext())) return contract0;
+				/** (C&C') ~ C | C <= C' */
+				if(contract1.isSubSetOf(contract0, new __CcContext())) return contract1;
 
 				return __cache.c({
 						/** n(C0+C1) ::= n(C0) + n(C1) */
@@ -797,6 +824,7 @@
 					   //////////////////////////////////////////////////
 					   /** r(C0&C1) :== r(C0) & r(C1) */
 					   isReadable: function(name) {
+							   __sysout("%%%: " + contract0.isReadable(name));
 							   return (contract0.isReadable(name) && contract1.isReadable(name));
 					   },
 					   /** w(C0&C1) :== w(C0) & w(C1) */
@@ -889,9 +917,16 @@
 		 * !C Contract (negation)
 		 */
 		function __NegContract(contract) {
-				// REDUCTION RULES
-				// negation only effects to literals
-				if(contract.isUniversal() || contract.isIndifferent()) return new __AtLiteral();
+				// NORMALIZATION
+				// ...
+
+				// REDUCTION
+				/** !(C) ~ @ | m*(C) */
+				if(contract.isUniversal()) return  new __AtLiteral();
+				/** SPECIAL: !(C) ~ @ | m(C) */
+				if(contract.isIndifferent()) return  new __AtLiteral();
+				/** SPECIAL: !('') ~ ? | m(C) */
+				if(contract==new __EmptyLiteral()) return  new __QMarkLiteral();
 
 				return __cache.c({
 						/** n(!C) ::= m(C) + m*(C) */
@@ -1006,9 +1041,14 @@
 		 * C.C Contract (concatenation)
 		 */
 		function __ConcatContract(contract0, contract1) {
-				// REDUCTION RULES
+				// NORMALIZATION
+				/** (''.C) ~ C */
+				if(contract0 == new __EmptyLiteral()) return contract1;
+				/** (C.C') ~ @ | n(C) */
 				if(contract0.isEmpty()) return new __AtLiteral();
-				else if(contract0 == new __EmptyLiteral()) return contract1;
+
+				// REDUCTION
+				// ...
 
 				return __cache.c({
 						/** n(C0.C1) ::= n(C0) */
@@ -1069,6 +1109,9 @@
 					   },
 					   /** ctx |- C <= this */
 					   isSuperSetOf: function(arg, ctx) {
+
+							   __sysout("::::::::::");
+
 							   /** C <= C' |= true  | C=C' */
 							   if(arg==this) return true;
 							   /** '' <= C' |= true  | v(C') */
@@ -1085,14 +1128,26 @@
 							   /** C <= C' |= false  | m(C) and !m(C') */
 							   else if(!this.isUniversal() && arg.isUniversal()) return false;
 
+							    __sysout(":^^^^");
+
 							   /** C <= C' |= true  | ctx(C <= C') */
 							   ccExp = new __CcExp(arg, this);
 							   if(ctx.contains(ccExp)) return true;
+
+__sysout(":^www^^^");
+
+
 							   /** otherwise */
 							   var thisContract = this;
 							   var result = true; 
 							   arg.first().foreach(function(k, literal) {
+									   __sysout(":adsfasdfaf: " + literal);
 									   result = result && thisContract.lderive(literal).isSuperSetOf(arg.lderive(literal), ctx.bind(ccExp));
+										__sysout("@@@: " + thisContract);
+										__sysout("@@@: " + thisContract.lderive(literal));
+										__sysout("@@@: " + arg);
+										__sysout("@@@: " + arg.lderive(literal));
+									   __sysout("@@@: " + thisContract.lderive(literal).isSuperSetOf(arg.lderive(literal), ctx.bind(ccExp)));
 							   });
 							   /** (d_literal C >= C') |= (d_literal C) >= (d_literal C') */
 							   return result;

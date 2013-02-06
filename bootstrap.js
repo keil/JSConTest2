@@ -66,9 +66,4 @@ load("permit.js")
 load("__lib/__lib_apache_assert.js");
 load("__test/__test_contract_subset.js");
 
-
-// ERROR
-//var test = __APC.permit("(a.b)?", {});
-
-
 quit();
