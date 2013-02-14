@@ -533,7 +533,7 @@
 		function __QMarkContract(contract) {
 				// NORMALIZATION
 				/** ^? ~ ^ */
-				if(contract==new __EmptyLiteral()) return new __EmptyContract();
+				if(contract==new __EmptyLiteral()) return new __EmptyLiteral();
 
 				// REDUCTION
 				/** C? ~ ^ | n(C) */
@@ -639,7 +639,7 @@
 		function __StarContract(contract) {
 				// NORMALIZATION
 				/** ^* ~ ^ */
-				if(contract==new __EmptyLiteral()) return new __EmptyContract();
+				if(contract==new __EmptyLiteral()) return new __EmptyLiteral();
 
 				// REDUCTION
 				/** C* ~ ^ | n(C) */
@@ -754,6 +754,16 @@
 				if(contract0==contract1) return contract0;
 
 				// REDUCTION
+				/** (C+C') ~ {} | n(C)&n(C') */
+				if(contract0.isEmpty()&&contract1.isEmpty()) return new __EmptySetLiteral();
+				/** (C+C') ~ {} | w(C)&w(C') */
+				if(contract0.isBlank()&&contract1.isBlank()) return new __AtLiteral();
+				/** (C+C') ~ C/C' | n(C)/n(C') */
+				if(contract0.isEmpty()) return contract1;
+				else if(contract1.isEmpty()) return contract0;
+				/** (C+C') ~ C/C' | w(C)/w(C') */
+				if(contract0.isBlank()) return contract1;
+				else if(contract1.isBlank()) return contract0;
 				/** (C+C') ~ C | C >= C' */
 				if(contract0.isSuperSetOf(contract1, new __CcContext())) return contract0;
 				/** (C+C') ~ C' | C <= C' */
@@ -868,6 +878,9 @@
 				/** (C&C') ~ C/C' | n(C)/n(C') */
 				if(contract0.isEmpty()) return new __EmptySetLiteral();
 				else if(contract1.isEmpty()) return new __EmptySetLiteral();
+				/** (C&C') ~ C/C' | w(C)/w(C') */
+				if(contract0.isBlank()) return new __AtLiteral();
+				else if(contract1.isBlank()) return new __AtLiteral();
 				/** (C&C') ~ C' | C >= C' */
 				if(contract0.isSubSetOf(contract1, new __CcContext())) return contract0;
 				/** (C&C') ~ C | C <= C' */
@@ -1114,15 +1127,17 @@
 				// REDUCTION
 				/** (C.C') ~ {} | n(C) */
 				if(contract0.isEmpty()) return new __EmptySetLiteral();
+				/** (C.C') ~ {} | w(C) */
+				if(contract0.isBlank()) return new __AtLiteral();
 
 				return __cache.c({
 						/** n(C0.C1) ::= n(C0) */
 						isEmpty: function() {
-								return contract0.isEmpty();
+								return contract0.isEmpty() || contract1.isEmpty();
 						},
 					   /** w(C0.C1) ::= w(C0) & w(C1) */
 					   isBlank: function() {
-							   return contract0.isBlank() && contract1.isBlank();
+							   return contract0.isBlank();
 					   },
 					   /** v(C0.C1) :== v(C0) & v(C1) */
 					   isNullable: function() {
