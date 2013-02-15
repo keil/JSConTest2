@@ -42,7 +42,8 @@ tpFA = new __APC.TracePath.TraceArgument(tpF1, tpA1);
 
 
 function test(p) {
-		__sysout(p.toString() + " = " + p.freduce());
+// TODO: deactivated
+//		__sysout(p.toString() + " = " + p.freduce());
 }
 
 

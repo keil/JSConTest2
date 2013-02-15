@@ -12,8 +12,8 @@
 		//////////////////////////////////////////////////
 		// TRACE PATH
 		// data structure to log access paths
-		// Property	p = "x" ...
-		// Path 	P = [] | P.p | P;P
+		// Property	p = "x" |  p{n}
+		// Path 	P = [] | P.p | (P:p) | (P;P)
 		//////////////////////////////////////////////////
 
 
@@ -21,37 +21,32 @@
 		*/
 		function __TraceEmpty() {
 				return __cache.c({
-						/* Dump
-						 * @return Array<String>
-						 */
-						dump: function(array) {
-								array.push("");
-								return array;
+						/** n({}) ::= true */
+						isEmpty: function() {
+								return true;
+						},
+					    isSequence:		function() { return false; },
+					   getCardinality:	function() { return 0;},
+					   getLast:			function() { return this; },
+					   getRawProperty:	function() { return this; },
+
+						increaseSequence: function(arg) {
+								return arg;
 						},
 
+					   //////////////////////////////////////////////////
+					   /* Dump
+						* @return Array<String>
+						*/
+					   dump: function(array) {
+							   array.push("");
+							   return array;
+					   },
 					   /* To String
 						* @return String
 						*/
 					   toString: function () {
 							   return "";
-					   },
-
-					   /* Is SuperSet or Equals
-						* @param arg Trace Path
-						* @return boolean, (this >= arg)
-						*/
-					   isSuperSetEqOf: function (arg) {
-							   // TODO
-							   return (this == arg);
-					   },
-
-					   /* Is SubSet or Equals
-						* @param arg Trace Path
-						* @return boolean, (this <= arg)
-						*/
-					   isSubSetEqOf: function (arg) {
-							   // TODO
-							   return arg.isSuperSetEqOf(this);
 					   },
 
 					   /* Flattening
@@ -63,26 +58,9 @@
 							   return arg;
 					   },
 
-					   /* Flattening Reduction
-						* @return Trace Path
-						*/
-					   freduce: function() {
-							   // TODO
-							   return this;
+					   contains: function (arg) {
+					   		return (this==arg);
 					   },
-
-					   /** SubSet Reduction
-						* @return subseteq-reduced contract
-						*/
-					   sreduce: function () {
-							   // TODO
-							   return this;
-					   },
-
-					   // TODO
-					   forAllPath: function(callback, thisArg) {
-							   callback.call(thisArg, this);
-					   }
 
 				});
 		}
@@ -92,44 +70,43 @@
 		 */
 		function __TraceProperty(property) {
 				return __cache.c({
-						/* Dump
-						 * @return Array<String>
-						 */
-						dump: function(array) {
-								if(array.length === 0) {
-										array.push(property);
-										return array;
-								}
-
-								array.foreach(function(k, v){
-										array[k] = v + "." + property;
-								});
-								return array;
+						/** n({}) ::= true */
+						isEmpty: function() {
+								return false;
 						},
+					   isSequence:		function() { return false; },
+					   getCardinality:	function() { return 0;},
+					   getLast:			function() { return this; },
+					   getRawProperty:	function() { return property; },
 
+					   increaseSequence: function(arg) {
+							   if(arg.isSequence()) {
+									   return new __TraceCardinality(this, arg.getCardinality()+1);
+							   } else {
+									   return new __TraceCardinality(this, 2);
+							   }
+					   },
+					   //////////////////////////////////////////////////
+					   /* Dump
+						* @return Array<String>
+						*/
+					   dump: function(array) {
+							   if(array.length === 0) {
+									   array.push(property);
+									   return array;
+							   }
+
+							   array.foreach(function(k, v){
+									   array[k] = v + "." + property;
+							   });
+							   return array;
+					   },
+					   test: function() {return "foreach";},
 					   /* To String
 						* @return String
 						*/
 					   toString: function () {
 							   return property;
-					   },
-
-					   /* Is SuperSet or Equals
-						* @param arg Trace Path
-						* @return boolean, (this >= arg)
-						*/
-					   isSuperSetEqOf: function (arg) {
-							   // TODO
-							   return (this == arg);
-					   },
-
-					   /* Is SubSet or Equals
-						* @param arg Trace Path
-						* @return boolean, (this <= arg)
-						*/
-					   isSubSetEqOf: function (arg) {
-							   // TODO
-							   return arg.isSuperSetEqOf(this);
 					   },
 
 					   /* Flattening
@@ -140,37 +117,115 @@
 							   // TODO
 							   return new __TracePath(this, arg);
 					   },
+					    contains: function (arg) {
+					   		return (this==arg);
+					   },
+				});
+		}
 
-					   /* Flattening Reduction
-						* @return Trace Path
-						*/
-					   freduce: function() {
-							   // TODO
-							   return this;
+		/** Trace PropertyCardinality
+		 * @param variable Variable name
+		 */
+		function __TraceCardinality(property, cardinality) {
+				if(property.isEmpty()) return new __TraceEmpty();
+
+				if(cardinality==0) return new __TraceEmpty();
+				if(cardinality==1) return new property;
+
+				return __cache.c({
+						/** n({}) ::= true */
+						isEmpty: function() {
+								return property.isEmpty();
+						},
+					   
+   					   isSequence:		function() { return true; },
+					   getCardinality:	function() { return cardinality;},
+					   getLast:			function() { return this; },
+					   getRawProperty:	function() { return property.getRawProperty(); },
+
+					    increaseSequence: function(arg) {
+							   if(arg.isSequence()) {
+									   return new __TraceCardinality(property, cardinality+arg.getCardinality());
+							   } else {
+									   return new __TraceCardinality(property, cardinality+1);
+							   }
 					   },
 
-					   /** SubSet Reduction
-						* @return subseteq-reduced contract
+
+					   //////////////////////////////////////////////////
+					   /* Dump
+						* @return Array<String>
 						*/
-					   sreduce: function () {
-							   // TODO
-							   return this;
+					   dump: function(array) {
+								propertyString = property;
+								for(var i=1;i<cardinality;i++) {
+									propertyString += ("." + property);
+								}
+
+							   if(array.length === 0) {
+									   array.push(propertyString);
+									   return array;
+							   }
+
+							   array.foreach(function(k, v){
+									   array[k] = v + "." + propertyString;
+							   });
+							   return array;
+					   },
+					   /* To String
+						* @return String
+						*/
+					   toString: function () {
+							   return (property + "{" + cardinality + "}");
 					   },
 
-					   // TODO
-					   forAllPath: function(callback, thisArg) {
-							   callback.call(thisArg, this);
-					   }
+					   /* Flattening
+					* @param arg Trace Path
+					* @return Trace Path
+					*/
+				   flattening: function (arg) {
+						   // TODO
+					   		return new __TracePath(this, arg);
+						   //return new __TracePath(path.flattening(property), arg);
+						 //  return path.flattening(new __TracePath(property, arg));
+				   },
+
+				    contains: function (arg) {
+					   		return (this==arg);
+					   },
 
 				});
 		}
+
+
+
+
+
+
 
 		/** Trace Argument
 		 * @param path Function path
 		 * @param property Argument name
 		 */
 		function __TraceArgument(path, property) {
+				// TODO
+				//
+				//
 				return __cache.c({
+							/** n({}) ::= true */
+						isEmpty: function() {
+								return (path.isEmpty() && property.isEmpty());
+						},
+					   isSequence:		function() { return property.isSequence(); },
+					   getCardinality:	function() { return 0;},
+					   getLast:			function() { return property; },
+					   getRawProperty:	function() { return property.getRawProperty() },
+
+					    increaseSequence: function(arg) {
+								return this;
+					   },
+
+					   //////////////////////////////////////////////////
 						/* Dump
 						 * @return Array<String>
 						 */
@@ -179,30 +234,11 @@
 								array = property.dump(array);
 								return array;
 						},
-
 					   /* To String
 						* @return String
 						*/
 					   toString: function () {
 							   return "function " + path.toString() + ": " + property.toString();
-					   },
-
-					   /* Is SuperSet or Equals
-						* @param arg Trace Path
-						* @return boolean, (this >= arg)
-						*/
-					   isSuperSetEqOf: function (arg) {
-							   // TODO
-							   return (this == arg);
-					   },
-
-					   /* Is SubSet or Equals
-						* @param arg Trace Path
-						* @return boolean, (this <= arg)
-						*/
-					   isSubSetEqOf: function (arg) {
-							   // TODO
-							   return (arg == this);
 					   },
 
 					   /* Flattening
@@ -213,27 +249,11 @@
 							   // TODO
 							   return new __TraceArgument(path, property.flattening(arg));
 					   },
-
-					   /* Flattening Reduction
-						* @return Trace Path
-						*/
-					   freduce: function() {
-							   // TODO
-							   return new __TraceArgument(path.freduce(), property.freduce());
+					    contains: function (arg) {
+					   		return (this==arg);
 					   },
 
-					   /** SubSet Reduction
-						* @return subseteq-reduced contract
-						*/
-					   sreduce: function () {
-							   // TODO
-							   return new __TraceArgument(path.sreduce(), property.sreduce());
-					   },
 
-					   // TODO
-					   forAllPath: function(callback, thisArg) {
-							   callback.call(thisArg, this);
-					   }
 				});
 		}
 
@@ -242,7 +262,58 @@
 		 * @param property Path property
 		 */
 		function __TracePath(path, property) {
+				//__sysout("$" + path);
+				//__sysout("#" + path.getLast());
+				//__sysout("@" + property);
+				if(path.getLast().getRawProperty()==property.getRawProperty()) {
+						return path.increaseSequence(property);
+				}
+
+							
+
+				if(path.isEmpty() && property.isEmpty()) return new __TraceEmpty();
+				else if(path.isEmpty()) return property;
+				else if(property.isEmpty()) return path;
+
+				//return path.flattening(property);
+
 				return __cache.c({
+						//path: path,
+					   	//property: property,
+
+						/** n({}) ::= true */
+						isEmpty: function() {
+								return (path.isEmpty() && property.isEmpty());
+						},
+					   isSequence:		function() { return property.isSequence(); },
+					   getCardinality:	function() { return 0;},
+					   getLast:			function() { return property; },
+					   getRawProperty:	function() { return property.getRawProperty() },
+					   
+					  
+						increaseSequence: function(arg) {
+							if(property.getRawProperty()==arg.getRawProperty()) {
+								// merge raw properties
+								if(property.isSequence() && arg.isSequence()) {
+										return new __TracePath(path,
+												new __TraceCardinality(property.getLast(),
+														(property.getCardinality()+arg.getCardinality())));
+								} else if(property.isSequence()) {
+									return new __TracePath(path,
+												new __TraceCardinality(property.getLast(),
+														(property.getCardinality()+1)));
+								} else if(property.isSequence()) {
+									return new __TracePath(path,
+												new __TraceCardinality(property.getLast(),
+														(arg.getCardinality()+1)));
+								} else {
+									return new __TracePath(path,
+												new __TraceCardinality(property.getLast(),
+														2));
+								}
+							}
+						},
+					   //////////////////////////////////////////////////
 						/* Dump
 						 * @return Array<String>
 						 */
@@ -251,30 +322,11 @@
 								array = property.dump(array);
 								return array;
 						},
-
 					   /* To String
 						* @return String
 						*/
 					   toString: function () {
 							   return path.toString() + "." + property.toString();
-					   },
-
-					   /* Is SuperSet or Equals
-						* @param arg Trace Path
-						* @return boolean, (this >= arg)
-						*/
-					   isSuperSetEqOf: function (arg) {
-							   // TODO
-							   return (this == arg) || path.isSuperSetEqOf(arg);
-					   },
-
-					   /* Is SubSet or Equals
-						* @param arg Trace Path
-						* @return boolean, (this <= arg)
-						*/
-					   isSubSetEqOf: function (arg) {
-							   // TODO
-							   return arg.isSuperSetEqOf(this);
 					   },
 
 					   /* Flattening
@@ -287,20 +339,8 @@
 							   return path.flattening(new __TracePath(property, arg));
 					   },
 
-					   /* Flattening Reduction
-						* @return Trace Path
-						*/
-					   freduce: function() {
-							   // TODO
-							   return path.flattening(property);
-					   },
-
-					   /** SubSet Reduction
-						* @return subseteq-reduced contract
-						*/
-					   sreduce: function () {
-							   // TODO
-							   return new __TracePath(path.sreduce(), property.sreduce());
+					    contains: function (arg) {
+					   		return (this==arg);
 					   },
 
 				});
@@ -311,7 +351,27 @@
 		 * @param path1 Trace Path 1
 		 */
 		function __TraceSet(path0, path1) {
+				if(path0.isEmpty() && path1.isEmpty()) return new __TraceEmpty();
+				else if(path0.isEmpty()) return path1;
+				else if(path1.isEmpty()) return path0;
+
+
 				return __cache.c({
+						/** n({}) ::= true */
+						isEmpty: function() {
+								return (path0.isEmpty() && path1.isEmpty());
+						},
+					    isSequence:		function() { return false; },
+					   getCardinality:	function() { return 0;},
+					   getLast:			function() { return this; },
+					   getRawProperty:	function() { return null; },
+
+					      increaseSequence: function(arg) {
+								return this;
+					   },
+
+
+					   //////////////////////////////////////////////////
 
 						/* Dump
 						 * @return Array<String>
@@ -328,39 +388,11 @@
 								// merge sets
 								return set0.concat(set1);
 						},
-
 					   /* To String
 						* @return String
 						*/
 						toString: function () {
 								return "( " + path0.toString() + " ; " + path1.toString() + " )";
-						},
-
-						/* Is SuperSet or Equals
-						 * @param arg Trace Path
-						 * @return boolean, (this >= arg)
-						 */
-						isSuperSetEqOf: function (arg) {
-								//var isSuperset = true;
-								//callback = function(p) {
-								//		__sysout("@@@@@@@@@@@@" + p);
-								//	isSuperset &= this.isSuperSetEqOf(p);
-								//}
-
-								//arg.forAllPath(callback, this);
-
-								//return isSuperset;
-								// TODO
-								return path0.isSuperSetEqOf(arg) || path1.isSuperSetEqOf(arg);// || arg.isSubSetEqOf(this);
-						},
-
-						/* Is SubSet or Equals
-						 * @param arg Trace Path
-						 * @return boolean, (this <= arg)
-						 */
-						isSubSetEqOf: function (arg) {
-								// TODO
-								return path0.isSubSetEqOf(arg) && path1.isSubSetEqOf(arg);
 						},
 
 						/* Flattening
@@ -372,36 +404,14 @@
 								return new __TraceSet(path0.flattening(arg), path1.flattening(arg));
 						},
 
-						/* Flattening Reduction
-						 * @return Trace Path
-						 */
-						freduce: function() {
-								// TODO
-								return new __TraceSet(path0.freduce(), path1.freduce());;
-						},
-
-						/** SubSet Reduction
-						 * @return subseteq-reduced contract
-						 */
-						sreduce: function () {
-								// TODO
-								if(path0.isSuperSetEqOf(path1))
-										return path0.sreduce();
-								else if(path1.isSuperSetEqOf(path0))
-										return path1.sreduce();
-								else 
-										return new __TraceSet(path0.sreduce(), path1.sreduce());
-						},
-
-						// TODO
-						forAllPath: function(callback, thisArg) {
-								callback.call(thisArg, path0);
-								callback.call(thisArg, path1);
-						}
+						 contains: function (arg) {
+					   		return (path0.contains(arg) || path1.contains(arg));
+					   },
 
 				});
 		}
 
+		// TODO
 		//////////////////////////////////////////////////
 		// APC . Path
 		//////////////////////////////////////////////////
@@ -427,6 +437,11 @@
 				// cache array
 				var cache = new Array();
 
+				// make key
+				var makeKey = function(path) {
+						return ("#"+path.toString()); 
+				};
+
 				return {
 
 						/* cache function
@@ -434,10 +449,10 @@
 						 * @return trace path
 						 */
 						c: function(path) {
-								if(this.contains(path.toString())) {
-										return this.get(path.toString());
+								if(this.contains(makeKey(path))) {
+										return this.get(makeKey(path));
 								} else {
-										this.put(path.toString(), path);
+										this.put(makeKey(path), path);
 										return path;
 								}
 						},
