@@ -35,6 +35,9 @@ load("system.js");
 // load apc
 load("apc.js");
 
+// load map
+load("map.js");
+
 // load configuration
 load("config.js");
 
@@ -63,6 +66,9 @@ load("permit.js")
 //////////////////////////////////////////////////
 
 var __start = new Date().getTime();
+
+/* Test Map **/ // (TESTED)
+load("__test/__test_map.js");
 
 /* Test Parser **/ // (TESTED)
 load("__test/__test_parser.js");

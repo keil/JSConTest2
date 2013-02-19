@@ -31,6 +31,9 @@ load("system.js");
 // load apc
 load("apc.js");
 
+// load map
+load("map.js");
+
 // load configuration
 load("config.js");
 
