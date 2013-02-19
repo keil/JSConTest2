@@ -25,14 +25,14 @@
 						isEmpty: function() {
 								return true;
 						},
-					    isSequence:		function() { return false; },
+					   isSequence:		function() { return false; },
 					   getCardinality:	function() { return 0;},
 					   getLast:			function() { return this; },
 					   getRawProperty:	function() { return this; },
 
-						increaseSequence: function(arg) {
-								return arg;
-						},
+					   increaseSequence: function(arg) {
+							   return arg;
+					   },
 
 					   //////////////////////////////////////////////////
 					   /* Dump
@@ -59,7 +59,7 @@
 					   },
 
 					   contains: function (arg) {
-					   		return (this==arg);
+							   return (this==arg);
 					   },
 
 				});
@@ -117,8 +117,8 @@
 							   // TODO
 							   return new __TracePath(this, arg);
 					   },
-					    contains: function (arg) {
-					   		return (this==arg);
+					   contains: function (arg) {
+							   return (this==arg);
 					   },
 				});
 		}
@@ -137,13 +137,13 @@
 						isEmpty: function() {
 								return property.isEmpty();
 						},
-					   
-   					   isSequence:		function() { return true; },
+
+					   isSequence:		function() { return true; },
 					   getCardinality:	function() { return cardinality;},
 					   getLast:			function() { return this; },
 					   getRawProperty:	function() { return property.getRawProperty(); },
 
-					    increaseSequence: function(arg) {
+					   increaseSequence: function(arg) {
 							   if(arg.isSequence()) {
 									   return new __TraceCardinality(property, cardinality+arg.getCardinality());
 							   } else {
@@ -157,10 +157,10 @@
 						* @return Array<String>
 						*/
 					   dump: function(array) {
-								propertyString = property;
-								for(var i=1;i<cardinality;i++) {
-									propertyString += ("." + property);
-								}
+							   propertyString = property;
+							   for(var i=1;i<cardinality;i++) {
+									   propertyString += ("." + property);
+							   }
 
 							   if(array.length === 0) {
 									   array.push(propertyString);
@@ -180,18 +180,18 @@
 					   },
 
 					   /* Flattening
-					* @param arg Trace Path
-					* @return Trace Path
-					*/
-				   flattening: function (arg) {
-						   // TODO
-					   		return new __TracePath(this, arg);
-						   //return new __TracePath(path.flattening(property), arg);
-						 //  return path.flattening(new __TracePath(property, arg));
-				   },
+						* @param arg Trace Path
+						* @return Trace Path
+						*/
+					   flattening: function (arg) {
+							   // TODO
+							   return new __TracePath(this, arg);
+							   //return new __TracePath(path.flattening(property), arg);
+							   //  return path.flattening(new __TracePath(property, arg));
+					   },
 
-				    contains: function (arg) {
-					   		return (this==arg);
+					   contains: function (arg) {
+							   return (this==arg);
 					   },
 
 				});
@@ -212,7 +212,7 @@
 				//
 				//
 				return __cache.c({
-							/** n({}) ::= true */
+						/** n({}) ::= true */
 						isEmpty: function() {
 								return (path.isEmpty() && property.isEmpty());
 						},
@@ -221,19 +221,19 @@
 					   getLast:			function() { return property; },
 					   getRawProperty:	function() { return property.getRawProperty() },
 
-					    increaseSequence: function(arg) {
-								return this;
+					   increaseSequence: function(arg) {
+							   return this;
 					   },
 
 					   //////////////////////////////////////////////////
-						/* Dump
-						 * @return Array<String>
-						 */
-						dump: function(array) {
-								array = path.dump(array);
-								array = property.dump(array);
-								return array;
-						},
+					   /* Dump
+						* @return Array<String>
+						*/
+					   dump: function(array) {
+							   array = path.dump(array);
+							   array = property.dump(array);
+							   return array;
+					   },
 					   /* To String
 						* @return String
 						*/
@@ -249,8 +249,8 @@
 							   // TODO
 							   return new __TraceArgument(path, property.flattening(arg));
 					   },
-					    contains: function (arg) {
-					   		return (this==arg);
+					   contains: function (arg) {
+							   return (this==arg);
 					   },
 
 
@@ -269,7 +269,7 @@
 						return path.increaseSequence(property);
 				}
 
-							
+
 
 				if(path.isEmpty() && property.isEmpty()) return new __TraceEmpty();
 				else if(path.isEmpty()) return property;
@@ -279,7 +279,7 @@
 
 				return __cache.c({
 						//path: path,
-					   	//property: property,
+						//property: property,
 
 						/** n({}) ::= true */
 						isEmpty: function() {
@@ -289,39 +289,39 @@
 					   getCardinality:	function() { return 0;},
 					   getLast:			function() { return property; },
 					   getRawProperty:	function() { return property.getRawProperty() },
-					   
-					  
-						increaseSequence: function(arg) {
-							if(property.getRawProperty()==arg.getRawProperty()) {
-								// merge raw properties
-								if(property.isSequence() && arg.isSequence()) {
-										return new __TracePath(path,
-												new __TraceCardinality(property.getLast(),
-														(property.getCardinality()+arg.getCardinality())));
-								} else if(property.isSequence()) {
-									return new __TracePath(path,
-												new __TraceCardinality(property.getLast(),
-														(property.getCardinality()+1)));
-								} else if(property.isSequence()) {
-									return new __TracePath(path,
-												new __TraceCardinality(property.getLast(),
-														(arg.getCardinality()+1)));
-								} else {
-									return new __TracePath(path,
-												new __TraceCardinality(property.getLast(),
-														2));
-								}
-							}
-						},
+
+
+					   increaseSequence: function(arg) {
+							   if(property.getRawProperty()==arg.getRawProperty()) {
+									   // merge raw properties
+									   if(property.isSequence() && arg.isSequence()) {
+											   return new __TracePath(path,
+													   new __TraceCardinality(property.getLast(),
+															   (property.getCardinality()+arg.getCardinality())));
+									   } else if(property.isSequence()) {
+											   return new __TracePath(path,
+															   new __TraceCardinality(property.getLast(),
+																	   (property.getCardinality()+1)));
+									   } else if(property.isSequence()) {
+											   return new __TracePath(path,
+															   new __TraceCardinality(property.getLast(),
+																	   (arg.getCardinality()+1)));
+									   } else {
+											   return new __TracePath(path,
+															   new __TraceCardinality(property.getLast(),
+																	   2));
+									   }
+							   }
+					   },
 					   //////////////////////////////////////////////////
-						/* Dump
-						 * @return Array<String>
-						 */
-						dump: function(array) {
-								array = path.dump(array);
-								array = property.dump(array);
-								return array;
-						},
+					   /* Dump
+						* @return Array<String>
+						*/
+					   dump: function(array) {
+							   array = path.dump(array);
+							   array = property.dump(array);
+							   return array;
+					   },
 					   /* To String
 						* @return String
 						*/
@@ -339,8 +339,8 @@
 							   return path.flattening(new __TracePath(property, arg));
 					   },
 
-					    contains: function (arg) {
-					   		return (this==arg);
+					   contains: function (arg) {
+							   return (this==arg);
 					   },
 
 				});
@@ -361,51 +361,51 @@
 						isEmpty: function() {
 								return (path0.isEmpty() && path1.isEmpty());
 						},
-					    isSequence:		function() { return false; },
+					   isSequence:		function() { return false; },
 					   getCardinality:	function() { return 0;},
 					   getLast:			function() { return this; },
 					   getRawProperty:	function() { return null; },
 
-					      increaseSequence: function(arg) {
-								return this;
+					   increaseSequence: function(arg) {
+							   return this;
 					   },
 
 
 					   //////////////////////////////////////////////////
 
-						/* Dump
-						 * @return Array<String>
-						 */
-						dump: function(array) {
-								// dump path 0
-								var set0 = new Array(array);
-								set0 = path0.dump(set0);
+					   /* Dump
+						* @return Array<String>
+						*/
+					   dump: function(array) {
+							   // dump path 0
+							   var set0 = new Array(array);
+							   set0 = path0.dump(set0);
 
-								// dump path 1
-								var set1 = new Array(array);
-								set1 = path1.dump(set1);
+							   // dump path 1
+							   var set1 = new Array(array);
+							   set1 = path1.dump(set1);
 
-								// merge sets
-								return set0.concat(set1);
-						},
+							   // merge sets
+							   return set0.concat(set1);
+					   },
 					   /* To String
 						* @return String
 						*/
-						toString: function () {
-								return "( " + path0.toString() + " ; " + path1.toString() + " )";
-						},
+					   toString: function () {
+							   return "( " + path0.toString() + " ; " + path1.toString() + " )";
+					   },
 
-						/* Flattening
-						 * @param arg Trace Path
-						 * @return Trace Path
-						 */
-						flattening: function (arg) {
-								// TODO
-								return new __TraceSet(path0.flattening(arg), path1.flattening(arg));
-						},
+					   /* Flattening
+						* @param arg Trace Path
+						* @return Trace Path
+						*/
+					   flattening: function (arg) {
+							   // TODO
+							   return new __TraceSet(path0.flattening(arg), path1.flattening(arg));
+					   },
 
-						 contains: function (arg) {
-					   		return (path0.contains(arg) || path1.contains(arg));
+					   contains: function (arg) {
+							   return (path0.contains(arg) || path1.contains(arg));
 					   },
 
 				});
@@ -434,13 +434,9 @@
 		/** Path Cache 
 		*/
 		function __PathCache() {
-				// cache array
-				var cache = new Array();
 
-				// make key
-				var makeKey = function(path) {
-						return ("#"+path.toString()); 
-				};
+				// cache array
+				var cache = new StringMap();
 
 				return {
 
@@ -449,10 +445,10 @@
 						 * @return trace path
 						 */
 						c: function(path) {
-								if(this.contains(makeKey(path))) {
-										return this.get(makeKey(path));
+								if(this.contains(path.toString())) {
+										return this.get(path.toString());
 								} else {
-										this.put(makeKey(path), path);
+										this.put(path.toString(), path);
 										return path;
 								}
 						},
@@ -463,7 +459,7 @@
 								 * @return value
 								 */
 								put: function(key, value) {
-										cache[key] = value;
+										cache.set(key, value);
 										return value;
 								},
 
@@ -472,7 +468,7 @@
 								 * @return value
 								 */
 								get: function(key) {
-										return cache[key];
+										return cache.get(key);
 								},
 
 								/* contains
@@ -480,13 +476,13 @@
 								 * @return true, if key in cache, false otherwise
 								 */
 								contains: function(key) {
-										return (cache[key]!=undefined) ? true : false;
+										return cache.has(key);
 								},
 
 								/* clear cache
 								*/
 								clear: function() {
-										cache = new Array();
+										cache = new StringMap();
 								}
 				}
 		}

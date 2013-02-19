@@ -17,6 +17,8 @@ load("__lib/__lib_padding.js");
 load("__lib/__lib_harmony_weakmap.js");
 // Load reflect API
 load("__lib/__lib_reflect.js");
+// Load StringMap
+load("__lib/__lib_StringMap.js");
 
 // load logging engine
 //load("__lib/__lib_log4js.js");
@@ -30,9 +32,6 @@ load("system.js");
 
 // load apc
 load("apc.js");
-
-// load map
-load("map.js");
 
 // load configuration
 load("config.js");

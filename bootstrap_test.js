@@ -17,6 +17,8 @@ load("__lib/__lib_padding.js");
 load("__lib/__lib_harmony_weakmap.js");
 // Load reflect API
 load("__lib/__lib_reflect.js");
+// Load StringMap
+load("__lib/__lib_StringMap.js");
 // load assert
 load("__lib/__lib_apache_assert.js");
 
@@ -34,9 +36,6 @@ load("system.js");
 
 // load apc
 load("apc.js");
-
-// load map
-load("map.js");
 
 // load configuration
 load("config.js");
@@ -68,7 +67,8 @@ load("permit.js")
 var __start = new Date().getTime();
 
 /* Test Map **/ // (TESTED)
-load("__test/__test_map.js");
+// deprecated 
+//load("__test/__test_map.js");
 
 /* Test Parser **/ // (TESTED)
 load("__test/__test_parser.js");

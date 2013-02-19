@@ -1361,7 +1361,7 @@
 		*/
 		function __ContractCache() {
 				// cache array
-				var cache = new Array();
+				var cache = new StringMap();
 
 				return {
 
@@ -1383,7 +1383,7 @@
 								 * $return value
 								 */
 								put: function(key, value) {
-										cache["\"" + key + "\""] = value;
+										cache.set(key, value);
 										return value;
 								},
 
@@ -1392,7 +1392,7 @@
 								 * $return value
 								 */
 								get: function(key) {
-										return cache["\"" + key + "\""];
+										return cache.get(key);
 								},
 
 								/* contains
@@ -1400,13 +1400,13 @@
 								 * $return true, if key in cache, false otherwise
 								 */
 								contains: function(key) {
-										return (cache["\"" + key + "\""]!==undefined) ? true : false;
+										return cache.has(key);
 								},
 
 								/* clear cache
 								*/
 								clear: function() {
-										cache = new Array();
+										cache = new StringMap();
 								}
 				}
 		}
