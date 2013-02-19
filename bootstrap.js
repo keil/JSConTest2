@@ -66,6 +66,39 @@ load("__lib/__lib_apache_assert.js");
 // load testcase
 //load("__test/__test_.js");
 
+load("path2.js")
+
+start = new __APC.TracePath.TraceEmpty();
+
+a = new __APC.TracePath.TraceProperty("a");
+b = new __APC.TracePath.TraceProperty("b");
+c = new __APC.TracePath.TraceProperty("c");
+d = new __APC.TracePath.TraceProperty("d");
+e = new __APC.TracePath.TraceProperty("e");
+f = new __APC.TracePath.TraceProperty("f");
 
 
-quit();
+p1 = new __APC.TracePath.TracePath(b, c);
+
+q1 =  new __APC.TracePath.TracePath(d, e);
+
+s0 = new __APC.TracePath.TraceSet(p1, q1);
+
+b0 = new __APC.TracePath.TracePath(start, a);
+b1 = new __APC.TracePath.TracePath(b0, s0);
+b2 = new __APC.TracePath.TracePath(b1, f);
+
+
+// final
+finalTrie = new __APC.TracePath.PathTrie();
+finalTrie.insert(start, new __APC.TracePath.PathTrie());
+
+
+trie = new __APC.TracePath.PathTrie();
+trie.insert(a, finalTrie);
+
+__sysout("@ " + trie.toString());
+__sysout("$ " + trie.dump("sasa", new Array()));
+
+
+//quit();

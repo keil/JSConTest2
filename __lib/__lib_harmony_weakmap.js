@@ -13,6 +13,18 @@ function WeakMap() {
 			   get: function(key) {
 					   var i = keys.indexOf(key);
 					   return i < 0 ? undefined : values[i];
+			   },
+			   remove: function(key) {
+					   var i = keys.indexOf(key);
+					   if(i >= 0) {
+							   keys.remove(i);
+							   values.remove(i);
+					   }
+			   },
+			   foreach: function(callback) {
+					   keys.foreach(function(i,key){
+							   callback(key, values[i]);
+					   });
 			   }
 		});
 }

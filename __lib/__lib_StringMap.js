@@ -23,7 +23,6 @@
 var StringMap;
 
 (function() {
-		"use strict";
 
 		var create = Object.create;
 		var freeze = Object.freeze;
@@ -32,12 +31,19 @@ var StringMap;
 				return freeze(func);
 		}
 
-		function assertString(x) {
-				if ('string' !== typeof(x)) {
-						throw new TypeError('Not a string: ' + x);
+		function keyEscape(key) {
+				if ('string' !== typeof(key)) {
+						throw new TypeError('Not a string: ' + key);
 				}
-				return x;
+				return ('#' + key);
 		}
+
+		function keyUnescape(key) {
+				if ('string' !== typeof(key)) {
+						throw new TypeError('Not a string: ' + key);
+				}
+				return (key.substring(1));
+		}	
 
 		StringMap = function StringMap() {
 
@@ -45,16 +51,19 @@ var StringMap;
 
 				return freeze({
 						get: constFunc(function(key) {
-								return objAsMap[assertString(key) + '$'];
+								return objAsMap[keyEscape(key)];
 						}),
 								set: constFunc(function(key, value) {
-										objAsMap[assertString(key) + '$'] = value;
+										objAsMap[keyEscape(key)] = value;
 								}),
 								has: constFunc(function(key) {
-										return (assertString(key) + '$') in objAsMap;
+										return (keyEscape(key)) in objAsMap;
+								}),
+								foreach: constFunc(function(callback) {
+										for(var key in objAsMap) callback(keyUnescape(key), objAsMap)
 								}),
 								'delete': constFunc(function(key) {
-										return delete objAsMap[assertString(key) + '$'];
+										return delete objAsMap[keyEscape(key)];
 								})
 				});
 		};
