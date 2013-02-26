@@ -20,11 +20,6 @@ function WeakMap() {
 							   keys.remove(i);
 							   values.remove(i);
 					   }
-			   },
-			   foreach: function(callback) {
-					   keys.foreach(function(i,key){
-							   callback(key, values[i]);
-					   });
 			   }
 		});
 }

@@ -62,6 +62,10 @@
 							   return (this==arg);
 					   },
 
+					   // TODO
+					   foreach: function(callback) {
+						   callback(property);
+					   }
 				});
 		}
 
@@ -120,84 +124,93 @@
 					   contains: function (arg) {
 							   return (this==arg);
 					   },
+
+					    // TODO
+					   foreach: function(callback) {
+					   			callback(property);
+					   }
 				});
 		}
 
-		/** Trace PropertyCardinality
-		 * @param variable Variable name
-		 */
-		function __TraceCardinality(property, cardinality) {
-				if(property.isEmpty()) return new __TraceEmpty();
-
-				if(cardinality==0) return new __TraceEmpty();
-				if(cardinality==1) return new property;
-
-				return __cache.c({
-						/** n({}) ::= true */
-						isEmpty: function() {
-								return property.isEmpty();
-						},
-
-					   isSequence:		function() { return true; },
-					   getCardinality:	function() { return cardinality;},
-					   getLast:			function() { return this; },
-					   getRawProperty:	function() { return property.getRawProperty(); },
-
-					   increaseSequence: function(arg) {
-							   if(arg.isSequence()) {
-									   return new __TraceCardinality(property, cardinality+arg.getCardinality());
-							   } else {
-									   return new __TraceCardinality(property, cardinality+1);
-							   }
-					   },
-
-
-					   //////////////////////////////////////////////////
-					   /* Dump
-						* @return Array<String>
-						*/
-					   dump: function(array) {
-							   propertyString = property;
-							   for(var i=1;i<cardinality;i++) {
-									   propertyString += ("." + property);
-							   }
-
-							   if(array.length === 0) {
-									   array.push(propertyString);
-									   return array;
-							   }
-
-							   array.foreach(function(k, v){
-									   array[k] = v + "." + propertyString;
-							   });
-							   return array;
-					   },
-					   /* To String
-						* @return String
-						*/
-					   toString: function () {
-							   return (property + "{" + cardinality + "}");
-					   },
-
-					   /* Flattening
-						* @param arg Trace Path
-						* @return Trace Path
-						*/
-					   flattening: function (arg) {
-							   // TODO
-							   return new __TracePath(this, arg);
-							   //return new __TracePath(path.flattening(property), arg);
-							   //  return path.flattening(new __TracePath(property, arg));
-					   },
-
-					   contains: function (arg) {
-							   return (this==arg);
-					   },
-
-				});
-		}
-
-
+//		/** Trace PropertyCardinality
+//		 * @param variable Variable name
+//		 */
+//		function __TraceCardinality(property, cardinality) {
+//				if(property.isEmpty()) return new __TraceEmpty();
+//
+//				if(cardinality==0) return new __TraceEmpty();
+//				if(cardinality==1) return new property;
+//
+//				return __cache.c({
+//						/** n({}) ::= true */
+//						isEmpty: function() {
+//								return property.isEmpty();
+//						},
+//
+//					   isSequence:		function() { return true; },
+//					   getCardinality:	function() { return cardinality;},
+//					   getLast:			function() { return this; },
+//					   getRawProperty:	function() { return property.getRawProperty(); },
+//
+//					   increaseSequence: function(arg) {
+//							   if(arg.isSequence()) {
+//									   return new __TraceCardinality(property, cardinality+arg.getCardinality());
+//							   } else {
+//									   return new __TraceCardinality(property, cardinality+1);
+//							   }
+//					   },
+//
+//
+//					   //////////////////////////////////////////////////
+//					   /* Dump
+//						* @return Array<String>
+//						*/
+//					   dump: function(array) {
+//							   propertyString = property;
+//							   for(var i=1;i<cardinality;i++) {
+//									   propertyString += ("." + property);
+//							   }
+//
+//							   if(array.length === 0) {
+//									   array.push(propertyString);
+//								   return array;
+//							   }
+//
+//							   array.foreach(function(k, v){
+//									   array[k] = v + "." + propertyString;
+//							   });
+//							   return array;
+//					   },
+//					   /* To String
+//						* @return String
+//						*/
+//					   toString: function () {
+//							   return (property + "{" + cardinality + "}");
+//					   },
+//
+//					   /* Flattening
+//						* @param arg Trace Path
+//						* @return Trace Path
+//						*/
+//					   flattening: function (arg) {
+//							   // TODO
+//							   return new __TracePath(this, arg);
+//							   //return new __TracePath(path.flattening(property), arg);
+//							   //  return path.flattening(new __TracePath(property, arg));
+//					   },
+//
+//					   contains: function (arg) {
+//							   return (this==arg);
+//					   },
+//
+//					    // TODO
+//					   foreach: function(callback) {
+//					   
+//					   }
+//				});
+//		}
+//
+//
 
 
 
@@ -253,6 +266,11 @@
 							   return (this==arg);
 					   },
 
+					    // TODO
+					   foreach: function(callback) {
+					   			path.foreach(callback);
+							   property.foreach(callback);
+					   }
 
 				});
 		}
@@ -343,6 +361,12 @@
 							   return (this==arg);
 					   },
 
+					    // TODO
+					   foreach: function(callback) {
+							   path.foreach(callback);
+							   property.foreach(callback);
+					   }
+
 				});
 		}
 
@@ -407,6 +431,13 @@
 					   contains: function (arg) {
 							   return (path0.contains(arg) || path1.contains(arg));
 					   },
+
+					    // TODO
+					//   foreach: function(callback) {
+					//		   path0.foreach(callback);
+					//		   path1.foreach(callback);
+					//   
+					//   }
 
 				});
 		}

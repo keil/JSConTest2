@@ -90,15 +90,22 @@ b2 = new __APC.TracePath.TracePath(b1, f);
 
 
 // final
-finalTrie = new __APC.TracePath.PathTrie();
-finalTrie.insert(start, new __APC.TracePath.PathTrie());
+//finalTrie = new __APC.TracePath.PathTrie();
+//finalTrie.insert(start, new __APC.TracePath.PathTrie());
 
 
 trie = new __APC.TracePath.PathTrie();
-trie.insert(a, finalTrie);
+trie.append(a);
+trie.append(b);
+trie.append(c);
+
+trie2 = new __APC.TracePath.PathTrie();
+trie2.append(a);
+
+trie.merge(trie2);
 
 __sysout("@ " + trie.toString());
-__sysout("$ " + trie.dump("sasa", new Array()));
+__sysout("$ " + trie.dump("#", new Array()));
 
 
-//quit();
+quit();
