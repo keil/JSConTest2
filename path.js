@@ -25,14 +25,14 @@
 						isEmpty: function() {
 								return true;
 						},
-					   isSequence:		function() { return false; },
-					   getCardinality:	function() { return 0;},
-					   getLast:			function() { return this; },
-					   getRawProperty:	function() { return this; },
+//					   isSequence:		function() { return false; },
+//					   getCardinality:	function() { return 0;},
+//					   getLast:			function() { return this; },
+//					   getRawProperty:	function() { return this; },
 
-					   increaseSequence: function(arg) {
-							   return arg;
-					   },
+//					   increaseSequence: function(arg) {
+//							   return arg;
+//					   },
 
 					   //////////////////////////////////////////////////
 					   /* Dump
@@ -49,23 +49,23 @@
 							   return "";
 					   },
 
-					   /* Flattening
-						* @param arg Trace Path
-						* @return Trace Path
-						*/
-					   flattening: function (arg) {
-							   // TODO
-							   return arg;
-					   },
+//					   /* Flattening
+//						* @param arg Trace Path
+//						* @return Trace Path
+//						*/
+//					   flattening: function (arg) {
+//							   // TODO
+//							   return arg;
+//					   },
 
-					   contains: function (arg) {
-							   return (this==arg);
-					   },
+//					   contains: function (arg) {
+//							   return (this==arg);
+//					   },
 
-					   // TODO
-					   foreach: function(callback) {
-						   callback(this);
-					   }
+//					   // TODO
+//					   foreach: function(callback) {
+//						   callback(this);
+//					   }
 				});
 		}
 
@@ -78,18 +78,18 @@
 						isEmpty: function() {
 								return false;
 						},
-					   isSequence:		function() { return false; },
-					   getCardinality:	function() { return 0;},
-					   getLast:			function() { return this; },
-					   getRawProperty:	function() { return property; },
+//					   isSequence:		function() { return false; },
+//					   getCardinality:	function() { return 0;},
+//					   getLast:			function() { return this; },
+//					   getRawProperty:	function() { return property; },
 
-					   increaseSequence: function(arg) {
-							   if(arg.isSequence()) {
-									   return new __TraceCardinality(this, arg.getCardinality()+1);
-							   } else {
-									   return new __TraceCardinality(this, 2);
-							   }
-					   },
+//					   increaseSequence: function(arg) {
+//							   if(arg.isSequence()) {
+//									   return new __TraceCardinality(this, arg.getCardinality()+1);
+//							   } else {
+//									   return new __TraceCardinality(this, 2);
+//							   }
+//					   },
 					   //////////////////////////////////////////////////
 					   /* Dump
 						* @return Array<String>
@@ -113,22 +113,22 @@
 							   return property;
 					   },
 
-					   /* Flattening
-						* @param arg Trace Path
-						* @return Trace Path
-						*/
-					   flattening: function (arg) {
-							   // TODO
-							   return new __TracePath(this, arg);
-					   },
-					   contains: function (arg) {
-							   return (this==arg);
-					   },
-
-					    // TODO
-					   foreach: function(callback) {
-					   			callback(this);
-					   }
+//					   /* Flattening
+//						* @param arg Trace Path
+//						* @return Trace Path
+//						*/
+//					   flattening: function (arg) {
+//							   // TODO
+//							   return new __TracePath(this, arg);
+//					   },
+//					   contains: function (arg) {
+//							   return (this==arg);
+//					   },
+//
+//					    // TODO
+//					   foreach: function(callback) {
+//					   			callback(this);
+//					   }
 				});
 		}
 
@@ -229,14 +229,14 @@
 						isEmpty: function() {
 								return (path.isEmpty() && property.isEmpty());
 						},
-					   isSequence:		function() { return property.isSequence(); },
-					   getCardinality:	function() { return 0;},
-					   getLast:			function() { return property; },
-					   getRawProperty:	function() { return property.getRawProperty() },
-
-					   increaseSequence: function(arg) {
-							   return this;
-					   },
+//					   isSequence:		function() { return property.isSequence(); },
+//					   getCardinality:	function() { return 0;},
+//					   getLast:			function() { return property; },
+//					   getRawProperty:	function() { return property.getRawProperty() },
+//
+//					   increaseSequence: function(arg) {
+//							   return this;
+//					   },
 
 					   //////////////////////////////////////////////////
 					   /* Dump
@@ -254,23 +254,23 @@
 							   return "function " + path.toString() + ": " + property.toString();
 					   },
 
-					   /* Flattening
-						* @param arg Trace Path
-						* @return Trace Path
-						*/
-					   flattening: function (arg) {
-							   // TODO
-							   return new __TraceArgument(path, property.flattening(arg));
-					   },
-					   contains: function (arg) {
-							   return (this==arg);
-					   },
-
-					    // TODO
-					   foreach: function(callback) {
-					   			path.foreach(callback);
-							   property.foreach(callback);
-					   }
+//					   /* Flattening
+//						* @param arg Trace Path
+//						* @return Trace Path
+//						*/
+//					   flattening: function (arg) {
+//							   // TODO
+//							   return new __TraceArgument(path, property.flattening(arg));
+//					   },
+//					   contains: function (arg) {
+//							   return (this==arg);
+//					   },
+//
+//					    // TODO
+//					   foreach: function(callback) {
+//					   			path.foreach(callback);
+//							   property.foreach(callback);
+//					   }
 
 				});
 		}
@@ -283,11 +283,11 @@
 				//__sysout("$" + path);
 				//__sysout("#" + path.getLast());
 				//__sysout("@" + property);
-				if(path.getLast().getRawProperty()==property.getRawProperty()) {
-						return path.increaseSequence(property);
-				}
-
-
+//				if(path.getLast().getRawProperty()==property.getRawProperty()) {
+//						return path.increaseSequence(property);
+//				}
+//
+//
 
 				if(path.isEmpty() && property.isEmpty()) return new __TraceEmpty();
 				else if(path.isEmpty()) return property;
@@ -303,34 +303,34 @@
 						isEmpty: function() {
 								return (path.isEmpty() && property.isEmpty());
 						},
-					   isSequence:		function() { return property.isSequence(); },
-					   getCardinality:	function() { return 0;},
-					   getLast:			function() { return property; },
-					   getRawProperty:	function() { return property.getRawProperty() },
-
-
-					   increaseSequence: function(arg) {
-							   if(property.getRawProperty()==arg.getRawProperty()) {
-									   // merge raw properties
-									   if(property.isSequence() && arg.isSequence()) {
-											   return new __TracePath(path,
-													   new __TraceCardinality(property.getLast(),
-															   (property.getCardinality()+arg.getCardinality())));
-									   } else if(property.isSequence()) {
-											   return new __TracePath(path,
-															   new __TraceCardinality(property.getLast(),
-																	   (property.getCardinality()+1)));
-									   } else if(property.isSequence()) {
-											   return new __TracePath(path,
-															   new __TraceCardinality(property.getLast(),
-																	   (arg.getCardinality()+1)));
-									   } else {
-											   return new __TracePath(path,
-															   new __TraceCardinality(property.getLast(),
-																	   2));
-									   }
-							   }
-					   },
+//					   isSequence:		function() { return property.isSequence(); },
+//					   getCardinality:	function() { return 0;},
+//					   getLast:			function() { return property; },
+//					   getRawProperty:	function() { return property.getRawProperty() },
+//
+//
+//					   increaseSequence: function(arg) {
+//							   if(property.getRawProperty()==arg.getRawProperty()) {
+//									   // merge raw properties
+//									   if(property.isSequence() && arg.isSequence()) {
+//											   return new __TracePath(path,
+//													   new __TraceCardinality(property.getLast(),
+//															   (property.getCardinality()+arg.getCardinality())));
+//									   } else if(property.isSequence()) {
+//											   return new __TracePath(path,
+//															   new __TraceCardinality(property.getLast(),
+//																	   (property.getCardinality()+1)));
+//									   } else if(property.isSequence()) {
+//											   return new __TracePath(path,
+//															   new __TraceCardinality(property.getLast(),
+//																	   (arg.getCardinality()+1)));
+//									   } else {
+//											   return new __TracePath(path,
+//															   new __TraceCardinality(property.getLast(),
+//																	   2));
+//									   }
+//							   }
+//					   },
 					   //////////////////////////////////////////////////
 					   /* Dump
 						* @return Array<String>
@@ -347,26 +347,26 @@
 							   return path.toString() + "." + property.toString();
 					   },
 
-					   /* Flattening
-						* @param arg Trace Path
-						* @return Trace Path
-						*/
-					   flattening: function (arg) {
-							   // TODO
-							   //return new __TracePath(path.flattening(property), arg);
-							   return path.flattening(new __TracePath(property, arg));
-					   },
-
-					   contains: function (arg) {
-							   return (this==arg);
-					   },
-
-					    // TODO
-					   foreach: function(callback) {
-							   path.foreach(callback);
-							   property.foreach(callback);
-					   }
-
+//					   /* Flattening
+//						* @param arg Trace Path
+//						* @return Trace Path
+//						*/
+//					   flattening: function (arg) {
+//							   // TODO
+//							   //return new __TracePath(path.flattening(property), arg);
+//							   return path.flattening(new __TracePath(property, arg));
+//					   },
+//
+//					   contains: function (arg) {
+//							   return (this==arg);
+//					   },
+//
+//					    // TODO
+//					   foreach: function(callback) {
+//							   path.foreach(callback);
+//							   property.foreach(callback);
+//					   }
+//
 				});
 		}
 
