@@ -42,6 +42,7 @@ load("config.js");
 
 // load trace path
 load("path.js");
+load("pathtrie.js");
 
 // load contract
 load("contract.js");
