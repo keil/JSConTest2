@@ -64,7 +64,7 @@
 
 					   // TODO
 					   foreach: function(callback) {
-						   callback(property);
+						   callback(this);
 					   }
 				});
 		}
@@ -127,7 +127,7 @@
 
 					    // TODO
 					   foreach: function(callback) {
-					   			callback(property);
+					   			callback(this);
 					   }
 				});
 		}

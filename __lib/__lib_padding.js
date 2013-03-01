@@ -25,3 +25,23 @@ function padding_right(s, c, n) {
 
 		return s;
 }
+
+// left margin s with n times c
+function margin_left(s, c, n) {
+		var margin = '';
+		for(i=0; i<n; i++) {
+				margin += c;
+		}
+
+		return (margin+s);
+}
+
+// right margin s with n times c
+function margin_right(s, c, n) {
+		var margin = '';
+		for(i=0; i<n; i++) {
+				margin += c;
+		}
+
+		return (s+margin);
+}

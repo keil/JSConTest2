@@ -37,7 +37,7 @@
 									   values.remove(i);
 							   }
 					   },
-					   contains: function(element) {
+					   contains: function(key) {
 							   var i = keys.indexOf(key);
 							   return i < 0 ? false : true;
 					   },
@@ -59,24 +59,24 @@
 
 				var addEdge = function(property) {
 						var emptyTrie = new __PathTrie();
-						return subtrie.add(property, emptyTrie);
+						return subtrie.set(property, emptyTrie);
 				}
 
 
 
 
 				var addEndOfPath = function() {
-						var emptyProperty = new __TraceEmpty();
+						var emptyProperty = new APC.TracePath.TraceEmpty();
 						return addEdge(emptyProperty);
 				};
 
 				var removeEndOfPath = function() {
-						var emptyProperty = new __TraceEmpty();
+						var emptyProperty = new APC.TracePath.TraceEmpty();
 						subtrie.remove(emptyProperty);
 				};
 
 				var isEndOFPath = function() {
-						var emptyProperty = new __TraceEmpty();
+						var emptyProperty = new APC.TracePath.TraceEmpty();
 						return subtrie.contains(emptyProperty);
 				};
 
@@ -97,8 +97,9 @@
 
 
 							add: function(property) {
+									__sysout("   #add " + property);
 									subtrie.foreach(function(edge, trie) {
-											subtrie.add(property);
+											if(edge!=new APC.TracePath.TraceEmpty()) trie.add(property);
 									});
 
 									if(isEndOFPath()) {
@@ -117,30 +118,78 @@
 							find: function(property) {
 								// TODO TBC
 							},
-
-
+	
 							toString: function() {
-									var level = 0;
 									var tmp = ''; 
 									subtrie.foreach(function(property, trie) {
-											level++;											
-											string = ("\n(" + property.toString() + ") {" + trie.toString() + "}");
-											tmp += padding_left(string, ' ', (level*3));
-											level--;
+											string = ("(" + property.toString() + ") {" + trie.toString() + "}");
+											tmp += string;
+									});
+									return tmp;
+							},
+
+							print: function(l) {
+									var level = (l==null) ? 0 : l;
+									var tmp = ''; 
+									subtrie.foreach(function(property, trie) {
+											string = ("(" + property.toString() + ") {" + trie.print(level+1) + "\n" + margin_left("}", ' ', (level*3)));
+											tmp += "\n" + margin_left(string, ' ', (level*3));
 									});
 									return tmp;
 							},
 
 
-
 							dump: function() {
-									result = new Array();
-									
+									var result = new StringMap();
+									//		if(this.endOfPath) {
+									//				result[]
+													//	result = result.concat(["$"]);
+											//	result = result.concat(["$"]);
+
+									//		}
+
+
 									subtrie.foreach(function(property, trie) {
-										trie.dump().foreach(function(k, v) {
+											if(property==new APC.TracePath.TraceEmpty()) {
+											//		__sysout("adsf");
+													path = new APC.TracePath.TraceEmpty();
+											//		__sysout("PATH" + path);
+													result[path.toString()] = path;
+													
+												//	__sysout("$$" +  result.length);
+
+													//result.push("asdf");
+											}
+										
+											trie.dump().foreach(function(hash, subpath) {
+													path = new APC.TracePath.TracePath(property, subpath);
+													result[path.toString()] = path;
+													//result.push(property.toString() + "." + trace);
+											});
+											
+
+
+
+										//	__sysout("   PROPERTY: " + property);
+										//		__sysout("   SUBTRIE: " + trie);
+										//	
+										//	__sysout(trie.dump().length);
+										//	result = trie.dump();
+									
+									/*		__sysout("!!" + trie.dump());
+											trie.dump().foreach(function(k, v) {
+											__sysout("asdf");
 											result.push(property.toString() + "." + v);
-										});
+												
+										}); */
+
 									});
+
+								//	if(this.endOfPath) {
+								///		__sysout("ENDOFPATH")
+								//		result.push('#');
+								//	}
+	
 
 									return result;
 							},

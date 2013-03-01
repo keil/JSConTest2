@@ -68,7 +68,7 @@ load("__lib/__lib_apache_assert.js");
 
 load("path2.js")
 
-start = new __APC.TracePath.TraceEmpty();
+empty = new __APC.TracePath.TraceEmpty();
 
 a = new __APC.TracePath.TraceProperty("a");
 b = new __APC.TracePath.TraceProperty("b");
@@ -78,34 +78,41 @@ e = new __APC.TracePath.TraceProperty("e");
 f = new __APC.TracePath.TraceProperty("f");
 
 
-p1 = new __APC.TracePath.TracePath(b, c);
-
-q1 =  new __APC.TracePath.TracePath(d, e);
-
-s0 = new __APC.TracePath.TraceSet(p1, q1);
-
-b0 = new __APC.TracePath.TracePath(start, a);
-b1 = new __APC.TracePath.TracePath(b0, s0);
-b2 = new __APC.TracePath.TracePath(b1, f);
-
+//p1 = new __APC.TracePath.TracePath(b, c);
+//q1 =  new __APC.TracePath.TracePath(d, e);
+//s0 = new __APC.TracePath.TraceSet(p1, q1);
+//b0 = new __APC.TracePath.TracePath(start, a);
+//b1 = new __APC.TracePath.TracePath(b0, s0);
+//b2 = new __APC.TracePath.TracePath(b1, f);
 
 // final
 //finalTrie = new __APC.TracePath.PathTrie();
 //finalTrie.insert(start, new __APC.TracePath.PathTrie());
 
-
 trie = new __APC.TracePath.PathTrie();
-trie.append(a);
-trie.append(b);
-trie.append(c);
 
-trie2 = new __APC.TracePath.PathTrie();
-trie2.append(a);
+trie.endOfPath = true;
 
-trie.merge(trie2);
+trie.add(a);
+trie.add(b);
+trie.add(c);
 
-__sysout("@ " + trie.toString());
-__sysout("$ " + trie.dump("#", new Array()));
+//trie2 = new __APC.TracePath.PathTrie();
+//trie2.append(a);
 
+//trie.merge(trie2);
+
+__sysout(trie);
+
+__sysout("\n\n### TO STRING");
+__sysout(trie.print());
+
+__sysout("\n\n### DUMP");
+//__sysout(trie.dump());
+
+
+trie.dump().foreach(function(s, o) {
+__sysout(path)
+});
 
 quit();
