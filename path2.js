@@ -130,12 +130,13 @@
 
 							print: function(l) {
 									var level = (l==null) ? 0 : l;
-									var tmp = ''; 
+									var tmp = ''; // (this.endOfPath) ? '$' : '';
 									subtrie.foreach(function(property, trie) {
 											string = ("(" + property.toString() + ") {" + trie.print(level+1) + "\n" + margin_left("}", ' ', (level*3)));
 											tmp += "\n" + margin_left(string, ' ', (level*3));
 									});
-									return tmp;
+									//return (this.endOfPath) ? (tmp+')') : tmp;
+									return tmp;	
 							},
 
 

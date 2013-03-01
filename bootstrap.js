@@ -112,7 +112,7 @@ __sysout("\n\n### DUMP");
 
 
 trie.dump().foreach(function(s, o) {
-__sysout(path)
+__sysout(path + "\n");
 });
 
 quit();
