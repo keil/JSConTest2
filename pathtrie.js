@@ -7,7 +7,6 @@
 // http://www.informatik.uni-freiburg.de/~keilr/
 // Version: 2.01
 //////////////////////////////////////////////////
-
 (function(APC) {
 
 
@@ -124,24 +123,17 @@
 							},
 
 							merge: function(trie) {
-
-									__sysout("MERGE:" + this + " AND " + trie);
-
 									trie.edges.foreach(function(property, subtrieOfTrie) {
 
 											
 											if(containsEdge(property)) {
-													__sysout("CONTAINS EDGE");
 												getSubtrie(property).merge(subtrieOfTrie);
 											} else {
-													__sysout("NOTCONTAINS EDGE");
 												addSubtrie(property, subtrieOfTrie);
 											}
 
 
 									});
-
-									__sysout("RESULT " + this);
 
 									// TODO TBC
 							},
@@ -159,7 +151,8 @@
 							toString: function() {
 									var tmp = ''; 
 									subtrie.foreach(function(property, trie) {
-											string = ("(" + property.toString() + ") {" + trie.toString() + "}");
+											if(property==new APC.TracePath.TraceEmpty()) string = "($)";
+											else string = ("(" + property.toString() + ") {" + trie.toString() + "}");
 											tmp += string;
 									});
 									return tmp;
@@ -169,7 +162,8 @@
 									var level = (l==null) ? 0 : l;
 									var tmp = ''; // (this.endOfPath) ? '$' : '';
 									subtrie.foreach(function(property, trie) {
-											string = ("(" + property.toString() + ") {" + trie.print(level+1) + "\n" + margin_left("}", ' ', (level*3)));
+											if(property==new APC.TracePath.TraceEmpty()) string = "($)";
+											else string = ("(" + property.toString() + ") {" + trie.print(level+1) + "\n" + margin_left("}", ' ', (level*3)));
 											tmp += "\n" + margin_left(string, ' ', (level*3));
 									});
 									//return (this.endOfPath) ? (tmp+')') : tmp;
@@ -191,7 +185,6 @@
 													result.push(path);
 											});
 									});
-									__sysout("DUMP " + result);
 									return result;
 							},
 
