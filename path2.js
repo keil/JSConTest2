@@ -60,10 +60,23 @@
 				var addEdge = function(property) {
 						var emptyTrie = new __PathTrie();
 						return subtrie.set(property, emptyTrie);
-				}
+				};
+
+				var containsEdge = function(property) {
+					return subtrie.contains(property);
+				};
 
 
+				var addSubtrie = function(property, trie) {
+						return subtrie.set(property, trie);
+				};
 
+				var getSubtrie = function(property) {
+					return subtrie.get(property);
+				};
+
+				
+			
 
 				var addEndOfPath = function() {
 						var emptyProperty = new APC.TracePath.TraceEmpty();
@@ -97,7 +110,6 @@
 
 
 							add: function(property) {
-									__sysout("   #add " + property);
 									subtrie.foreach(function(edge, trie) {
 											if(edge!=new APC.TracePath.TraceEmpty()) trie.add(property);
 									});
@@ -112,11 +124,36 @@
 							},
 
 							merge: function(trie) {
+
+									__sysout("MERGE:" + this + " AND " + trie);
+
+									trie.edges.foreach(function(property, subtrieOfTrie) {
+
+											
+											if(containsEdge(property)) {
+													__sysout("CONTAINS EDGE");
+												getSubtrie(property).merge(subtrieOfTrie);
+											} else {
+													__sysout("NOTCONTAINS EDGE");
+												addSubtrie(property, subtrieOfTrie);
+											}
+
+
+									});
+
+									__sysout("RESULT " + this);
+
 									// TODO TBC
 							},
 
 							find: function(property) {
+									//return (subtrie.contains(property)) ? subtrie.get(property) : undefined;
 									// TODO TBC
+									// // needed
+							},
+
+							get edges() {
+								return subtrie;
 							},
 
 							toString: function() {
@@ -154,6 +191,7 @@
 													result.push(path);
 											});
 									});
+									__sysout("DUMP " + result);
 									return result;
 							},
 

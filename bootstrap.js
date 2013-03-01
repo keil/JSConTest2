@@ -112,7 +112,51 @@ __sysout("\n\n### DUMP");
 
 
 trie.dump().foreach(function(s, o) {
-__sysout(path + "\n");
+__sysout(o + "\n");
 });
+
+
+
+
+
+
+trie1 = new __APC.TracePath.PathTrie();
+trie1.endOfPath = true;
+trie1.add(a);
+
+trie.merge(trie1);
+
+
+
+
+trie2 = new __APC.TracePath.PathTrie();
+trie2.endOfPath = true;
+trie2.add(b);
+trie2.add(c);
+
+trie.merge(trie2);
+
+trie3 = new __APC.TracePath.PathTrie();
+trie3.endOfPath = true;
+trie3.add(b);
+trie3.add(c);
+trie3.add(c);
+
+trie.merge(trie3);
+
+__sysout("\n\n### TO STRING");
+__sysout(trie.print());
+
+__sysout("\n\n### DUMP");
+__sysout(trie.dump());
+
+
+trie.dump().foreach(function(s, o) {
+__sysout(":" + o);
+});
+
+
+
+
 
 quit();
