@@ -23,11 +23,15 @@
 				// optional name
 				objname = name!=null ? new APC.TracePath.TraceProperty(name) : new APC.TracePath.TraceEmpty();
 
+				// trie
+				trie = new APC.TracePath.PathTrie(true);
+				trie.add(objname);
+
 				// parse contracts
 				contract = APC.Parser.parse(string);
 
 				// create proxy
-				return __APC.Proxy.wrap(obj, contract, objname);
+				return __APC.Proxy.wrap(obj, contract, trie);
 		}
 
 		/** Apply
@@ -57,11 +61,15 @@
 				// optional name
 				fname = name!=null ? new APC.TracePath.TraceProperty(name) : new APC.TracePath.TraceEmpty();
 
+				// trie
+				trie = new APC.TracePath.PathTrie(true);
+				trie.add(objname);
+
 				// parse contracts
 				contract = APC.Parser.parse(string);
 
 				// create function proxy
-				return __APC.Proxy.wrapArgs(func, contract, fname);
+				return __APC.Proxy.wrapArgs(func, contract, trie);
 		}
 
 		/** Apply Arguments 

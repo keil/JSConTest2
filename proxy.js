@@ -15,26 +15,21 @@
 
 		/** Standard Access Handler
 		 * @param contract Access Permission Contract
-		 * @param path Trace Path
+		 * @param trie Path Trie
 		 * @return AccessHandler
 		 */
-		function __AccessHandler(contract, path) {
+		function __AccessHandler(contract, trie) {
 				return {
 						/** extend contract
-						 * @param extContract Access Permission Contract
-						 * @param extPath Access Permission Contract
+						 * @param contractArg Access Permission Contract
+						 * @param trieArg Path Trie
 						 */
-						extend: function(extContract, extPath) {
+						extend: function(contractArg, trieArg) {
 								/* C = C&C' */
-								contract = new APC.Contract.AndContract(contract, extContract);
+								contract = new APC.Contract.AndContract(contract, contractArg);
 								
-								path.merge(ext.path);
-								
-								///* P = P;P' */
-								//path = new APC.TracePath.TraceSet(path, extPath);
-								
-								// TODO
-								//path = (APC.Config.SubsetReductionMode == APC.SubsetReduction.Mode.ON) ? path.sreduce() : path;
+								/* T = T&T */
+								trie.merge(trieArg);								
 						},
 
 
@@ -385,17 +380,10 @@
 		/** Standard Membrane
 		 * @param init Value to wrap
 		 * @param contract Access Permission Contract
-		 * @param path Trace Path
+		 * @param trie TraceTrie
 		 * @return wrapped object or primitive value
 		 */
-		function __createMembrane(init, contract, path) {
-
-
-				// TODO
-				trie = new APC.TracePath.PathTrie();
-				trie.add(path);
-				path = trie;
-
+		function __createMembrane(init, contract, trie) {
 
 				/** Wrap Object
 				 * @param target Target value to wrap
@@ -408,7 +396,7 @@
 						}
 
 						/* Access Handler *********************************** */
-						var accessHandler = __AccessHandler(contract, path);
+						var accessHandler = __AccessHandler(contract, trie);
 
 						/* Proxy ******************************************** */
 						var proxy = new Proxy(target, accessHandler);
@@ -421,7 +409,7 @@
 				 * @return  Proxy
 				 */
 				function extend(target) {
-						__cache.get(target).extend(contract, path);
+						__cache.get(target).extend(contract, trie);
 						return target;
 				}
 
@@ -434,17 +422,10 @@
 		/** Function Membrane
 		 * @param init Value to wrap
 		 * @param contract Access Permission Contract
+		 * @param trie TraceTrie
 		 * @return wrapped object
 		 */
-		function __createFunctionMembrane(init, contract, path) {
-
-
-				
-				// TODO
-				trie = new APC.TracePath.PathTrie(true);
-				trie.add(path);
-				path = trie;
-
+		function __createFunctionMembrane(init, contract, trie) {
 
 				/** Wrap Object
 				 * @param target Target value to wrap
@@ -453,11 +434,11 @@
 				function wrap(target) {
 						// IF no function, return standard membrane
 						if (typeof init !== "function") {
-								return __createMembrane(init, contract, path);
+								return __createMembrane(init, contract, trie);
 						}
 
 						/* Access Handler *********************************** */
-						var functionHandler = __FunctionHandler(contract, path);
+						var functionHandler = __FunctionHandler(contract, trie);
 
 						/* Proxy ******************************************** */
 						var proxy = new Proxy(target, functionHandler);
@@ -470,7 +451,7 @@
 				 * @return  Proxy
 				 */
 				function extend(target) {
-						__fcache.get(target).extend(contract, path);
+						__fcache.get(target).extend(contract, trie);
 						return target;
 				}
 
