@@ -5,15 +5,20 @@
 // http://proglang.informatik.uni-freiburg.de/
 // Author: Matthias Keil
 // http://www.informatik.uni-freiburg.de/~keilr/
-// Version: 2.01
 //////////////////////////////////////////////////
 (function(APC) {
 
-
-		function __PathTrieEdges() {
+		/** Edges
+		*/
+		function __Edges() {
 				var keys = [];
 				var values = [];
 				return Object.freeze({
+						/* Set
+						 * @return key
+						 * @param value
+						 * @return true|false
+						 */
 						set: function(key, value) {
 								if (key !== Object(key)) { 
 										return false;
@@ -25,284 +30,240 @@
 								values[i] = value;
 								return true;
 						},
-					   get: function(key) {
-							   var i = keys.indexOf(key);
-							   return i < 0 ? undefined : values[i];
-					   },
-					   remove: function(key) {
-							   var i = keys.indexOf(key);
-							   if(i >= 0) {
-									   keys.remove(i);
-									   values.remove(i);
-							   }
-					   },
-					   contains: function(key) {
-							   var i = keys.indexOf(key);
-							   return i < 0 ? false : true;
-					   },
-					   foreach: function(callback) {
-							   keys.foreach(function(i,key){
-									   callback(key, values[i]);
-							   });
-					   }
+					   /* Get
+						* @return key
+						* @return undefined|values[i]
+						*/
+								get: function(key) {
+										var i = keys.indexOf(key);
+										return i < 0 ? undefined : values[i];
+								},
+								/* Remove
+								 * @param key
+								 * @return true|false
+								 */
+								remove: function(key) {
+										var i = keys.indexOf(key);
+										if(i >= 0) {
+												return (keys.remove(i) && values.remove(i));
+										}
+								},
+								/* Contains
+								 * @param key
+								 * @return true|false
+								 */
+								contains: function(key) {
+										var i = keys.indexOf(key);
+										return i < 0 ? false : true;
+								},
+								/* Foreach
+								 * @param callback
+								 */
+								foreach: function(callback) {
+										keys.foreach(function(i,key){
+												callback(key, values[i]);
+										});
+								}
 				});
 		}
 
-		//		function __EmptyTrie() {
-		//				trie = new __PathTrie();
-		//				trie.
-		//		}
 
 
 
-		function __PathTrie( /*trieArrayArg, edgeArg,*/ endOfPathArg) {
+
+		/** Path Trie
+		 * @param endOfPathArg true, if trie is endOfPath, false otherwise
+		 */
+		function __PathTrie(endOfPathArg) {
 
 				// edges E := {} | E[Property -> PathTrie]
-				var subtrie = new __PathTrieEdges();
+				var edges = new __Edges();
 
 
-				var addEdge = function(property, endOfPath) {
-						//var emptyTrie = new __PathTrie(,,endOfPath);
 
-						var emptyTrie = new __PathTrie();
-						return subtrie.set(property, emptyTrie);
-				};
-
-				var containsEdge = function(property) {
-						return subtrie.contains(property);
-				};
-
-				var addSubtrie = function(property, trie) {
-						return subtrie.set(property, trie);
-				};
-
+				//////////////////////////////////////////////////
+				/* GET SubTrie
+				 * @param property edge
+				 * @return PathTrie|undefined
+				 */
 				var getSubtrie = function(property) {
-						return subtrie.get(property);
+						return edges.get(property);
 				};
 
+				/* ADD SubTrie
+				 * @param property edge
+				 * @param trie, path trie
+				 * @return true|false
+				 */
+				var addSubtrie = function(property, trie) {
+						return edges.set(property, trie);
+				};
+
+				/* CONTAINS Edge
+				 * @param property edge
+				 * @return true|false
+				 */
+				var containsEdge = function(property) {
+						return edges.contains(property);
+				};
+
+
+
+				//////////////////////////////////////////////////
+				/* ADD Edge
+				 * @param property property
+				 * @param endOfPath true, if edge should point to a endOfPath trie, false otherwise
+				 * @return true|false
+				 */
+				var addEdge = function(property, endOfPath) {
+						return addSubtrie(property, new __PathTrie(endOfPath));
+				};
+
+				/* ADD endOfPath
+				 * @return true|false
+				 */
 				var addEndOfPath = function() {
-						var emptyProperty = new APC.TracePath.TraceEmpty();
-						return addEdge(emptyProperty);
+						return addEdge(new APC.TracePath.TraceEmpty());
 				};
 
+				/* REMOVE endOfPath
+				 * @return true|false
+				 */
 				var removeEndOfPath = function() {
-						var emptyProperty = new APC.TracePath.TraceEmpty();
-						subtrie.remove(emptyProperty);
+						return edges.remove(new APC.TracePath.TraceEmpty());
 				};
 
+				/* IS endOfPath
+				 * @return true|false
+				 */
 				var isEndOFPath = function() {
-						var emptyProperty = new APC.TracePath.TraceEmpty();
-						return subtrie.contains(emptyProperty);
+						return containsEdge(new APC.TracePath.TraceEmpty());
 				};
 
 
 
-
-
-
-
-/*
-				// merge given trie's into a new one
-				if(trieArrayArg instanceof Array) {
-						__sysout("# merge trieArrays");
-
-						// foreach trie in trieArrayArg
-						trieArrayArg.foreach(function(k, trieArg) {
-
-								// foreach edge E: Proeprty -> PathTrie in trieArg.edges
-								trieArg.edges.foreach(function(property, subtrieOfTrieArg) {
-
-										if(containsEdge(property)) {
-												subtrie = new __PathTrie([getSubtrie(property) ,subtrieOfTrieArg]);
-												addSubtrie(property, subtrie);
-										} else {
-												addSubtrie(property, subtrieOfTrieArg);
-										}
-								});
-						});
-				}
-
-
-				if(edgeArg != null) {
-						__sysout("# add edgeArg");
-
-
-						subtrie.foreach(function(edge, trie) {
-								if(edge!=new APC.TracePath.TraceEmpty()) {
-									addEdge(edge, true);
-								} else {
-									t = new __PathTrie([]);
-
-									addEdge([new __PathTrie(), edge, true);
-								}
-								
-								
-								
-								
-								trie.add(property);
-						});
-
-						if(isEndOFPath()) {
-								removeEndOfPath(); 
-								if(!subtrie.contains(property)) {
-										addEdge(property);
-								}
-								subtrie.get(property).endOfPath = true;
-						}
-
-
-
-
-					
-				}
-*/
-
-				if(endOfPathArg instanceof Boolean) {
-						__sysout("# set endOfPathArg");
-						if(value) {
-								__sysout("# set endOfPath=true");
-								return addEndOfPath();
+				//////////////////////////////////////////////////
+				/* If endOfPathArg is set, make this to andOfPath
+				*/
+				if((typeof endOfPathArg) === "boolean") {
+						if(endOfPathArg) {
+								addEndOfPath();
 						} else {
-								__sysout("# set endOfPath=false");
-								return removeEndOfPath();
+								removeEndOfPath();
 						}
 				}
 
-
-
-
-
-
-
-
-
-
-				
-			
-
-				//				if(trie!=null) {
-				//						trie.edges.foreach(function(property, subtrie){
-				//							subtrie.set(property, subtrie);
-				//						});
-				//				}
-				//
-				//				if(eop!=null) {
-				//					if(eop) {
-				//						return addEndOfPath();
-				//					} else {
-				//						return removeEndOfPath();
-				//					}
-				//				}
-
+				//////////////////////////////////////////////////
 
 				return {
 
+						/* GET endOfPath
+						 * @return true|false
+						 */
 						get endOfPath() {
 								return isEndOFPath();
 						},
+							/* GET edges
+							 * @return Array with Property-Trie Elements
+							 */
 							get edges() {
-									return subtrie;
+									return edges;
 							},
 
+							/* GET path
+							 * @return Array with Path-Elements
+							 */
+							get paths() {
+									return this.dump();
+							},
 
-
-							set endOfPath(value) {
-									//	return trie = new __PathTrie(this, value);
-
-									//	newTrie = new __PathTrie();
-									//	newTrie.merge(this);
-
-									if(value) {
+							/* SET endOfPath
+							 * @param endOfPath true adds the empty path, false removes it
+							 */
+							set endOfPath(endOfPath) {
+									if(endOfPath) {
 											return addEndOfPath();
 									} else {
 											return removeEndOfPath();
 									}
 							},
 
-
-					//		setEndOfPath: function(arg) {
-				//				return new __PathTrie(this, arg);
-				//			},
-
-
-
+							//////////////////////////////////////////////////
+							/* ADD
+							 * substitutes all endOfPath-Edges by property->{}
+							 * @param property edge
+							 */
 							add: function(property) {
-								//	t = new __PathTrie();
-								//	t.merge(this);
 
-
-
-									subtrie.foreach(function(edge, trie) {
+									// for all edges in this
+									edges.foreach(function(edge, trie) {
 											if(edge!=new APC.TracePath.TraceEmpty()) trie.add(property);
 									});
 
+									// if, this == endOfPath
 									if(isEndOFPath()) {
 											removeEndOfPath(); 
-											if(!subtrie.contains(property)) {
-													addEdge(property);
+
+											// if property not in edges 
+											if(containsEdge(property)) {
+													getSubtrie(property).endOfPath = true;
+											} else {
+													addEdge(property, true);
 											}
-											subtrie.get(property).endOfPath = true;
 									}
 							},
 
-							append: function(property, trieArg) {
-									subtrie.foreach(function(edge, trie) {
-											if(edge!=new APC.TracePath.TraceEmpty()) trie.append(property, trieArg);
+							/* APPEND
+							 * substitutes all endOfPath-Edges by property->subtrie
+							 * @param property edge
+							 * @param subtrie Path Trie
+							 */
+							append: function(property, subtrie) {
+
+									// for all edges in this
+									edges.foreach(function(edge, trie) {
+											if(edge!=new APC.TracePath.TraceEmpty()) trie.append(property, subtrie);
 									});
 
+									// if, this == endOfPath
 									if(isEndOFPath()) {
 											removeEndOfPath(); 
-										
+
+											// if property not in edges 
 											if(containsEdge(property)) {
 													getSubtrie(property).merge(subtrieOfTrie);
 											} else {
 													addSubtrie(property, subtrieOfTrie);
 											}
-
-										
-											//if(!subtrie.contains(property)) {
-											//		addSubtrie(property, trieArg);
-											//} else {
-										//		getSubtrie(property).merge(subtrieOfTrie);
-										//	}
-											//subtrie.get(property).merge(trieArg);
 									}
 							},
 
+							/* MERGE
+							 * merges this with trie
+							 * @param subtrie Path Trie
+							 */
 							merge: function(trie) {
-									trie.edges.foreach(function(property, subtrieOfTrie) {
 
+									// for ll edges in trie
+									trie.edges.foreach(function(property, trie) {
 
+											// if property not in edges
 											if(containsEdge(property)) {
-													getSubtrie(property).merge(subtrieOfTrie);
+													getSubtrie(property).merge(trie);
 											} else {
-													addSubtrie(property, subtrieOfTrie);
+													addSubtrie(property, trie);
 											}
-
-
 									});
-
-									// TODO TBC
 							},
 
-							remove: function(property) {
-
-							},
-
-							find: function(property) {
-									//return (subtrie.contains(property)) ? subtrie.get(property) : undefined;
-									// TODO TBC
-									// // needed
-							},
-
-
-
-
-
-
+							//////////////////////////////////////////////////
+							/* To String
+							 * returns a string representation
+							 * @return String
+							 */
 							toString: function() {
 									var tmp = ''; 
-									subtrie.foreach(function(property, trie) {
+									edges.foreach(function(property, trie) {
 											if(property==new APC.TracePath.TraceEmpty()) string = "($)";
 											else string = ("(" + property.toString() + ") {" + trie.toString() + "}");
 											tmp += string;
@@ -310,28 +271,33 @@
 									return tmp;
 							},
 
+							/* Print
+							 * returns a line based tree-representation
+							 * @return String
+							 */
 							print: function(l) {
 									var level = (l==null) ? 0 : l;
-									var tmp = ''; // (this.endOfPath) ? '$' : '';
-									subtrie.foreach(function(property, trie) {
+									var tmp = '';
+									edges.foreach(function(property, trie) {
 											if(property==new APC.TracePath.TraceEmpty()) string = "($)";
 											else string = ("(" + property.toString() + ") {" + trie.print(level+1) + "\n" + margin_left("}", ' ', (level*3)));
 											tmp += "\n" + margin_left(string, ' ', (level*3));
 									});
-									//return (this.endOfPath) ? (tmp+')') : tmp;
 									return tmp;	
 							},
 
-
+							/* Dump
+							 * returns an array containing all path elements
+							 * @return Array
+							 */
 							dump: function() {
+									__sysout("   @@@ " + this.print());
 									var result = new Array();
-
-									subtrie.foreach(function(property, trie) {
+									edges.foreach(function(property, trie) {
 											if(property==new APC.TracePath.TraceEmpty()) {
 													path = new APC.TracePath.TraceEmpty();
 													result.push(path);
 											}
-
 											trie.dump().foreach(function(i, subpath) {
 													path = new APC.TracePath.TracePath(property, subpath);
 													result.push(path);
@@ -339,104 +305,14 @@
 									});
 									return result;
 							},
-
-							get paths() {
-								return this.dump();
-							},
-
-				}
-
-		}
-
-
-
-
-
-
-
-
-
-
-
-
-		// TODO
-		//////////////////////////////////////////////////
-		// APC . Path
-		//////////////////////////////////////////////////
-		APC.TracePath.PathTrie		= __PathTrie;
-
-
-
-		//////////////////////////////////////////////////
-		//  TRIE CACHE
-		//  cache for path tries
-		//////////////////////////////////////////////////
-
-		/** Path Cache 
-		*/
-		function __TrieCache() {
-
-				// cache array
-				var cache = new StringMap();
-
-				return {
-
-						/* cache function
-						 * @param path trace path
-						 * @return trace path
-						 */
-						c: function(trie) {
-								if(this.contains(trie.toString())) {
-										return this.get(trie.toString());
-								} else {
-										this.put(trie.toString(), trie);
-										return trie;
-								}
-						},
-
-								/* put
-								 * @param key cache key
-								 * @param value cache value
-								 * @return value
-								 */
-								put: function(key, value) {
-										cache.set(key, value);
-										return value;
-								},
-
-								/* get
-								 * @param key cache key
-								 * @return value
-								 */
-								get: function(key) {
-										return cache.get(key);
-								},
-
-								/* contains
-								 * @param key cache key
-								 * @return true, if key in cache, false otherwise
-								 */
-								contains: function(key) {
-										return cache.has(key);
-								},
-
-								/* clear cache
-								*/
-								clear: function() {
-										cache = new StringMap();
-								}
 				}
 		}
-
-		// current trie cache
-		var __cache = new __TrieCache();
 
 
 
 		//////////////////////////////////////////////////
 		// APC . Path
 		//////////////////////////////////////////////////
-		APC.TracePath.TrieCache = __cache;
+		APC.TracePath.PathTrie		= __PathTrie;
 
 })(__APC);
-

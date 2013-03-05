@@ -441,7 +441,7 @@
 
 				
 				// TODO
-				trie = new APC.TracePath.PathTrie();
+				trie = new APC.TracePath.PathTrie(true);
 				trie.add(path);
 				path = trie;
 
