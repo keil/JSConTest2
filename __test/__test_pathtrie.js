@@ -34,7 +34,7 @@ f = new __APC.TracePath.TraceProperty("f");
 
 trie = new __APC.TracePath.PathTrie();
 trie.endOfPath = true;
-
+__sysout(trie);
 trie.add(a);
 trie.add(b);
 trie.add(c);
@@ -90,7 +90,7 @@ trieX.merge(trieY);
 //////////////////////////////////////////////////
 trie.merge(trieX);
 
-
+trieY.add(__APC.TracePath.TraceProperty("SASA"));
 
 //////////////////////////////////////////////////
 __sysout("\n\n### TO STRING");

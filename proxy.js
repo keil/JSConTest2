@@ -27,8 +27,11 @@
 						extend: function(extContract, extPath) {
 								/* C = C&C' */
 								contract = new APC.Contract.AndContract(contract, extContract);
-								/* P = P;P' */
-								path = new APC.TracePath.TraceSet(path, extPath);
+								
+								path.merge(ext.path);
+								
+								///* P = P;P' */
+								//path = new APC.TracePath.TraceSet(path, extPath);
 								
 								// TODO
 								//path = (APC.Config.SubsetReductionMode == APC.SubsetReduction.Mode.ON) ? path.sreduce() : path;
@@ -49,9 +52,25 @@
 						 */
 						getOwnPropertyDescriptor: function(target, name) {
 								/* Trace Path *************************************** */
-								tracePath =  new APC.TracePath.TracePath(path, new APC.TracePath.TraceProperty(name));
+								tarceProperty = new APC.TracePath.TraceProperty(name);
+								
+	//							tracePath =  new APC.TracePath.TracePath(path, new APC.TracePath.TraceProperty(name));
 								//tracePath = (APC.Config.FlatteningMode == APC.Flattening.Mode.ON) ? tracePath.freduce() : tracePath;
-								APC.Access.Logger.put(APC.Access.Type.READ, tracePath);
+	//							APC.Access.Logger.put(APC.Access.Type.READ, tracePath);
+
+
+								/* Trace Path *************************************** */
+								path.paths.foreach(function(i, path){
+									tracePath =  new APC.TracePath.TracePath(path, new APC.TracePath.TraceProperty(name));
+									APC.Access.Logger.put(APC.Access.Type.READ, tracePath);								
+								});
+
+								/* Trace Path *************************************** */
+								property = new APC.TracePath.TraceProperty(name);
+								tracePath = new APC.TracePath.PathTrie(true);
+								path.append(property, tracePath);
+
+
 
 								/* Access Permission Contract *********************** */
 								if(contract.isReadable(name)) {
@@ -87,9 +106,17 @@
 						 */
 						defineProperty: function(target, name, desc) {
 								/* Trace Path *************************************** */
-								tracePath =  new APC.TracePath.TracePath(path, new APC.TracePath.TraceProperty(name));
+								//tracePath =  new APC.TracePath.TracePath(path, new APC.TracePath.TraceProperty(name));
 								//tracePath = (APC.Config.FlatteningMode == APC.Flattening.Mode.ON) ? tracePath.freduce() : tracePath;
-								APC.Access.Logger.put(APC.Access.Type.WRITE, tracePath);
+								//APC.Access.Logger.put(APC.Access.Type.WRITE, tracePath);
+
+
+								/* Trace Path *************************************** */
+								path.paths.foreach(function(i,path){
+									tracePath =  new APC.TracePath.TracePath(path, new APC.TracePath.TraceProperty(name));
+									APC.Access.Logger.put(APC.Access.Type.WRITE, tracePath);								
+								});
+
 
 								/* Access Permission Contract *********************** */
 								if(contract.isWriteable(name)) {
@@ -106,9 +133,17 @@
 						 */
 						deleteProperty: function(target, name) {
 								/* Trace Path *************************************** */
-								tracePath =  new APC.TracePath.TracePath(path, new APC.TracePath.TraceProperty(name));
+								//tracePath =  new APC.TracePath.TracePath(path, new APC.TracePath.TraceProperty(name));
 								//tracePath = (APC.Config.FlatteningMode == APC.Flattening.Mode.ON) ? tracePath.freduce() : tracePath;
-								APC.Access.Logger.put(APC.Access.Type.WRITE, tracePath);
+								//APC.Access.Logger.put(APC.Access.Type.WRITE, tracePath);
+
+	/* Trace Path *************************************** */
+								path.paths.foreach(function(i,path){
+									tracePath =  new APC.TracePath.TracePath(path, new APC.TracePath.TraceProperty(name));
+									APC.Access.Logger.put(APC.Access.Type.WRITE, tracePath);								
+								});
+
+
 
 								/* Access Permission Contract *********************** */
 								if(contract.isWriteable(name)) {
@@ -185,9 +220,26 @@
 						 */
 						get: function(target, name, receiver) {
 								/* Trace Path *************************************** */
-								tracePath =  new APC.TracePath.TracePath(path, new APC.TracePath.TraceProperty(name));
-								//tracePath = (APC.Config.FlatteningMode == APC.Flattening.Mode.ON) ? tracePath.freduce() : tracePath;
-								APC.Access.Logger.put(APC.Access.Type.READ, tracePath);
+								//tracePath =  new APC.TracePath.TracePath(path, new APC.TracePath.TraceProperty(name));
+								////tracePath = (APC.Config.FlatteningMode == APC.Flattening.Mode.ON) ? tracePath.freduce() : tracePath;
+								//APC.Access.Logger.put(APC.Access.Type.READ, tracePath);
+								
+							
+								/* Trace Path *************************************** */
+								path.paths.foreach(function(i, path){
+									tracePath =  new APC.TracePath.TracePath(path, new APC.TracePath.TraceProperty(name));
+									APC.Access.Logger.put(APC.Access.Type.READ, tracePath);								
+								});
+
+								/* Trace Path *************************************** */
+								property = new APC.TracePath.TraceProperty(name);
+								tracePath = new APC.TracePath.PathTrie(true);
+								path.append(property, tracePath);
+
+
+								
+
+
 
 								/* Access Permission Contract *********************** */
 								if(contract.isReadable(name)) {
@@ -206,9 +258,20 @@
 						 */
 						set: function(target, name, value, receiver) {
 								/* Trace Path *************************************** */
-								tracePath =  new APC.TracePath.TracePath(path, new APC.TracePath.TraceProperty(name));
+								//tracePath =  new APC.TracePath.TracePath(path, new APC.TracePath.TraceProperty(name));
 								//tracePath = (APC.Config.FlatteningMode == APC.Flattening.Mode.ON) ? tracePath.freduce() : tracePath;
-								APC.Access.Logger.put(APC.Access.Type.WRITE, tracePath);
+								//APC.Access.Logger.put(APC.Access.Type.WRITE, tracePath);
+
+
+								/* Trace Path *************************************** */
+								path.paths.foreach(function(i,path){
+									tracePath =  new APC.TracePath.TracePath(path, new APC.TracePath.TraceProperty(name));
+									APC.Access.Logger.put(APC.Access.Type.WRITE, tracePath);								
+								});
+
+
+
+
 
 								/* Access Permission Contract *********************** */
 								if(contract.isWriteable(name)) {
@@ -326,6 +389,14 @@
 		 * @return wrapped object or primitive value
 		 */
 		function __createMembrane(init, contract, path) {
+
+
+				// TODO
+				trie = new APC.TracePath.PathTrie();
+				trie.add(path);
+				path = trie;
+
+
 				/** Wrap Object
 				 * @param target Target value to wrap
 				 * @return  Proxy | Primitive
@@ -366,6 +437,15 @@
 		 * @return wrapped object
 		 */
 		function __createFunctionMembrane(init, contract, path) {
+
+
+				
+				// TODO
+				trie = new APC.TracePath.PathTrie();
+				trie.add(path);
+				path = trie;
+
+
 				/** Wrap Object
 				 * @param target Target value to wrap
 				 * @return  Proxy | Primitive
