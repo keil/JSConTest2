@@ -1,10 +1,12 @@
 //////////////////////////////////////////////////
 // JavaScript Reflection API
 //  for Access Permission Contracts
-// (c) University of Freiburg
-// http://proglang.informatik.uni-freiburg.de/
+//
+// Copyright (c) University of Freiburg
+//  http://proglang.informatik.uni-freiburg.de/
+//
 // Author: Matthias Keil
-// http://www.informatik.uni-freiburg.de/~keilr/
+//  http://www.informatik.uni-freiburg.de/~keilr/
 //////////////////////////////////////////////////
 (function(APC) {
 

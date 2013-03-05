@@ -5,7 +5,6 @@
 // http://proglang.informatik.uni-freiburg.de/
 // Author: Matthias Keil
 // http://www.informatik.uni-freiburg.de/~keilr/
-// Version: 2.01
 //////////////////////////////////////////////////
 (function(APC) {
 
@@ -13,7 +12,7 @@
 		// TRACE PATH
 		// data structure to log access paths
 		// Property	p = "x" |  p{n}
-		// Path 	P = [] | P.p | (P:p) | (P;P)
+		// Path 	P = [] | p | P.P | (P:p)
 		//////////////////////////////////////////////////
 
 
@@ -25,14 +24,6 @@
 						isEmpty: function() {
 								return true;
 						},
-//					   isSequence:		function() { return false; },
-//					   getCardinality:	function() { return 0;},
-//					   getLast:			function() { return this; },
-//					   getRawProperty:	function() { return this; },
-
-//					   increaseSequence: function(arg) {
-//							   return arg;
-//					   },
 
 					   //////////////////////////////////////////////////
 					   /* Dump
@@ -48,24 +39,6 @@
 					   toString: function () {
 							   return "";
 					   },
-
-//					   /* Flattening
-//						* @param arg Trace Path
-//						* @return Trace Path
-//						*/
-//					   flattening: function (arg) {
-//							   // TODO
-//							   return arg;
-//					   },
-
-//					   contains: function (arg) {
-//							   return (this==arg);
-//					   },
-
-//					   // TODO
-//					   foreach: function(callback) {
-//						   callback(this);
-//					   }
 				});
 		}
 
@@ -78,18 +51,7 @@
 						isEmpty: function() {
 								return false;
 						},
-//					   isSequence:		function() { return false; },
-//					   getCardinality:	function() { return 0;},
-//					   getLast:			function() { return this; },
-//					   getRawProperty:	function() { return property; },
 
-//					   increaseSequence: function(arg) {
-//							   if(arg.isSequence()) {
-//									   return new __TraceCardinality(this, arg.getCardinality()+1);
-//							   } else {
-//									   return new __TraceCardinality(this, 2);
-//							   }
-//					   },
 					   //////////////////////////////////////////////////
 					   /* Dump
 						* @return Array<String>
@@ -112,131 +74,19 @@
 					   toString: function () {
 							   return property;
 					   },
-
-//					   /* Flattening
-//						* @param arg Trace Path
-//						* @return Trace Path
-//						*/
-//					   flattening: function (arg) {
-//							   // TODO
-//							   return new __TracePath(this, arg);
-//					   },
-//					   contains: function (arg) {
-//							   return (this==arg);
-//					   },
-//
-//					    // TODO
-//					   foreach: function(callback) {
-//					   			callback(this);
-//					   }
 				});
 		}
-
-//		/** Trace PropertyCardinality
-//		 * @param variable Variable name
-//		 */
-//		function __TraceCardinality(property, cardinality) {
-//				if(property.isEmpty()) return new __TraceEmpty();
-//
-//				if(cardinality==0) return new __TraceEmpty();
-//				if(cardinality==1) return new property;
-//
-//				return __cache.c({
-//						/** n({}) ::= true */
-//						isEmpty: function() {
-//								return property.isEmpty();
-//						},
-//
-//					   isSequence:		function() { return true; },
-//					   getCardinality:	function() { return cardinality;},
-//					   getLast:			function() { return this; },
-//					   getRawProperty:	function() { return property.getRawProperty(); },
-//
-//					   increaseSequence: function(arg) {
-//							   if(arg.isSequence()) {
-//									   return new __TraceCardinality(property, cardinality+arg.getCardinality());
-//							   } else {
-//									   return new __TraceCardinality(property, cardinality+1);
-//							   }
-//					   },
-//
-//
-//					   //////////////////////////////////////////////////
-//					   /* Dump
-//						* @return Array<String>
-//						*/
-//					   dump: function(array) {
-//							   propertyString = property;
-//							   for(var i=1;i<cardinality;i++) {
-//									   propertyString += ("." + property);
-//							   }
-//
-//							   if(array.length === 0) {
-//									   array.push(propertyString);
-//								   return array;
-//							   }
-//
-//							   array.foreach(function(k, v){
-//									   array[k] = v + "." + propertyString;
-//							   });
-//							   return array;
-//					   },
-//					   /* To String
-//						* @return String
-//						*/
-//					   toString: function () {
-//							   return (property + "{" + cardinality + "}");
-//					   },
-//
-//					   /* Flattening
-//						* @param arg Trace Path
-//						* @return Trace Path
-//						*/
-//					   flattening: function (arg) {
-//							   // TODO
-//							   return new __TracePath(this, arg);
-//							   //return new __TracePath(path.flattening(property), arg);
-//							   //  return path.flattening(new __TracePath(property, arg));
-//					   },
-//
-//					   contains: function (arg) {
-//							   return (this==arg);
-//					   },
-//
-//					    // TODO
-//					   foreach: function(callback) {
-//					   
-//					   }
-//				});
-//		}
-//
-//
-
-
-
-
 
 		/** Trace Argument
 		 * @param path Function path
 		 * @param property Argument name
 		 */
 		function __TraceArgument(path, property) {
-				// TODO
-				//
-				//
 				return __cache.c({
 						/** n({}) ::= true */
 						isEmpty: function() {
 								return (path.isEmpty() && property.isEmpty());
 						},
-//					   isSequence:		function() { return property.isSequence(); },
-//					   getCardinality:	function() { return 0;},
-//					   getLast:			function() { return property; },
-//					   getRawProperty:	function() { return property.getRawProperty() },
-//
-//					   increaseSequence: function(arg) {
-//							   return this;
-//					   },
 
 					   //////////////////////////////////////////////////
 					   /* Dump
@@ -253,25 +103,6 @@
 					   toString: function () {
 							   return "function " + path.toString() + ": " + property.toString();
 					   },
-
-//					   /* Flattening
-//						* @param arg Trace Path
-//						* @return Trace Path
-//						*/
-//					   flattening: function (arg) {
-//							   // TODO
-//							   return new __TraceArgument(path, property.flattening(arg));
-//					   },
-//					   contains: function (arg) {
-//							   return (this==arg);
-//					   },
-//
-//					    // TODO
-//					   foreach: function(callback) {
-//					   			path.foreach(callback);
-//							   property.foreach(callback);
-//					   }
-
 				});
 		}
 
@@ -280,57 +111,17 @@
 		 * @param property Path property
 		 */
 		function __TracePath(path, property) {
-				//__sysout("$" + path);
-				//__sysout("#" + path.getLast());
-				//__sysout("@" + property);
-//				if(path.getLast().getRawProperty()==property.getRawProperty()) {
-//						return path.increaseSequence(property);
-//				}
-//
-//
-
+				// REDUCTION	
 				if(path.isEmpty() && property.isEmpty()) return new __TraceEmpty();
 				else if(path.isEmpty()) return property;
 				else if(property.isEmpty()) return path;
-
-				//return path.flattening(property);
-
+				
 				return __cache.c({
-						//path: path,
-						//property: property,
-
 						/** n({}) ::= true */
 						isEmpty: function() {
 								return (path.isEmpty() && property.isEmpty());
 						},
-//					   isSequence:		function() { return property.isSequence(); },
-//					   getCardinality:	function() { return 0;},
-//					   getLast:			function() { return property; },
-//					   getRawProperty:	function() { return property.getRawProperty() },
-//
-//
-//					   increaseSequence: function(arg) {
-//							   if(property.getRawProperty()==arg.getRawProperty()) {
-//									   // merge raw properties
-//									   if(property.isSequence() && arg.isSequence()) {
-//											   return new __TracePath(path,
-//													   new __TraceCardinality(property.getLast(),
-//															   (property.getCardinality()+arg.getCardinality())));
-//									   } else if(property.isSequence()) {
-//											   return new __TracePath(path,
-//															   new __TraceCardinality(property.getLast(),
-//																	   (property.getCardinality()+1)));
-//									   } else if(property.isSequence()) {
-//											   return new __TracePath(path,
-//															   new __TraceCardinality(property.getLast(),
-//																	   (arg.getCardinality()+1)));
-//									   } else {
-//											   return new __TracePath(path,
-//															   new __TraceCardinality(property.getLast(),
-//																	   2));
-//									   }
-//							   }
-//					   },
+
 					   //////////////////////////////////////////////////
 					   /* Dump
 						* @return Array<String>
@@ -346,103 +137,11 @@
 					   toString: function () {
 							   return path.toString() + "." + property.toString();
 					   },
-
-//					   /* Flattening
-//						* @param arg Trace Path
-//						* @return Trace Path
-//						*/
-//					   flattening: function (arg) {
-//							   // TODO
-//							   //return new __TracePath(path.flattening(property), arg);
-//							   return path.flattening(new __TracePath(property, arg));
-//					   },
-//
-//					   contains: function (arg) {
-//							   return (this==arg);
-//					   },
-//
-//					    // TODO
-//					   foreach: function(callback) {
-//							   path.foreach(callback);
-//							   property.foreach(callback);
-//					   }
-//
 				});
 		}
 
-		/** Trace Path Set
-		 * @param path0 Trace Path 0
-		 * @param path1 Trace Path 1
-		 */
-		function __TraceSet(path0, path1) {
-				if(path0.isEmpty() && path1.isEmpty()) return new __TraceEmpty();
-				else if(path0.isEmpty()) return path1;
-				else if(path1.isEmpty()) return path0;
 
 
-				return __cache.c({
-						/** n({}) ::= true */
-						isEmpty: function() {
-								return (path0.isEmpty() && path1.isEmpty());
-						},
-					   isSequence:		function() { return false; },
-					   getCardinality:	function() { return 0;},
-					   getLast:			function() { return this; },
-					   getRawProperty:	function() { return null; },
-
-					   increaseSequence: function(arg) {
-							   return this;
-					   },
-
-
-					   //////////////////////////////////////////////////
-
-					   /* Dump
-						* @return Array<String>
-						*/
-					   dump: function(array) {
-							   // dump path 0
-							   var set0 = new Array(array);
-							   set0 = path0.dump(set0);
-
-							   // dump path 1
-							   var set1 = new Array(array);
-							   set1 = path1.dump(set1);
-
-							   // merge sets
-							   return set0.concat(set1);
-					   },
-					   /* To String
-						* @return String
-						*/
-					   toString: function () {
-							   return "( " + path0.toString() + " ; " + path1.toString() + " )";
-					   },
-
-					   /* Flattening
-						* @param arg Trace Path
-						* @return Trace Path
-						*/
-					   flattening: function (arg) {
-							   // TODO
-							   return new __TraceSet(path0.flattening(arg), path1.flattening(arg));
-					   },
-
-					   contains: function (arg) {
-							   return (path0.contains(arg) || path1.contains(arg));
-					   },
-
-					    // TODO
-					//   foreach: function(callback) {
-					//		   path0.foreach(callback);
-					//		   path1.foreach(callback);
-					//   
-					//   }
-
-				});
-		}
-
-		// TODO
 		//////////////////////////////////////////////////
 		// APC . Path
 		//////////////////////////////////////////////////
@@ -451,7 +150,7 @@
 		APC.TracePath.TraceProperty	= __TraceProperty;
 		APC.TracePath.TraceArgument	= __TraceArgument;
 		APC.TracePath.TracePath		= __TracePath;
-		APC.TracePath.TraceSet		= __TraceSet;
+
 
 
 
