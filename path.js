@@ -285,8 +285,17 @@
 						 * @param path Access path
 						 */
 						put: function(type, path) {
-								entryValue = Entry(type, path);
-								accessMap.add(entryValue);
+								
+								if(path instanceof Array) {
+										path.foreach(function(i, path) {
+												entryValue = Entry(type, path);
+												accessMap.add(entryValue);
+										});
+								}
+								else {
+										entryValue = Entry(type, path);
+										accessMap.add(entryValue);
+								}
 						},
 
 								/** iterates over elements

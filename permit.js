@@ -24,7 +24,8 @@
 				objname = name!=null ? new APC.TracePath.TraceProperty(name) : new APC.TracePath.TraceEmpty();
 
 				// trie
-				trie = new APC.TracePath.PathTrie(true);
+				trie = new APC.TracePath.PathTrie();
+				trie.endOfPath = true;
 				trie.add(objname);
 
 				// parse contracts
@@ -62,7 +63,8 @@
 				fname = name!=null ? new APC.TracePath.TraceProperty(name) : new APC.TracePath.TraceEmpty();
 
 				// trie
-				trie = new APC.TracePath.PathTrie(true);
+				trie = new APC.TracePath.PathTrie();
+				trie.endOfPath = true;
 				trie.add(objname);
 
 				// parse contracts

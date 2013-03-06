@@ -4,7 +4,6 @@
 //
 // Copyright (c) University of Freiburg
 //  http://proglang.informatik.uni-freiburg.de/
-//
 // Author: Matthias Keil
 //  http://www.informatik.uni-freiburg.de/~keilr/
 //////////////////////////////////////////////////
@@ -76,7 +75,7 @@
 		/** Path Trie
 		 * @param endOfPathArg true, if trie is endOfPath, false otherwise
 		 */
-		function __PathTrie(endOfPathArg) {
+		function __PathTrie(trieArg) {
 
 				// edges E := {} | E[Property -> PathTrie]
 				var edges = new __Edges();
@@ -145,18 +144,16 @@
 
 
 				//////////////////////////////////////////////////
-				/* If endOfPathArg is set, make this to andOfPath
-				*/
-				if((typeof endOfPathArg) === "boolean") {
-						if(endOfPathArg) {
-								addEndOfPath();
-						} else {
-								removeEndOfPath();
-						}
+				/* If trieArg is set, than clone trieArg */
+				if(trieArg != null) {
+						trieArg.edges.foreach(function(property, trie) {
+								addSubtrie(property, trie);
+						});
 				}
 
-				//////////////////////////////////////////////////
 
+
+				//////////////////////////////////////////////////
 				return {
 
 						/* GET endOfPath
@@ -190,124 +187,217 @@
 									}
 							},
 
-							//////////////////////////////////////////////////
-							/* ADD
-							 * substitutes all endOfPath-Edges by property->{}
-							 * @param property edge
-							 */
-							add: function(property) {
 
-									// for all edges in this
-									edges.foreach(function(edge, trie) {
-											if(edge!=new APC.TracePath.TraceEmpty()) trie.add(property);
-									});
 
-									// if, this == endOfPath
-									if(isEndOFPath()) {
-											removeEndOfPath(); 
 
-											// if property not in edges 
-											if(containsEdge(property)) {
-													getSubtrie(property).endOfPath = true;
-											} else {
-													addEdge(property, true);
-											}
-									}
+
+
+							setEndOfPath: function(bool) {
+									return new __PathTrie(this, bool);
 							},
 
-							/* APPEND
-							 * substitutes all endOfPath-Edges by property->subtrie
-							 * @param property edge
-							 * @param subtrie Path Trie
-							 */
-							append: function(property, subtrie) {
 
-									// for all edges in this
-									edges.foreach(function(edge, trie) {
-											if(edge!=new APC.TracePath.TraceEmpty()) trie.append(property, subtrie);
-									});
-
-									// if, this == endOfPath
-									if(isEndOFPath()) {
-											removeEndOfPath(); 
-
-											// if property not in edges 
-											if(containsEdge(property)) {
-													getSubtrie(property).merge(subtrieOfTrie);
-											} else {
-													addSubtrie(property, subtrieOfTrie);
-											}
-									}
+							contains: function(property) {
+								return edges.contains(property);
 							},
 
-							/* MERGE
-							 * merges this with trie
-							 * @param subtrie Path Trie
-							 */
-							merge: function(trie) {
 
-									// for ll edges in trie
-									trie.edges.foreach(function(property, trie) {
+						get: function(property) {
+								return edges.get(property);
+						},
 
-											// if property not in edges
-											if(containsEdge(property)) {
-													getSubtrie(property).merge(trie);
-											} else {
-													addSubtrie(property, trie);
-											}
-									});
-							},
+								set: function(property, subtrie) {
+										newTrie = new __PathTrie(this);
+										newTrie.edges.set(property, subtrie);
+										return newTrie;
+								},
 
-							//////////////////////////////////////////////////
-							/* To String
-							 * returns a string representation
-							 * @return String
-							 */
-							toString: function() {
-									var tmp = ''; 
-									edges.foreach(function(property, trie) {
-											if(property==new APC.TracePath.TraceEmpty()) string = "($)";
-											else string = ("(" + property.toString() + ") {" + trie.toString() + "}");
-											tmp += string;
-									});
-									return tmp;
-							},
 
-							/* Print
-							 * returns a line based tree-representation
-							 * @return String
-							 */
-							print: function(l) {
-									var level = (l==null) ? 0 : l;
-									var tmp = '';
-									edges.foreach(function(property, trie) {
-											if(property==new APC.TracePath.TraceEmpty()) string = "($)";
-											else string = ("(" + property.toString() + ") {" + trie.print(level+1) + "\n" + margin_left("}", ' ', (level*3)));
-											tmp += "\n" + margin_left(string, ' ', (level*3));
-									});
-									return tmp;	
-							},
 
-							/* Dump
-							 * returns an array containing all path elements
-							 * @return Array
-							 */
-							dump: function() {
-									__sysout("   @@@ " + this.print());
-									var result = new Array();
-									edges.foreach(function(property, trie) {
-											if(property==new APC.TracePath.TraceEmpty()) {
-													path = new APC.TracePath.TraceEmpty();
-													result.push(path);
-											}
-											trie.dump().foreach(function(i, subpath) {
-													path = new APC.TracePath.TracePath(property, subpath);
-													result.push(path);
-											});
-									});
-									return result;
-							},
+								//////////////////////////////////////////////////
+								/* ADD
+								 * substitutes all endOfPath-Edges by property->{}
+								 * @param property edge
+								 */
+								add: function(property) {
+
+										__sysout("@ add " + property);
+
+										// for all edges in this
+										edges.foreach(function(edge, trie) {
+												if(edge!=new APC.TracePath.TraceEmpty()) trie.add(property);
+										});
+
+										// if, this == endOfPath
+										if(isEndOFPath()) {
+												removeEndOfPath(); 
+
+												// if property not in edges 
+												if(containsEdge(property)) {
+														getSubtrie(property).endOfPath = true;
+												} else {
+														addEdge(property, true);
+												}
+										}
+								},
+
+								/* APPEND
+								 * substitutes all endOfPath-Edges by property->subtrie
+								 * @param property edge
+								 * @param subtrie Path Trie
+								 */
+								append: function(property, subtrie) {
+
+										// for all edges in this
+										edges.foreach(function(property, trie) {
+												if(property!=new APC.TracePath.TraceEmpty()) trie.append(property, subtrie);
+										});
+
+										// if, this == endOfPath
+										if(isEndOFPath()) {
+												removeEndOfPath(); 
+
+												// if property not in edges 
+												if(containsEdge(property)) {
+														getSubtrie(property).merge(subtrieOfTrie);
+												} else {
+														addSubtrie(property, subtrieOfTrie);
+												}
+										}
+								},
+
+								/* MERGE
+								 * merges this with trie
+								 * @param subtrie Path Trie
+								 */
+								merge: function(trie) {
+
+										// for ll edges in trie
+										trie.edges.foreach(function(property, trie) {
+
+												// if property not in edges
+												if(containsEdge(property)) {
+														getSubtrie(property).merge(trie);
+												} else {
+														addSubtrie(property, trie);
+												}
+										});
+								},
+
+								//////////////////////////////////////////////////
+								/* To String
+								 * returns a string representation
+								 * @return String
+								 */
+								toString: function() {
+										var tmp = ''; 
+										edges.foreach(function(property, trie) {
+												if(property==new APC.TracePath.TraceEmpty()) string = "($)";
+												else string = ("(" + property.toString() + ") {" + trie.toString() + "}");
+												tmp += string;
+										});
+										return tmp;
+								},
+
+								/* Print
+								 * returns a line based tree-representation
+								 * @return String
+								 */
+								print: function(l) {
+										edges.foreach(function(k,v) {__sysout("@" +  k + " " + v)});
+										var level = (l==null) ? 0 : l;
+										var tmp = '';
+										edges.foreach(function(property, trie) {
+												if(property==new APC.TracePath.TraceEmpty()) string = "($)";
+												else string = ("(" + property.toString() + ") {" + trie.print(level+1) + "\n" + margin_left("}", ' ', (level*3)));
+												tmp += "\n" + margin_left(string, ' ', (level*3));
+										});
+										return tmp;	
+								},
+
+								/* Dump
+								 * returns an array containing all path elements
+								 * @return Array
+								 */
+								dump: function() {
+										__sysout("   # " + this.print());
+										var result = new Array();
+										edges.foreach(function(property, trie) {
+												if(property==new APC.TracePath.TraceEmpty()) {
+														path = new APC.TracePath.TraceEmpty();
+														result.push(path);
+												}
+												trie.dump().foreach(function(i, subpath) {
+														path = new APC.TracePath.TracePath(property, subpath);
+														result.push(path);
+												});
+										});
+										return result;
+								},
 				}
+		}
+
+
+
+		function __PathTrieDecorator(trie) {
+
+
+				pathTrie = (trie!=null) ? trie :  new __PathTrie();
+
+		
+
+				return {
+
+						// todo
+						get trie() {
+							return pathTrie;
+						},
+
+						get endOfPath() {
+								return pathTrie.endOfPath;
+						},
+
+
+						get paths() {
+								return pathTrie.dump();
+						},
+						
+						
+
+				
+						add: function(property) {
+								newTrie = new __PathTrie(pathTrie);
+								newTrie.add(property);
+
+								return canonicalize(newTrie); 
+						},
+// TODO
+//						append: function(property, trie) {
+//								newTrie = new __PathTrie(pathTrie);
+//								newTrie.append(proeprty);
+//
+//								return canonicalize(newTrie); 
+//						},
+
+						merge: function(trie) {
+								newTrie = new __PathTrie(pathTrie);
+								newTrie.merge(trie.trie);
+
+								return canonicalize(newTrie); 
+						},
+
+						toString: function() {
+								return pathTrie.toString();
+						},
+
+						print: function() {
+								return pathTrie.print();
+						},
+				
+						dump: function() {
+								return pathTrie.dump();
+						}
+				};
 		}
 
 
@@ -315,6 +405,93 @@
 		//////////////////////////////////////////////////
 		// APC . Path
 		//////////////////////////////////////////////////
-		APC.TracePath.PathTrie		= __PathTrie;
+		//APC.TracePath.PathTrie		= __PathTrie;
+		APC.TracePath.PathTrie			= __PathTrieDecorator;
+
+
+
+
+
+		//////////////////////////////////////////////////
+		//  TRIE CACHE
+		//  cache for tries
+		//////////////////////////////////////////////////
+
+		/** Trie Cache 
+		*/
+		function __TrieCache() {
+
+				// cache array
+				var cache = new StringMap();
+
+				return {
+
+						/* cache function
+						 * @param path trace path
+						 * @return trace path
+						 */
+						c: function(path) {
+								if(this.contains(path.toString())) {
+										return this.get(path.toString());
+								} else {
+										this.put(path.toString(), path);
+										return path;
+								}
+						},
+
+								/* put
+								 * @param key cache key
+								 * @param value cache value
+								 * @return value
+								 */
+								put: function(key, value) {
+										cache.set(key, value);
+										return value;
+								},
+
+								/* get
+								 * @param key cache key
+								 * @return value
+								 */
+								get: function(key) {
+										return cache.get(key);
+								},
+
+								/* contains
+								 * @param key cache key
+								 * @return true, if key in cache, false otherwise
+								 */
+								contains: function(key) {
+										return cache.has(key);
+								},
+
+								/* clear cache
+								*/
+								clear: function() {
+										cache = new StringMap();
+								}
+				}
+		}
+
+
+		// Canonicalize Tries
+		// @param Trie
+		// @return Trie Decorator
+		function canonicalize(trie) {
+				__sysout("   ! " + trie.print());
+				decorator = new __PathTrieDecorator(trie);
+				return __cache.c(decorator);
+		}
+
+
+		// current trie cache
+		var __cache = new __TrieCache();
+
+
+
+		//////////////////////////////////////////////////
+		// APC . Path
+		//////////////////////////////////////////////////
+		APC.TracePath.TrieCache = __cache;
 
 })(__APC);
