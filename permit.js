@@ -25,8 +25,8 @@
 
 				// trie
 				trie = new APC.TracePath.PathTrie();
-				trie.endOfPath = true;
-				trie.add(objname);
+				trie = trie.makeEndOfPath();
+				trie = trie.add(objname);
 
 				// parse contracts
 				contract = APC.Parser.parse(string);
@@ -64,8 +64,8 @@
 
 				// trie
 				trie = new APC.TracePath.PathTrie();
-				trie.endOfPath = true;
-				trie.add(objname);
+				trie = trie.makeEndOfPath();
+				trie = trie.add(objname);
 
 				// parse contracts
 				contract = APC.Parser.parse(string);

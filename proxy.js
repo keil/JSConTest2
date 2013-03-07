@@ -29,7 +29,7 @@
 								contract = new APC.Contract.AndContract(contract, contractArg);
 								
 								/* T = T&T */
-								trie.merge(trieArg);								
+								trie = trie.merge(trieArg);								
 						},
 
 

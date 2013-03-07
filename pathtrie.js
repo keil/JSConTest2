@@ -15,6 +15,12 @@
 				var keys = [];
 				var values = [];
 				return Object.freeze({
+
+// TODO
+get length() {
+return keys.length;
+},
+
 						/* Set
 						 * @return key
 						 * @param value
@@ -116,8 +122,8 @@
 				 * @param endOfPath true, if edge should point to a endOfPath trie, false otherwise
 				 * @return true|false
 				 */
-				var addEdge = function(property, endOfPath) {
-						return addSubtrie(property, new __PathTrie(endOfPath));
+				var addEdge = function(property) {
+						return addSubtrie(property, new __PathTrie());
 				};
 
 				/* ADD endOfPath
@@ -145,7 +151,16 @@
 
 				//////////////////////////////////////////////////
 				/* If trieArg is set, than clone trieArg */
+
+				__sysout("++++++++++ TRIEARG: " + trieArg + " ++++++++++");
+
 				if(trieArg != null) {
+
+						__sysout("++++++++++ MERGE ++++++++++");
+						__sysout(trieArg);
+						__sysout(trieArg.print());
+						__sysout(trieArg.edges);
+
 						trieArg.edges.foreach(function(property, trie) {
 								addSubtrie(property, trie);
 						});
@@ -166,6 +181,7 @@
 							 * @return Array with Property-Trie Elements
 							 */
 							get edges() {
+									__sysout("RETURN EDGES: " + edges);
 									return edges;
 							},
 
@@ -180,10 +196,20 @@
 							 * @param endOfPath true adds the empty path, false removes it
 							 */
 							set endOfPath(endOfPath) {
+
+									__sysout("SET EOP: " + endOfPath);
+									__sysout("SUM: " + edges.length);
+
 									if(endOfPath) {
-											return addEndOfPath();
+											x = addEndOfPath();
+											__sysout("%%% " + this.endOfPath);
+											__sysout("SUM: " + edges.length);
+											return x;
 									} else {
-											return removeEndOfPath();
+											x = removeEndOfPath();
+											__sysout("%%% " + this.endOfPath);
+													__sysout("SUM: " + edges.length);
+											return x;
 									}
 							},
 
@@ -222,11 +248,18 @@
 								add: function(property) {
 
 										__sysout("@ add " + property);
+										__sysout("eop:" + this.endOfPath);
+										__sysout("*" + this.print());
+
+										__sysout("SUM: " + edges.length);
 
 										// for all edges in this
 										edges.foreach(function(edge, trie) {
+												__sysout("   WALK " + edge);
 												if(edge!=new APC.TracePath.TraceEmpty()) trie.add(property);
 										});
+
+__sysout("SUM: " + edges.length);
 
 										// if, this == endOfPath
 										if(isEndOFPath()) {
@@ -236,9 +269,12 @@
 												if(containsEdge(property)) {
 														getSubtrie(property).endOfPath = true;
 												} else {
-														addEdge(property, true);
+														addEdge(property);
+														getSubtrie(property).endOfPath = true;
 												}
 										}
+
+										__sysout("*" + this.print());
 								},
 
 								/* APPEND
@@ -363,6 +399,14 @@
 						},
 						
 						
+						makeEndOfPath: function() {
+								//__sysout("NEW TRIE WITH: " + )
+								newTrie = new __PathTrie(pathTrie);
+								newTrie.endOfPath = true;
+
+								return canonicalize(newTrie); 
+						},	
+
 
 				
 						add: function(property) {
