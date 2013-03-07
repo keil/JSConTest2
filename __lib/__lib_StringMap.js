@@ -60,7 +60,7 @@ var StringMap;
 										return (keyEscape(key)) in objAsMap;
 								}),
 								foreach: constFunc(function(callback) {
-										for(var key in objAsMap) callback(keyUnescape(key), objAsMap)
+										for(var key in objAsMap) callback(keyUnescape(key), objAsMap[key])
 								}),
 								'delete': constFunc(function(key) {
 										return delete objAsMap[keyEscape(key)];

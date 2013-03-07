@@ -255,13 +255,20 @@
 							 */
 							merge: function(trie) {
 
+									__sysout("== MERGE " + trie + " on " + this);
+
+								
 									// for ll edges in trie
 									trie.edges.foreach(function(property, trie) {
 
 											// if property not in edges
 											if(containsEdge(property)) {
+														__sysout("=== CONTAINS " + property);
+
 													getSubtrie(property).merge(trie);
 											} else {
+														__sysout("=== NOT CONTAINS " + property);
+
 													addSubtrie(property, trie);
 											}
 									});
@@ -327,7 +334,7 @@
 		function __PathTrieDecorator(trie) {
 
 				// PathTrie T
-				pathTrie = (trie!=null) ? trie :  new __PathTrie();
+				var pathTrie = (trie!=null) ?  new __PathTrie(trie) :  new __PathTrie();
 
 				return {
 
@@ -373,6 +380,13 @@
 									newTrie = new __PathTrie(pathTrie);
 									newTrie.append(property);
 
+									__sysout("$$$$$$$$$$ " + newTrie + " $$$$$$$$$$ ");
+
+									toreturn = canonicalize(newTrie);
+
+										__sysout("$$$$$$$$$$ " + toreturn + " $$$$$$$$$$ ");
+
+
 									// cache
 									return canonicalize(newTrie); 
 							},
@@ -382,8 +396,18 @@
 							 * @return Path Trie Decorator
 							 */
 							merge: function(trie) {
+
+									__sysout("MERGE with " + trie.trie);
+									__sysout("MERGE with " + pathTrie);
+
+
 									newTrie = new __PathTrie(pathTrie);
+									
+									__sysout("new TRIE" + pathTrie);
+
 									newTrie.merge(trie.trie);
+
+									__sysout("new TRIE" + newTrie);
 
 									return canonicalize(newTrie); 
 							},
@@ -440,8 +464,11 @@
 						 */
 						c: function(path) {
 								if(this.contains(path.toString())) {
+										__sysout("Cache HIT " + path.toString());
 										return this.get(path.toString());
 								} else {
+										__sysout("Cache MISS " + path);
+
 										this.put(path.toString(), path);
 										return path;
 								}
@@ -462,6 +489,12 @@
 								 * @return value
 								 */
 								get: function(key) {
+										__sysout("## " + key + " " + cache.get(key));
+__sysout(cache);
+										cache.foreach(function(k,v) {
+												__sysout("!~ " + k + " : " + v.toString());
+										});
+
 										return cache.get(key);
 								},
 
@@ -486,8 +519,20 @@
 		// @param Trie
 		// @return Trie Decorator
 		function canonicalize(trie) {
+
+				__sysout("             @@@@@@@@@@@@ " + trie);
+
+
 				decorator = new __PathTrieDecorator(trie);
-				return __cache.c(decorator);
+
+				__sysout("             @@@@@@@@@@@@ " + decorator);
+
+				toreturn = __cache.c(decorator);
+
+				__sysout("             @@@@@@@@@@@@ " + toreturn);
+
+
+				return toreturn;
 		}
 
 
