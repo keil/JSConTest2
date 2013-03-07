@@ -1,12 +1,18 @@
-//////////////////////////////////////////////////
-// JavaScript Reflection API
-//  for Access Permission Contracts
-// - TestCase -
-// (c) University of Freiburg
-// http://proglang.informatik.uni-freiburg.de/
-// Author: Matthias Keil
-// http://www.informatik.uni-freiburg.de/~keilr/
-//////////////////////////////////////////////////
+/*
+ * JavaScript Reflection API
+ *  for Access Permission Contracts
+ *  - TestCase
+ *
+ * Copyright (c) 2013, Proglang, University of Freiburg.
+ *  http://proglang.informatik.uni-freiburg.de/
+ * All rights reserved.
+ *
+ * Author Matthias Keil
+ *  http://www.informatik.uni-freiburg.de/~keilr/
+ *
+ * $Date$
+ * $Rev$
+ */
 
 start = new __APC.TracePath.TraceEmpty();
 //start = new __APC.TracePath.TraceProperty("chahca");

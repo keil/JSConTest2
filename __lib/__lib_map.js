@@ -1,13 +1,18 @@
-//////////////////////////////////////////////////
-// JavaScript Reflection API
-//  for Access Permission Contracts
-// (c) University of Freiburg
-// http://proglang.informatik.uni-freiburg.de/
-// Author: Matthias Keil
-// http://www.informatik.uni-freiburg.de/~keilr/
-// Version: 2.01
-//////////////////////////////////////////////////
-
+/*
+ * JavaScript Reflection API
+ *  for Access Permission Contracts
+ *  - Library
+ *
+ * Copyright (c) 2013, Proglang, University of Freiburg.
+ *  http://proglang.informatik.uni-freiburg.de/
+ * All rights reserved.
+ *
+ * Author Matthias Keil
+ *  http://www.informatik.uni-freiburg.de/~keilr/
+ *
+ * $Date$
+ * $Rev$
+ */
 (function(APC){
 
 		//////////////////////////////////////////////////
