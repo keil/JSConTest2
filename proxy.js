@@ -185,7 +185,6 @@
 						 */
 						get: function(target, name, receiver) {
 								/* Trace Path *************************************** */
-								__sysout("@" + trie);
 								trie = trie.append(new APC.TracePath.TraceProperty(name));
 								APC.Access.Logger.put(APC.Access.Type.READ, trie.paths);
 

@@ -60,8 +60,9 @@
 		//////////////////////////////////////////////////
 		// APC . Config
 		//////////////////////////////////////////////////
-		APC.SubsetReduction = {};
-		APC.SubsetReduction.Mode = __SubsetReductionMode;
+		//APC.SubsetReduction = {};
+		//APC.SubsetReduction.Mode = __SubsetReductionMode;
+		// TODO
 
 
 
@@ -72,7 +73,8 @@
 		//////////////////////////////////////////////////
 		APC.Config = {};
 		APC.Config.EvaluationMode = __EvaluationMode.OBSERVER;
-		APC.Config.FlatteningMode = __FlatteningMode.ON;
-		APC.Config.SubsetReductionMode = __SubsetReductionMode.ON;
+		//APC.Config.FlatteningMode = __FlatteningMode.ON;
+		//APC.Config.SubsetReductionMode = __SubsetReductionMode.ON;
+		// TODO
 
 })(__APC);
