@@ -203,11 +203,11 @@
 							 * substitutes all endOfPath-Edges by property->{}
 							 * @param property edge
 							 */
-							add: function(property) {
+							append: function(property) {
 
 									// for all edges in this
 									edges.foreach(function(edge, trie) {
-											if(edge!=new APC.TracePath.TraceEmpty()) trie.add(property);
+											if(edge!=new APC.TracePath.TraceEmpty()) trie.append(property);
 									});
 
 									// if, this == endOfPath
@@ -371,7 +371,7 @@
 							 */
 							append: function(property) {
 									newTrie = new __PathTrie(pathTrie);
-									newTrie.add(property);
+									newTrie.append(property);
 
 									// cache
 									return canonicalize(newTrie); 

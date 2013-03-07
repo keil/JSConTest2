@@ -290,6 +290,11 @@
 						 */
 						apply: function(target, thisArg, args) {
 								/* Trace Path *************************************** */
+
+								// TODO
+								// use TRIES instead of Paths
+								// make new testcases
+
 								tracePathArguments =  new APC.TracePath.TraceArgument(path, new APC.TracePath.TraceProperty("arguments"));
 								tracePathThis =  new APC.TracePath.TraceArgument(path, new APC.TracePath.TraceProperty("this"));
 

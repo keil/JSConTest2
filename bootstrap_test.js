@@ -80,7 +80,8 @@ var __start = new Date().getTime();
 load("__test/__test_parser.js");
 
 /* Test Path **/ // (TESTED)
-load("__test/__test_path.js");
+// deprecated 
+//load("__test/__test_path.js"); 
 load("__test/__test_path2.js");
 
 /** Test Contract **/ // (TESTED)
@@ -117,9 +118,14 @@ load("__test/__test_superset.js");
 load("__test/__test_sreduce.js");
 load("__test/__test_flattening.js");
 
+
 /* Containment Calculus */
 load("__test/__test_contract_subset.js");
 
+
+/* Tries */
+load("__test/__test_pathtrie.js");
+load("__test/__test_pathtrie2.js");
 
 var __end = new Date().getTime();
 
