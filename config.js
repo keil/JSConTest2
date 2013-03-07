@@ -31,41 +31,6 @@
 
 
 
-		//////////////////////////////////////////////////
-		// FLATTENING MODE
-		// ON: flattening enabled
-		// OFF: flattening disabled
-		//////////////////////////////////////////////////
-
-		// Violation Mode
-		var __FlatteningMode = { ON: true, OFF: false }
-
-		//////////////////////////////////////////////////
-		// APC . Config
-		//////////////////////////////////////////////////
-		APC.Flattening = {};
-		APC.Flattening.Mode = __FlatteningMode;
-
-
-
-		//////////////////////////////////////////////////
-		// SUBSET REDUCTION MODE
-		// ON: subset reduction enabled
-		// OFF: subset reduction disabled
-		//////////////////////////////////////////////////
-
-		// Violation Mode
-		var __SubsetReductionMode = { ON: true, OFF: false }
-
-		//////////////////////////////////////////////////
-		// APC . Config
-		//////////////////////////////////////////////////
-		//APC.SubsetReduction = {};
-		//APC.SubsetReduction.Mode = __SubsetReductionMode;
-		// TODO
-
-
-
 
 
 		//////////////////////////////////////////////////
@@ -73,8 +38,5 @@
 		//////////////////////////////////////////////////
 		APC.Config = {};
 		APC.Config.EvaluationMode = __EvaluationMode.OBSERVER;
-		//APC.Config.FlatteningMode = __FlatteningMode.ON;
-		//APC.Config.SubsetReductionMode = __SubsetReductionMode.ON;
-		// TODO
 
 })(__APC);
