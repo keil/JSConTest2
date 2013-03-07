@@ -72,7 +72,4 @@ load("__lib/__lib_apache_assert.js");
 // load testcase
 //load("__test/__test_.js");
 
-load("__test/__test_pathtrie.js");
-load("__test/__test_pathtrie2.js");
-
 quit();

@@ -32,7 +32,7 @@
 						extend: function(contractArg, trieArg) {
 								/* C = C&C' */
 								contract = new APC.Contract.AndContract(contract, contractArg);
-								
+
 								/* T = T&T */
 								trie = trie.merge(trieArg);								
 						},
@@ -91,7 +91,7 @@
 								/* Trace Path *************************************** */
 								trie = trie.append(new APC.TracePath.TraceProperty(name));
 								APC.Access.Logger.put(APC.Access.Type.WRITE, trie.paths);
-							
+
 								/* Access Permission Contract *********************** */
 								if(contract.isWriteable(name)) {
 										return Object.defineProperty(target, name, desc);
@@ -270,7 +270,7 @@
 						extend: function(contractArg, trieArg) {
 								/* C = C&C' */
 								contract = new APC.Contract.AndContract(contract, contractArg);
-								
+
 								/* T = T&T */
 								trie = trie.merge(trieArg);
 						},
@@ -299,11 +299,11 @@
 								thisTrie = trie.makeEndOfPath();
 
 								trie.paths.foreach(function(i, path) {
-									tracePathArguments =  new APC.TracePath.TraceArgument(path, new APC.TracePath.TraceProperty("arguments"));
-									tracePathThis =  new APC.TracePath.TraceArgument(path, new APC.TracePath.TraceProperty("this"));
+										tracePathArguments =  new APC.TracePath.TraceArgument(path, new APC.TracePath.TraceProperty("arguments"));
+										tracePathThis =  new APC.TracePath.TraceArgument(path, new APC.TracePath.TraceProperty("this"));
 
-									argumentsTrie = argumentsTrie.append(tracePathArguments);
-									thisTrie = thisTrie.append(tracePathThis);
+										argumentsTrie = argumentsTrie.append(tracePathArguments);
+										thisTrie = thisTrie.append(tracePathThis);
 
 								});
 

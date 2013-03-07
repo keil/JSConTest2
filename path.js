@@ -121,7 +121,7 @@
 				if(path.isEmpty() && property.isEmpty()) return new __TraceEmpty();
 				else if(path.isEmpty()) return property;
 				else if(property.isEmpty()) return path;
-				
+
 				return __cache.c({
 						/** n({}) ::= true */
 						isEmpty: function() {
@@ -291,7 +291,7 @@
 						 * @param path Access path
 						 */
 						put: function(type, path) {
-								
+
 								if(path instanceof Array) {
 										path.foreach(function(i, path) {
 												entryValue = Entry(type, path);
