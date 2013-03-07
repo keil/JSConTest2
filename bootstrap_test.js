@@ -113,10 +113,11 @@ load("__test/__test_scope2.js");
 
 
 /* Test Path (membership) **/ // 
-load("__test/__test_subset.js");
-load("__test/__test_superset.js");
-load("__test/__test_sreduce.js");
-load("__test/__test_flattening.js");
+// deprecated 
+//load("__test/__test_subset.js");
+//load("__test/__test_superset.js");
+//load("__test/__test_sreduce.js");
+//load("__test/__test_flattening.js");
 
 
 /* Containment Calculus */

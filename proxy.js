@@ -185,6 +185,7 @@
 						 */
 						get: function(target, name, receiver) {
 								/* Trace Path *************************************** */
+								__sysout("@" + trie);
 								trie = trie.append(new APC.TracePath.TraceProperty(name));
 								APC.Access.Logger.put(APC.Access.Type.READ, trie.paths);
 
@@ -291,15 +292,23 @@
 						apply: function(target, thisArg, args) {
 								/* Trace Path *************************************** */
 
-								// TODO
-								// use TRIES instead of Paths
-								// make new testcases
+								// trie
+								argumentsTrie = new APC.TracePath.PathTrie();
+								argumentsTrie = trie.makeEndOfPath();
+								thisTrie = new APC.TracePath.PathTrie();
+								thisTrie = trie.makeEndOfPath();
 
-								tracePathArguments =  new APC.TracePath.TraceArgument(path, new APC.TracePath.TraceProperty("arguments"));
-								tracePathThis =  new APC.TracePath.TraceArgument(path, new APC.TracePath.TraceProperty("this"));
+								trie.paths.foreach(function(i, path) {
+									tracePathArguments =  new APC.TracePath.TraceArgument(path, new APC.TracePath.TraceProperty("arguments"));
+									tracePathThis =  new APC.TracePath.TraceArgument(path, new APC.TracePath.TraceProperty("this"));
 
-								args = __createMembrane(args, contract.derive("arguments"), tracePathArguments);
-								thisArg = __createMembrane(thisArg, contract.derive("this"), tracePathThis);
+									argumentsTrie = argumentsTrie.append(tracePathArguments);
+									thisTrie = thisTrie.append(tracePathThis);
+
+								});
+
+								args = __createMembrane(args, contract.derive("arguments"), argumentsTrie);
+								thisArg = __createMembrane(thisArg, contract.derive("this"), thisTrie);
 
 								return target.apply(thisArg, args);
 						},
