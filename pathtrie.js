@@ -9,9 +9,9 @@
  * Author Matthias Keil
  *  http://www.informatik.uni-freiburg.de/~keilr/
  *
- * Date: $Date$
- * Revision: $Rev$
-*/
+ * $Date$
+ * $Rev$
+ */
 (function(APC) {
 
 		/** Edges
@@ -20,62 +20,62 @@
 				var keys = [];
 				var values = [];
 				return Object.freeze({
-
-// TODO
-get length() {
-return keys.length;
-},
-
-						/* Set
-						 * @return key
-						 * @param value
-						 * @return true|false
+						/* Length
+						 * @return length of key array
 						 */
-						set: function(key, value) {
-								if (key !== Object(key)) { 
-										return false;
-								}
-
-								var i = keys.indexOf(key);
-								if (i < 0) { i = keys.length; }
-								keys[i] = key;
-								values[i] = value;
-								return true;
+						get length() {
+								return keys.length;
 						},
+					   /* Set
+						* @return key
+						* @param value
+						* @return true|false
+						*/
+					   set: function(key, value) {
+							   if (key !== Object(key)) { 
+									   return false;
+							   }
+
+							   var i = keys.indexOf(key);
+							   if (i < 0) { i = keys.length; }
+							   keys[i] = key;
+							   values[i] = value;
+							   return true;
+					   },
 					   /* Get
 						* @return key
 						* @return undefined|values[i]
 						*/
-								get: function(key) {
-										var i = keys.indexOf(key);
-										return i < 0 ? undefined : values[i];
-								},
-								/* Remove
-								 * @param key
-								 * @return true|false
-								 */
-								remove: function(key) {
-										var i = keys.indexOf(key);
-										if(i >= 0) {
-												return (keys.remove(i) && values.remove(i));
-										}
-								},
-								/* Contains
-								 * @param key
-								 * @return true|false
-								 */
-								contains: function(key) {
-										var i = keys.indexOf(key);
-										return i < 0 ? false : true;
-								},
-								/* Foreach
-								 * @param callback
-								 */
-								foreach: function(callback) {
-										keys.foreach(function(i,key){
-												callback(key, values[i]);
-										});
-								}
+					   get: function(key) {
+							   var i = keys.indexOf(key);
+							   return i < 0 ? undefined : values[i];
+					   },
+					   /* Remove
+						* @param key
+						* @return true|false
+						*/
+					   remove: function(key) {
+							   var i = keys.indexOf(key);
+							   if(i >= 0) {
+									   return (keys.remove(i) && values.remove(i));
+							   }
+					   },
+					   /* Contains
+						* @param key
+						* @return true|false
+						*/
+					   contains: function(key) {
+							   var i = keys.indexOf(key);
+							   return i < 0 ? false : true;
+					   },
+					   /* Foreach
+						* @param callback
+						*/
+					   foreach: function(callback) {
+							   keys.foreach(function(i,key){
+									   callback(key, values[i]);
+							   });
+					   }
 				});
 		}
 
@@ -84,7 +84,7 @@ return keys.length;
 
 
 		/** Path Trie
-		 * @param endOfPathArg true, if trie is endOfPath, false otherwise
+		 * @param trieArg PathTrie to clone
 		 */
 		function __PathTrie(trieArg) {
 
@@ -156,16 +156,7 @@ return keys.length;
 
 				//////////////////////////////////////////////////
 				/* If trieArg is set, than clone trieArg */
-
-				__sysout("++++++++++ TRIEARG: " + trieArg + " ++++++++++");
-
 				if(trieArg != null) {
-
-						__sysout("++++++++++ MERGE ++++++++++");
-						__sysout(trieArg);
-						__sysout(trieArg.print());
-						__sysout(trieArg.edges);
-
 						trieArg.edges.foreach(function(property, trie) {
 								addSubtrie(property, trie);
 						});
@@ -186,7 +177,6 @@ return keys.length;
 							 * @return Array with Property-Trie Elements
 							 */
 							get edges() {
-									__sysout("RETURN EDGES: " + edges);
 									return edges;
 							},
 
@@ -201,251 +191,219 @@ return keys.length;
 							 * @param endOfPath true adds the empty path, false removes it
 							 */
 							set endOfPath(endOfPath) {
-
-									__sysout("SET EOP: " + endOfPath);
-									__sysout("SUM: " + edges.length);
-
 									if(endOfPath) {
-											x = addEndOfPath();
-											__sysout("%%% " + this.endOfPath);
-											__sysout("SUM: " + edges.length);
-											return x;
+											return addEndOfPath();
 									} else {
-											x = removeEndOfPath();
-											__sysout("%%% " + this.endOfPath);
-													__sysout("SUM: " + edges.length);
-											return x;
+											return removeEndOfPath();
 									}
 							},
 
+							//////////////////////////////////////////////////
+							/* APPEND EDGE
+							 * substitutes all endOfPath-Edges by property->{}
+							 * @param property edge
+							 */
+							add: function(property) {
 
+									// for all edges in this
+									edges.foreach(function(edge, trie) {
+											if(edge!=new APC.TracePath.TraceEmpty()) trie.add(property);
+									});
 
+									// if, this == endOfPath
+									if(isEndOFPath()) {
+											removeEndOfPath(); 
 
-
-
-							setEndOfPath: function(bool) {
-									return new __PathTrie(this, bool);
+											// if property not in edges 
+											if(containsEdge(property)) {
+													getSubtrie(property).endOfPath = true;
+											} else {
+													addEdge(property);
+													getSubtrie(property).endOfPath = true;
+											}
+									}
 							},
 
+							/* APPEND TRIE
+							 * substitutes all endOfPath-Edges by property->subtrie
+							 * @param property edge
+							 * @param subtrie Path Trie
+							 */
+							appendTrie: function(property, subtrie) {
 
-							contains: function(property) {
-								return edges.contains(property);
+									// for all edges in this
+									edges.foreach(function(property, trie) {
+											if(property!=new APC.TracePath.TraceEmpty()) trie.append(property, subtrie);
+									});
+
+									// if, this == endOfPath
+									if(isEndOFPath()) {
+											removeEndOfPath(); 
+
+											// if property not in edges 
+											if(containsEdge(property)) {
+													getSubtrie(property).merge(subtrieOfTrie);
+											} else {
+													addSubtrie(property, subtrieOfTrie);
+											}
+									}
 							},
 
+							/* MERGE
+							 * merges this with trie
+							 * @param subtrie Path Trie
+							 */
+							merge: function(trie) {
 
-						get: function(property) {
-								return edges.get(property);
-						},
+									// for ll edges in trie
+									trie.edges.foreach(function(property, trie) {
 
-								set: function(property, subtrie) {
-										newTrie = new __PathTrie(this);
-										newTrie.edges.set(property, subtrie);
-										return newTrie;
-								},
+											// if property not in edges
+											if(containsEdge(property)) {
+													getSubtrie(property).merge(trie);
+											} else {
+													addSubtrie(property, trie);
+											}
+									});
+							},
 
+							//////////////////////////////////////////////////
+							/* To String
+							 * returns a string representation
+							 * @return String
+							 */
+							toString: function() {
+									var tmp = ''; 
+									edges.foreach(function(property, trie) {
+											if(property==new APC.TracePath.TraceEmpty()) string = "($)";
+											else string = ("(" + property.toString() + ") {" + trie.toString() + "}");
+											tmp += string;
+									});
+									return tmp;
+							},
 
+							/* Print
+							 * returns a line based tree-representation
+							 * @return String
+							 */
+							print: function(l) {
+									var level = (l==null) ? 0 : l;
+									var tmp = '';
+									edges.foreach(function(property, trie) {
+											if(property==new APC.TracePath.TraceEmpty()) string = "($)";
+											else string = ("(" + property.toString() + ") {" + trie.print(level+1) + "\n" + margin_left("}", ' ', (level*3)));
+											tmp += "\n" + margin_left(string, ' ', (level*3));
+									});
+									return tmp;	
+							},
 
-								//////////////////////////////////////////////////
-								/* ADD
-								 * substitutes all endOfPath-Edges by property->{}
-								 * @param property edge
-								 */
-								add: function(property) {
-
-										__sysout("@ add " + property);
-										__sysout("eop:" + this.endOfPath);
-										__sysout("*" + this.print());
-
-										__sysout("SUM: " + edges.length);
-
-										// for all edges in this
-										edges.foreach(function(edge, trie) {
-												__sysout("   WALK " + edge);
-												if(edge!=new APC.TracePath.TraceEmpty()) trie.add(property);
-										});
-
-__sysout("SUM: " + edges.length);
-
-										// if, this == endOfPath
-										if(isEndOFPath()) {
-												removeEndOfPath(); 
-
-												// if property not in edges 
-												if(containsEdge(property)) {
-														getSubtrie(property).endOfPath = true;
-												} else {
-														addEdge(property);
-														getSubtrie(property).endOfPath = true;
-												}
-										}
-
-										__sysout("*" + this.print());
-								},
-
-								/* APPEND
-								 * substitutes all endOfPath-Edges by property->subtrie
-								 * @param property edge
-								 * @param subtrie Path Trie
-								 */
-								append: function(property, subtrie) {
-
-										// for all edges in this
-										edges.foreach(function(property, trie) {
-												if(property!=new APC.TracePath.TraceEmpty()) trie.append(property, subtrie);
-										});
-
-										// if, this == endOfPath
-										if(isEndOFPath()) {
-												removeEndOfPath(); 
-
-												// if property not in edges 
-												if(containsEdge(property)) {
-														getSubtrie(property).merge(subtrieOfTrie);
-												} else {
-														addSubtrie(property, subtrieOfTrie);
-												}
-										}
-								},
-
-								/* MERGE
-								 * merges this with trie
-								 * @param subtrie Path Trie
-								 */
-								merge: function(trie) {
-
-										// for ll edges in trie
-										trie.edges.foreach(function(property, trie) {
-
-												// if property not in edges
-												if(containsEdge(property)) {
-														getSubtrie(property).merge(trie);
-												} else {
-														addSubtrie(property, trie);
-												}
-										});
-								},
-
-								//////////////////////////////////////////////////
-								/* To String
-								 * returns a string representation
-								 * @return String
-								 */
-								toString: function() {
-										var tmp = ''; 
-										edges.foreach(function(property, trie) {
-												if(property==new APC.TracePath.TraceEmpty()) string = "($)";
-												else string = ("(" + property.toString() + ") {" + trie.toString() + "}");
-												tmp += string;
-										});
-										return tmp;
-								},
-
-								/* Print
-								 * returns a line based tree-representation
-								 * @return String
-								 */
-								print: function(l) {
-										edges.foreach(function(k,v) {__sysout("@" +  k + " " + v)});
-										var level = (l==null) ? 0 : l;
-										var tmp = '';
-										edges.foreach(function(property, trie) {
-												if(property==new APC.TracePath.TraceEmpty()) string = "($)";
-												else string = ("(" + property.toString() + ") {" + trie.print(level+1) + "\n" + margin_left("}", ' ', (level*3)));
-												tmp += "\n" + margin_left(string, ' ', (level*3));
-										});
-										return tmp;	
-								},
-
-								/* Dump
-								 * returns an array containing all path elements
-								 * @return Array
-								 */
-								dump: function() {
-										__sysout("   # " + this.print());
-										var result = new Array();
-										edges.foreach(function(property, trie) {
-												if(property==new APC.TracePath.TraceEmpty()) {
-														path = new APC.TracePath.TraceEmpty();
-														result.push(path);
-												}
-												trie.dump().foreach(function(i, subpath) {
-														path = new APC.TracePath.TracePath(property, subpath);
-														result.push(path);
-												});
-										});
-										return result;
-								},
+							/* Dump
+							 * returns an array containing all path elements
+							 * @return Array
+							 */
+							dump: function() {
+									var result = new Array();
+									edges.foreach(function(property, trie) {
+											if(property==new APC.TracePath.TraceEmpty()) {
+													path = new APC.TracePath.TraceEmpty();
+													result.push(path);
+											}
+											trie.dump().foreach(function(i, subpath) {
+													path = new APC.TracePath.TracePath(property, subpath);
+													result.push(path);
+											});
+									});
+									return result;
+							},
 				}
 		}
 
 
 
+
+		/** Path Trie Decorator
+		 * @param trieArg PathTrie to wrap
+		 */
 		function __PathTrieDecorator(trie) {
 
-
+				// PathTrie T
 				pathTrie = (trie!=null) ? trie :  new __PathTrie();
-
-		
 
 				return {
 
-						// todo
+						/* Get: Trie
+						 * @return T - wrapped PathTrie
+						 */
 						get trie() {
-							return pathTrie;
+								return pathTrie;
 						},
 
-						get endOfPath() {
-								return pathTrie.endOfPath;
-						},
+							/* Get: endOfPath
+							 * @return T.endOfPath
+							 */
+							get endOfPath() {
+									return pathTrie.endOfPath;
+							},
 
+							/* Get: paths
+							 * @return T.dump - all deducible paths
+							 */
+							get paths() {
+									return pathTrie.dump();
+							},
 
-						get paths() {
-								return pathTrie.dump();
-						},
-						
-						
-						makeEndOfPath: function() {
-								//__sysout("NEW TRIE WITH: " + )
-								newTrie = new __PathTrie(pathTrie);
-								newTrie.endOfPath = true;
+							//////////////////////////////////////////////////
+							/* ENDOFPATH
+							 * wraps: T.endOfPath=true
+							 * @return Path Trie Decorator
+							 */
+							makeEndOfPath: function() {
+									newTrie = new __PathTrie(pathTrie);
+									newTrie.endOfPath = true;
 
-								return canonicalize(newTrie); 
-						},	
+									// cache
+									return canonicalize(newTrie); 
+							},	
 
+							/* APPEND
+							 * wraps: T.append(property)
+							 * @return Path Trie Decorator
+							 */
+							append: function(property) {
+									newTrie = new __PathTrie(pathTrie);
+									newTrie.add(property);
 
-				
-						append: function(property) {
-								newTrie = new __PathTrie(pathTrie);
-								newTrie.add(property);
+									// cache
+									return canonicalize(newTrie); 
+							},
 
-								return canonicalize(newTrie); 
-						},
-// TODO
-//						append: function(property, trie) {
-//								newTrie = new __PathTrie(pathTrie);
-//								newTrie.append(proeprty);
-//
-//								return canonicalize(newTrie); 
-//						},
+							/* MERGE
+							 * wraps: T.append(property)
+							 * @return Path Trie Decorator
+							 */
+							merge: function(trie) {
+									newTrie = new __PathTrie(pathTrie);
+									newTrie.merge(trie.trie);
 
-						merge: function(trie) {
-								newTrie = new __PathTrie(pathTrie);
-								newTrie.merge(trie.trie);
+									return canonicalize(newTrie); 
+							},
 
-								return canonicalize(newTrie); 
-						},
+							//////////////////////////////////////////////////
+							/* To String
+							 * wraps: T.toString()
+							 * @return String
+							 */
+							toString: function() {
+									return ("[[" + pathTrie.toString() + "]]");
+							},
 
-						toString: function() {
-								return pathTrie.toString();
-						},
-
-						print: function() {
-								return pathTrie.print();
-						},
-				
-						dump: function() {
-								return pathTrie.dump();
-						}
+							/* Print
+							 * wraps: T.print()
+							 * @return String
+							 */
+							print: function() {
+									return pathTrie.print();
+							}
 				};
 		}
 
@@ -473,6 +431,7 @@ __sysout("SUM: " + edges.length);
 				// cache array
 				var cache = new StringMap();
 
+				//////////////////////////////////////////////////
 				return {
 
 						/* cache function
@@ -527,7 +486,6 @@ __sysout("SUM: " + edges.length);
 		// @param Trie
 		// @return Trie Decorator
 		function canonicalize(trie) {
-				__sysout("   ! " + trie.print());
 				decorator = new __PathTrieDecorator(trie);
 				return __cache.c(decorator);
 		}

@@ -98,9 +98,9 @@ __sysout(trie);
 __sysout(trie.print());
 
 __sysout("\n\n### DUMP");
-__sysout(trie.dump());
+__sysout(trie.paths);
 
 
-trie.dump().foreach(function(s, o) {
+trie.paths.foreach(function(s, o) {
 __sysout(":" + o);
 });
