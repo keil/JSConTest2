@@ -52,30 +52,8 @@
 						 */
 						getOwnPropertyDescriptor: function(target, name) {
 								/* Trace Path *************************************** */
-								/* Trace Path *************************************** */
 								trie = trie.append(new APC.TracePath.TraceProperty(name));
 								APC.Access.Logger.put(APC.Access.Type.READ, trie.paths);
-
-
-
-
-	//							tracePath =  new APC.TracePath.TracePath(path, new APC.TracePath.TraceProperty(name));
-								//tracePath = (APC.Config.FlatteningMode == APC.Flattening.Mode.ON) ? tracePath.freduce() : tracePath;
-	//							APC.Access.Logger.put(APC.Access.Type.READ, tracePath);
-
-
-								/* Trace Path *************************************** */
-								//path.paths.foreach(function(i, path){
-								//	tracePath =  new APC.TracePath.TracePath(path, new APC.TracePath.TraceProperty(name));
-							//		APC.Access.Logger.put(APC.Access.Type.READ, tracePath);								
-						//		});
-
-								/* Trace Path *************************************** */
-						//		property = new APC.TracePath.TraceProperty(name);
-						//		tracePath = new APC.TracePath.PathTrie(true);
-						//		path.append(property, tracePath);
-
-
 
 								/* Access Permission Contract *********************** */
 								if(contract.isReadable(name)) {
@@ -113,19 +91,7 @@
 								/* Trace Path *************************************** */
 								trie = trie.append(new APC.TracePath.TraceProperty(name));
 								APC.Access.Logger.put(APC.Access.Type.WRITE, trie.paths);
-
-								//tracePath =  new APC.TracePath.TracePath(path, new APC.TracePath.TraceProperty(name));
-								//tracePath = (APC.Config.FlatteningMode == APC.Flattening.Mode.ON) ? tracePath.freduce() : tracePath;
-								//APC.Access.Logger.put(APC.Access.Type.WRITE, tracePath);
-
-
-								/* Trace Path *************************************** */
-							//	path.paths.foreach(function(i,path){
-							//		tracePath =  new APC.TracePath.TracePath(path, new APC.TracePath.TraceProperty(name));
-							//		APC.Access.Logger.put(APC.Access.Type.WRITE, tracePath);								
-							//	});
-
-
+							
 								/* Access Permission Contract *********************** */
 								if(contract.isWriteable(name)) {
 										return Object.defineProperty(target, name, desc);
@@ -143,20 +109,6 @@
 								/* Trace Path *************************************** */
 								trie = trie.append(new APC.TracePath.TraceProperty(name));
 								APC.Access.Logger.put(APC.Access.Type.WRITE, trie.paths);
-
-
-
-								//tracePath =  new APC.TracePath.TracePath(path, new APC.TracePath.TraceProperty(name));
-								//tracePath = (APC.Config.FlatteningMode == APC.Flattening.Mode.ON) ? tracePath.freduce() : tracePath;
-								//APC.Access.Logger.put(APC.Access.Type.WRITE, tracePath);
-
-	/* Trace Path *************************************** */
-							//	path.paths.foreach(function(i,path){
-						//			tracePath =  new APC.TracePath.TracePath(path, new APC.TracePath.TraceProperty(name));
-					//				APC.Access.Logger.put(APC.Access.Type.WRITE, tracePath);								
-						//		});
-
-
 
 								/* Access Permission Contract *********************** */
 								if(contract.isWriteable(name)) {
@@ -235,29 +187,6 @@
 								/* Trace Path *************************************** */
 								trie = trie.append(new APC.TracePath.TraceProperty(name));
 								APC.Access.Logger.put(APC.Access.Type.READ, trie.paths);
-								
-								
-								
-								//tracePath =  new APC.TracePath.TracePath(path, new APC.TracePath.TraceProperty(name));
-								////tracePath = (APC.Config.FlatteningMode == APC.Flattening.Mode.ON) ? tracePath.freduce() : tracePath;
-								//APC.Access.Logger.put(APC.Access.Type.READ, tracePath);
-								
-							
-								/* Trace Path *************************************** */
-							//	path.paths.foreach(function(i, path){
-							//		tracePath =  new APC.TracePath.TracePath(path, new APC.TracePath.TraceProperty(name));
-							//		APC.Access.Logger.put(APC.Access.Type.READ, tracePath);								
-							//	});
-
-							//	/* Trace Path *************************************** */
-							//	property = new APC.TracePath.TraceProperty(name);
-							//	tracePath = new APC.TracePath.PathTrie(true);
-							//	path.append(property, tracePath);
-
-
-								
-
-
 
 								/* Access Permission Contract *********************** */
 								if(contract.isReadable(name)) {
@@ -278,23 +207,6 @@
 								/* Trace Path *************************************** */
 								trie = trie.append(new APC.TracePath.TraceProperty(name));
 								APC.Access.Logger.put(APC.Access.Type.WRITE, trie.paths);
-
-								
-								
-								//tracePath =  new APC.TracePath.TracePath(path, new APC.TracePath.TraceProperty(name));
-								//tracePath = (APC.Config.FlatteningMode == APC.Flattening.Mode.ON) ? tracePath.freduce() : tracePath;
-								//APC.Access.Logger.put(APC.Access.Type.WRITE, tracePath);
-
-
-								/* Trace Path *************************************** */
-							//	path.paths.foreach(function(i,path){
-							//		tracePath =  new APC.TracePath.TracePath(path, new APC.TracePath.TraceProperty(name));
-							//		APC.Access.Logger.put(APC.Access.Type.WRITE, tracePath);								
-							//	});
-
-
-
-
 
 								/* Access Permission Contract *********************** */
 								if(contract.isWriteable(name)) {
@@ -348,18 +260,18 @@
 		 * @param contract Access Permission Contract
 		 * @return FunctionHandler
 		 */
-		function __FunctionHandler(contract, path) {
+		function __FunctionHandler(contract, trie) {
 				return {
 						/** extend contract
 						 * @param extContract Access Permission Contract
 						 * @param extPath Access Permission Contract
 						 */
-						extend: function(extContract, extPath) {
+						extend: function(contractArg, trieArg) {
 								/* C = C&C' */
-								contract = new APC.Contract.AndContract(contract, extContract);
-								/* P = P;P' */
-								path = new APC.TracePath.TraceSet(path, extPath);
-								path = (APC.Config.SubsetReductionMode == APC.SubsetReduction.Mode.ON) ? path.sreduce() : path;
+								contract = new APC.Contract.AndContract(contract, contractArg);
+								
+								/* T = T&T */
+								trie = trie.merge(trieArg);
 						},
 
 
