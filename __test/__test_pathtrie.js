@@ -37,13 +37,13 @@ f = new __APC.TracePath.TraceProperty("f");
 //////////////////////////////////////////////////
 //////////////////////////////////////////////////
 
-
 trie = new __APC.TracePath.PathTrie();
 trie = trie.makeEndOfPath();
-__sysout(trie);
 trie = trie.append(a);
 trie = trie.append(b);
 trie = trie.append(c);
+
+
 
 
 //////////////////////////////////////////////////

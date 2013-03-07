@@ -146,7 +146,7 @@
 							 * @return PathTrie
 							 */
 							set: function(property, trie) {
-									newTrie = new __PathTrie(this);
+									var newTrie = new __PathTrie(this);
 									newTrie.edges.set(property, trie);
 
 									// cache
@@ -158,7 +158,7 @@
 							 * @return PathTrie
 							 */
 							remove: function(property) {
-									newTrie = new __PathTrie(this);
+									var newTrie = new __PathTrie(this);
 									newTrie.edges.remove(property);
 
 									// cache
@@ -178,7 +178,7 @@
 							 * @return PathTrie
 							 */
 							makeEndOfPath: function() {
-									newTrie = new __PathTrie(this);
+									var newTrie = new __PathTrie(this);
 									newTrie.edges.set(new APC.TracePath.TraceEmpty(), new __PathTrie());
 
 									// cache
@@ -189,7 +189,7 @@
 							 * @return PathTrie
 							 */
 							removeEndOfPath: function() {
-									newTrie = new __PathTrie(this);
+									var newTrie = new __PathTrie(this);
 									newTrie.edges.remove(new APC.TracePath.TraceEmpty());
 
 									// cache
@@ -201,11 +201,11 @@
 							 * @param property edge
 							 */
 							append: function(property) {
-									newTrie = new __PathTrie(this);
+									var newTrie = new __PathTrie(this);
 
 									// for all edges in this
 									newTrie.edges.foreach(function(edge, trie) {
-											if(edge!=new APC.TracePath.TraceEmpty()) newTrie.edges.set(edge, newTrie.get(edge).append(property));
+											if(edge!=new APC.TracePath.TraceEmpty()) newTrie.edges.set(edge, newTrie.edges.get(edge).append(property));
 									});
 
 									// if, this == endOfPath
@@ -275,7 +275,7 @@
 							 */
 							merge: function(trie) {
 
-									newTrie = new __PathTrie(this);
+									var newTrie = new __PathTrie(this);
 
 
 									// for ll edges in trie
