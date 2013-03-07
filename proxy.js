@@ -48,7 +48,7 @@
 						getOwnPropertyDescriptor: function(target, name) {
 								/* Trace Path *************************************** */
 								/* Trace Path *************************************** */
-								trie = trie.add(new APC.TracePath.TraceProperty(name));
+								trie = trie.append(new APC.TracePath.TraceProperty(name));
 								APC.Access.Logger.put(APC.Access.Type.READ, trie.paths);
 
 
@@ -106,7 +106,7 @@
 						 */
 						defineProperty: function(target, name, desc) {
 								/* Trace Path *************************************** */
-								trie = trie.add(new APC.TracePath.TraceProperty(name));
+								trie = trie.append(new APC.TracePath.TraceProperty(name));
 								APC.Access.Logger.put(APC.Access.Type.WRITE, trie.paths);
 
 								//tracePath =  new APC.TracePath.TracePath(path, new APC.TracePath.TraceProperty(name));
@@ -136,7 +136,7 @@
 						 */
 						deleteProperty: function(target, name) {
 								/* Trace Path *************************************** */
-								trie = trie.add(new APC.TracePath.TraceProperty(name));
+								trie = trie.append(new APC.TracePath.TraceProperty(name));
 								APC.Access.Logger.put(APC.Access.Type.WRITE, trie.paths);
 
 
@@ -228,7 +228,7 @@
 						 */
 						get: function(target, name, receiver) {
 								/* Trace Path *************************************** */
-								trie = trie.add(new APC.TracePath.TraceProperty(name));
+								trie = trie.append(new APC.TracePath.TraceProperty(name));
 								APC.Access.Logger.put(APC.Access.Type.READ, trie.paths);
 								
 								
@@ -271,7 +271,7 @@
 						 */
 						set: function(target, name, value, receiver) {
 								/* Trace Path *************************************** */
-								trie = trie.add(new APC.TracePath.TraceProperty(name));
+								trie = trie.append(new APC.TracePath.TraceProperty(name));
 								APC.Access.Logger.put(APC.Access.Type.WRITE, trie.paths);
 
 								

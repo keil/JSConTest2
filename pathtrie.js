@@ -1,12 +1,17 @@
-//////////////////////////////////////////////////
-// JavaScript Reflection API
-//  for Access Permission Contracts
-//
-// Copyright (c) University of Freiburg
-//  http://proglang.informatik.uni-freiburg.de/
-// Author: Matthias Keil
-//  http://www.informatik.uni-freiburg.de/~keilr/
-//////////////////////////////////////////////////
+/*
+ * JavaScript Reflection API
+ *  for Access Permission Contracts
+ *
+ * Copyright (c) 2013, Proglang, University of Freiburg.
+ *  http://proglang.informatik.uni-freiburg.de/
+ * All rights reserved.
+ *
+ * Author Matthias Keil
+ *  http://www.informatik.uni-freiburg.de/~keilr/
+ *
+ * Date: $Date$
+ * Revision: $Rev$
+*/
 (function(APC) {
 
 		/** Edges
@@ -409,7 +414,7 @@ __sysout("SUM: " + edges.length);
 
 
 				
-						add: function(property) {
+						append: function(property) {
 								newTrie = new __PathTrie(pathTrie);
 								newTrie.add(property);
 
