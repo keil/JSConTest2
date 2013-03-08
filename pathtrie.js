@@ -81,7 +81,6 @@
 
 
 
-		// TODO
 		/** Empty Path Trie
 		 * @param trieArg PathTrie to clone
 		 */
@@ -222,61 +221,14 @@
 
 									// cache
 									return __cache.c(newTrie);
-
-									/*
-									// for all edges in this
-									edges.foreach(function(edge, trie) {
-									if(edge!=new APC.TracePath.TraceEmpty()) trie.append(property);
-									});
-
-									// if, this == endOfPath
-									if(isEndOFPath()) {
-									removeEndOfPath(); 
-
-									// if property not in edges 
-									if(containsEdge(property)) {
-									getSubtrie(property).endOfPath = true;
-									} else {
-									addEdge(property);
-									getSubtrie(property).endOfPath = true;
-									}
-									}
-									*/
 							},
 
-							/* APPEND TRIE
-							 * substitutes all endOfPath-Edges by property->subtrie
-							 * @param property edge
-							 * @param subtrie Path Trie
-							 */
-							/*							appendTrie: function(property, subtrie) {
-
-							// for all edges in this
-							edges.foreach(function(property, trie) {
-							if(property!=new APC.TracePath.TraceEmpty()) trie.append(property, subtrie);
-							});
-
-							// if, this == endOfPath
-							if(isEndOFPath()) {
-							removeEndOfPath(); 
-
-							// if property not in edges 
-							if(containsEdge(property)) {
-							getSubtrie(property).merge(subtrieOfTrie);
-							} else {
-							addSubtrie(property, subtrieOfTrie);
-							}
-							}
-							},
-							*/
 							/* MERGE
 							 * merges this with trie
 							 * @param subtrie Path Trie
 							 */
 							merge: function(trie) {
-
 									var newTrie = new __PathTrie(this);
-
 
 									// for ll edges in trie
 									trie.edges.foreach(function(edge, trie) {
@@ -289,31 +241,8 @@
 											}
 									});
 
-
 									// cache
 									return __cache.c(newTrie);
-
-
-									//__sysout("== MERGE " + trie + " on " + this);
-
-
-
-									/*
-									// for ll edges in trie
-									trie.edges.foreach(function(property, trie) {
-
-									// if property not in edges
-									if(containsEdge(property)) {
-									__sysout("=== CONTAINS " + property);
-
-									getSubtrie(property).merge(trie);
-									} else {
-									__sysout("=== NOT CONTAINS " + property);
-
-									addSubtrie(property, trie);
-									}
-									});
-									*/
 							},
 
 							//////////////////////////////////////////////////
@@ -440,7 +369,7 @@
 								}
 				}
 		}
-	
+
 		// current trie cache
 		var __cache = new __TrieCache();
 
