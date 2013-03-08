@@ -75,4 +75,7 @@ load("__lib/__lib_apache_assert.js");
 load("__test/__test_pathtrie.js");
 //load("__test/__test_pathtrie2.js");
 
+load("__test/__test_path2.js");
+
+
 quit();

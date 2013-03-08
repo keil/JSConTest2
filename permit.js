@@ -29,7 +29,7 @@
 				objname = name!=null ? new APC.TracePath.TraceProperty(name) : new APC.TracePath.TraceEmpty();
 
 				// trie
-				trie = new APC.TracePath.PathTrie();
+				var trie = new APC.TracePath.PathTrie();
 				trie = trie.makeEndOfPath();
 				trie = trie.append(objname);
 
@@ -68,7 +68,7 @@
 				fname = name!=null ? new APC.TracePath.TraceProperty(name) : new APC.TracePath.TraceEmpty();
 
 				// trie
-				trie = new APC.TracePath.PathTrie();
+				var trie = new APC.TracePath.PathTrie();
 				trie = trie.makeEndOfPath();
 				trie = trie.append(objname);
 
