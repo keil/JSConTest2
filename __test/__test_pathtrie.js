@@ -93,8 +93,6 @@ trieY = trieY.append(c);
 trieY = trieY.append(d);
 trieY = trieY.append(f);
 
-
-
 trieX = trieX.merge(trieY);
 
 
