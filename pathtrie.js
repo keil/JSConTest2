@@ -369,118 +369,10 @@
 
 
 
-
-		/** Path Trie Decorator
-		 * @param trieArg PathTrie to wrap
-		 */
-		function OLD__PathTrieDecorator(trie) {
-
-				// PathTrie T
-				var pathTrie = (trie!=null) ?  new __PathTrie(trie) :  new __PathTrie();
-
-				return {
-
-						/* Get: Trie
-						 * @return T - wrapped PathTrie
-						 */
-						get trie() {
-								return pathTrie;
-						},
-
-							/* Get: endOfPath
-							 * @return T.endOfPath
-							 */
-							get endOfPath() {
-									return pathTrie.endOfPath;
-							},
-
-							/* Get: paths
-							 * @return T.dump - all deducible paths
-							 */
-							get paths() {
-									return pathTrie.dump();
-							},
-
-							//////////////////////////////////////////////////
-							/* ENDOFPATH
-							 * wraps: T.endOfPath=true
-							 * @return Path Trie Decorator
-							 */
-							/*							makeEndOfPath: function() {
-														newTrie = new __PathTrie(pathTrie);
-														newTrie.endOfPath = true;
-
-							// cache
-							return canonicalize(newTrie); 
-							},	
-							*/
-							/* APPEND
-							 * wraps: T.append(property)
-							 * @return Path Trie Decorator
-							 */
-							append: function(property) {
-									newTrie = new __PathTrie(pathTrie);
-									newTrie.append(property);
-
-									__sysout("$$$$$$$$$$ " + newTrie + " $$$$$$$$$$ ");
-
-									toreturn = canonicalize(newTrie);
-
-									__sysout("$$$$$$$$$$ " + toreturn + " $$$$$$$$$$ ");
-
-
-									// cache
-									return canonicalize(newTrie); 
-							},
-
-							/* MERGE
-							 * wraps: T.append(property)
-							 * @return Path Trie Decorator
-							 */
-							merge: function(trie) {
-
-									__sysout("MERGE with " + trie.trie);
-									__sysout("MERGE with " + pathTrie);
-
-
-									newTrie = new __PathTrie(pathTrie);
-
-									__sysout("new TRIE" + pathTrie);
-
-									newTrie.merge(trie.trie);
-
-									__sysout("new TRIE" + newTrie);
-
-									return canonicalize(newTrie); 
-							},
-
-							//////////////////////////////////////////////////
-							/* To String
-							 * wraps: T.toString()
-							 * @return String
-							 */
-							toString: function() {
-									return ("[[" + pathTrie.toString() + "]]");
-							},
-
-							/* Print
-							 * wraps: T.print()
-							 * @return String
-							 */
-							print: function() {
-									return pathTrie.print();
-							}
-				};
-		}
-
-
-
 		//////////////////////////////////////////////////
 		// APC . Path
 		//////////////////////////////////////////////////
-		// TODO
-		APC.TracePath.PathTrie		= __PathTrie;
-		//APC.TracePath.PathTrie			= __PathTrieDecorator;
+		APC.TracePath.PathTrie			= __EmptyPathTrie;
 
 
 
@@ -506,14 +398,10 @@
 						 * @return trace path
 						 */
 						c: function(path) {
-								// TODO
-								return path;
+								//return path;
 								if(this.contains(path.toString())) {
-										__sysout("Cache HIT " + path.toString());
 										return this.get(path.toString());
 								} else {
-										__sysout("Cache MISS " + path);
-
 										this.put(path.toString(), path);
 										return path;
 								}
@@ -534,12 +422,6 @@
 								 * @return value
 								 */
 								get: function(key) {
-										__sysout("## " + key + " " + cache.get(key));
-										__sysout(cache);
-										cache.foreach(function(k,v) {
-												__sysout("!~ " + k + " : " + v.toString());
-										});
-
 										return cache.get(key);
 								},
 
@@ -558,29 +440,7 @@
 								}
 				}
 		}
-
-
-		// Canonicalize Tries
-		// @param Trie
-		// @return Trie Decorator
-		/*		function canonicalize(trie) {
-
-				__sysout("             @@@@@@@@@@@@ " + trie);
-
-
-				decorator = new __PathTrieDecorator(trie);
-
-				__sysout("             @@@@@@@@@@@@ " + decorator);
-
-				toreturn = __cache.c(decorator);
-
-				__sysout("             @@@@@@@@@@@@ " + toreturn);
-
-
-				return toreturn;
-				}
-				*/
-
+	
 		// current trie cache
 		var __cache = new __TrieCache();
 

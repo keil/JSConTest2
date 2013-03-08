@@ -293,9 +293,7 @@
 
 								// trie
 								argumentsTrie = new APC.TracePath.PathTrie();
-								argumentsTrie = trie.makeEndOfPath();
 								thisTrie = new APC.TracePath.PathTrie();
-								thisTrie = trie.makeEndOfPath();
 
 								trie.paths.foreach(function(i, path) {
 										tracePathArguments =  new APC.TracePath.TraceArgument(path, new APC.TracePath.TraceProperty("arguments"));
