@@ -51,16 +51,10 @@ trie1 = new __APC.TracePath.PathTrie();
 trie1 = trie1.makeEndOfPath();
 trie1 = trie1.append(a);
 
-__sysout("========= TRIE" + trie);
-__sysout("======== TRIE1" + trie1);
-
-
 trie = trie.merge(trie1);
 
-__sysout("+++++++++ TRIE" + trie);
 
 
-/*
 //////////////////////////////////////////////////
 trie2 = new __APC.TracePath.PathTrie();
 trie2 = trie2.makeEndOfPath();
@@ -68,6 +62,7 @@ trie2 = trie2.append(b);
 trie2 = trie2.append(c);
 
 trie = trie.merge(trie2);
+
 
 
 //////////////////////////////////////////////////
@@ -98,14 +93,18 @@ trieY = trieY.append(c);
 trieY = trieY.append(d);
 trieY = trieY.append(f);
 
+
+
 trieX = trieX.merge(trieY);
 
 
 //////////////////////////////////////////////////
-trie.merge(trieX);
+trie = trie.merge(trieX);
 
 trieY = trieY.append(__APC.TracePath.TraceProperty("SASA"));
-*/
+
+trie = trie.merge(trieY);
+
 
 //////////////////////////////////////////////////
 __sysout("\n\n### TO STRING");
