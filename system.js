@@ -151,3 +151,25 @@ function __appendLook(domNode) {
 		});
 		divChildV.appendChild(dlV);
 }
+
+
+
+//////////////////////////////////////////////////
+// DUMP
+//////////////////////////////////////////////////
+
+/* Dump Values to String Output
+*/
+function __testcase(file) {
+		__sysout("\n\n\n\n\n");
+		__sysout("##################################################");
+		__sysout("##")
+		__sysout("## " + file);
+		__sysout("##")
+		__sysout("##################################################");
+		__sysout("\n");
+
+		(function() {
+				load(file);
+		})();
+}
