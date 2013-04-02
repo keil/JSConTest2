@@ -100,6 +100,11 @@
 							   return true;
 					   },
 					   //////////////////////////////////////////////////
+					   /** reduce {} ::= {} */
+					   reduce: function() {
+					   		return this;
+					   },
+					   //////////////////////////////////////////////////
 					   /** Dump
 						* @return string
 						*/
@@ -201,6 +206,11 @@
 							   else return false;
 					   },
 					   //////////////////////////////////////////////////
+					   /** reduce ^ ::= ^ */
+					   reduce: function() {
+					   		return this;
+					   },
+					   //////////////////////////////////////////////////
 					   /** Dump
 						* @return string
 						*/
@@ -271,6 +281,7 @@
 					   //////////////////////////////////////////////////
 					   /** ctx |- C <= this */
 					   isSuperSetOf: function(arg, ctx) {
+								// TODO
 							   __sysout("$$$$ " + arg + " < " + this);
 							   /** C <= C' |= true  | C=C' */
 							   if(arg==this) {return true;
@@ -297,6 +308,11 @@
 					   /** ctx |- C >= this */
 					   isSubSetOf: function(arg, ctx) {
 							   return arg.isSuperSetOf(this, ctx);
+					   },
+					   //////////////////////////////////////////////////
+					   /** reduce @ ::= @ */
+					   reduce: function() {
+					   		return this;
 					   },
 					   //////////////////////////////////////////////////
 					   /** Dump
@@ -398,6 +414,11 @@
 							   return arg.isSuperSetOf(this, ctx);
 					   },
 					   //////////////////////////////////////////////////
+					   /** reduce ? ::= ? */
+					   reduce: function() {
+					   		return this;
+					   },
+					   //////////////////////////////////////////////////
 					   /** Dump
 						* @return string
 						*/
@@ -456,12 +477,12 @@
 					   derive: function(name) {
 							   return (name == varname) ? new __EmptyLiteral() : new __EmptySetLiteral();
 					   },
-					   /** (d_literal varname) ::= varname if literal=^, ^ if literal==varname, @ oterhwise */
+					   /** (d_literal varname) ::= varname if literal=^, ^ if literal==varname, {} oterhwise */
 					   lderive: function(larg) {
 							   return (larg==new __EmptyLiteral()) ? this: ((larg==this) ? new __EmptyLiteral() : new __EmptySetLiteral());
 					   },
 					   // TODO
-					   /** (b_literal varname) ::= varname if literal=^, ^ if literal==varname or literal==?, @ oterhwise */
+					   /** (b_literal varname) ::= varname if literal=^, ^ if literal==varname or literal==?, {} oterhwise */
 					   cderive: function(larg) {
 							   return (larg==new __EmptyLiteral()) ? this: ((larg==this || larg==new __QMarkLiteral()) ? new __EmptyLiteral() : new __EmptySetLiteral());
 					   },
@@ -476,7 +497,7 @@
 							   //							   else if(arg.isBlank()) return true;
 
 							   /** otherwise */
-							   //else return false;
+							  // else return false;
 
 							   /** C <= C' |= true  | ctx(C <= C') */
 							   ccExp = new __CcExp(arg, this);
@@ -494,6 +515,11 @@
 					   /** ctx |- C >= this */
 					   isSubSetOf: function(arg, ctx) {
 							   return arg.isSuperSetOf(this, ctx);
+					   },
+					   //////////////////////////////////////////////////
+					   /** reduce varname ::= varname */
+					   reduce: function() {
+					   		return this;
 					   },
 					   //////////////////////////////////////////////////
 					   /** Dump
@@ -596,6 +622,11 @@
 							   return arg.isSuperSetOf(this, ctx);
 					   },
 					   //////////////////////////////////////////////////
+					   /** reduce RegEx ::= RegEx */
+					   reduce: function() {
+					   		return this;
+					   },
+					   //////////////////////////////////////////////////
 					   /** Dump
 						* @return string
 						*/
@@ -624,12 +655,6 @@
 				// NORMALIZATION
 				/** ^? ~ ^ */
 				if(contract==new __EmptyLiteral()) return new __EmptyLiteral();
-
-				// REDUCTION
-				/** C? ~ ^ | n(C) */
-				if(contract.isEmpty()) return new __EmptyLiteral();
-				/** C? ~ ^ | w(C) */
-				if(contract.isBlank()) return new __EmptyLiteral();
 
 				return __cache.c({
 						/** n(C?) ::= false */
@@ -711,6 +736,18 @@
 					   /** ctx |- C >= this */
 					   isSubSetOf: function(arg, ctx) {
 							   return arg.isSuperSetOf(this, ctx);
+					   },
+					   //////////////////////////////////////////////////
+					   /** reduce C? ::= (reduce C)? */
+					   reduce: function() {
+					   		return ;
+							// REDUCTION
+							/** C? ~ ^ | n(C) */
+							if(contract.isEmpty()) return new __EmptyLiteral();
+							/** C? ~ ^ | w(C) */
+							else if(contract.isBlank()) return new __EmptyLiteral();
+							/** */
+							else return new ____QMarkContract(contract.reduce());
 					   },
 					   //////////////////////////////////////////////////
 					   /** Dump
@@ -865,8 +902,12 @@
 						if(contract0.isBlank()) return contract1;
 						else if(contract1.isBlank()) return contract0;
 						/** (C+C') ~ C | C >= C' */
-						if(contract0.isSuperSetOf(contract1, new __CcContext())) return contract0;
+						// TODO
+			//			__sysout("CALL SUPERSET CHECK on: " + contract0 + ">" + contract1);
+				//		if(contract0.isSuperSetOf(contract1, new __CcContext())) return contract0;
 						/** (C+C') ~ C' | C <= C' */
+						// TODO
+						__sysout("CALL SUPERSET CHECK on: " + contract1 + ">" + contract0);
 						if(contract1.isSuperSetOf(contract0, new __CcContext())) return contract1;
 
 						return __cache.c({
@@ -1162,13 +1203,13 @@
 							   /** (d_literal !C) ::= !(b_literal C) */
 							   lderive: function(larg) {
 									   // TODO
-										return new __NegContract(contract.cderive(larg));
+										return (larg==new __QMarkLiteral()) ? new __NegContract(contract.cderive(larg)) : new __NegContract(contract.lderive(larg));
 									   //return new __NegContract(contract.lderive(larg));
 							   },
 							   // TODO
 							   /** (b_literal !C) ::= !(d_literal C) */
 							   cderive: function(larg) {
-									   return new __NegContract(contract.lderive(larg));
+									   return (larg==new __QMarkLiteral()) ? new __NegContract(contract.lderive(larg)) :  new __NegContract(contract.cderive(larg));
 									   //return this.lderive(larg);
 							   },
 							   //////////////////////////////////////////////////
@@ -1309,7 +1350,15 @@
 							   },
 							   /** (d_literal C0.C1) ::= (d_literal C0).C1 + (d_literal C1) if v(C0), (d_literal C0).c1 otherwise */
 							   lderive: function(larg) {
-									   if(contract0.isNullable()) return new __OrContract(__ConcatContract(contract0.lderive(larg), contract1), contract1.lderive(larg));
+										__sysout("LDERIVE " + larg + " ON " + this);
+										//__sysout("MAKE OR CONTRACT WITH " + new __ConcatContract(contract0.lderive(larg), contract1) + " AND " + contract1.lderive(larg)); 
+										//+ )
+
+										// TODO		
+									   if(contract0.isNullable()) __sysout("RETURN " + new __OrContract(new __ConcatContract(contract0.lderive(larg), contract1), contract1.lderive(larg)));
+									   else __sysout("RETURN " + new __ConcatContract(contract0.lderive(larg), contract1));
+
+									   if(contract0.isNullable()) return new __OrContract(new __ConcatContract(contract0.lderive(larg), contract1), contract1.lderive(larg));
 									   else return new __ConcatContract(contract0.lderive(larg), contract1);
 							   },
 							   // TODO
@@ -1338,18 +1387,16 @@
 									   /** C <= C' |= false  | m(C) and !m(C') */
 									   //							   else if(!this.isUniversal() && arg.isUniversal()) return false;
 
-									   /** C <= C' |= true  | ctx(C <= C') */
+									   	/** C <= C' |= true  | ctx(C <= C') */
 									   ccExp = new __CcExp(arg, this);
 									   if(ctx.contains(ccExp)) return true;
-
 									   /** otherwise */
 									   var thisContract = this;
-									   var result = true; 
-
+									   var result = true;
 									   arg.first().foreach(function(k, literal) {
+											   __sysout("CALL LDERIV with : " + literal);
 											   result = result && thisContract.lderive(literal).isSuperSetOf(arg.lderive(literal), ctx.bind(ccExp));
 									   });
-
 									   /** (d_literal C >= C') |= (d_literal C) >= (d_literal C') */
 									   return result;
 							   },
