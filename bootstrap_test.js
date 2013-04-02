@@ -74,59 +74,59 @@ var __start = new Date().getTime();
 
 /* Test Map **/ // (TESTED)
 // deprecated 
-//load("__test/__test_map.js");
+//__testcase("__test/__test_map.js");
 
 /* Test Parser **/ // (TESTED)
-load("__test/__test_parser.js");
+__testcase("__test/__test_parser.js");
 
 /* Test Path **/ // (TESTED)
 // deprecated 
-//load("__test/__test_path.js"); 
-load("__test/__test_path2.js");
+//__testcase("__test/__test_path.js"); 
+__testcase("__test/__test_path2.js");
 
 /** Test Contract **/ // (TESTED)
-load("__test/__test_contract.js");
+__testcase("__test/__test_contract.js");
 
 /** Test Contract (reduced) **/ // (TESTED)
-load("__test/__test_contract_reduce.js");
+__testcase("__test/__test_contract_reduce.js");
 
 /* Test Contract (derive) **/  // (TESTED)
-load("__test/__test_contract_read.js");
-load("__test/__test_contract_write.js");
-load("__test/__test_set_read.js");
-load("__test/__test_set_write.js");
+__testcase("__test/__test_contract_read.js");
+__testcase("__test/__test_contract_write.js");
+__testcase("__test/__test_set_read.js");
+__testcase("__test/__test_set_write.js");
 
 
 /* Test Permit **/  // (TESTED)
-load("__test/__test_permit.js");
-load("__test/__test_permit2.js");
-load("__test/__test_permit3.js");
-load("__test/__test_permit4.js");
-load("__test/__test_permit5.js");
-load("__test/__test_permit6.js");
-load("__test/__test_permit7.js");
+__testcase("__test/__test_permit.js");
+__testcase("__test/__test_permit2.js");
+__testcase("__test/__test_permit3.js");
+__testcase("__test/__test_permit4.js");
+__testcase("__test/__test_permit5.js");
+__testcase("__test/__test_permit6.js");
+__testcase("__test/__test_permit7.js");
 
 
 /* Test Permit (special) **/ // (TESTED)
-load("__test/__test_scope.js");
-load("__test/__test_scope2.js");
+__testcase("__test/__test_scope.js");
+__testcase("__test/__test_scope2.js");
 
 
 /* Test Path (membership) **/ // 
 // deprecated 
-//load("__test/__test_subset.js");
-//load("__test/__test_superset.js");
-//load("__test/__test_sreduce.js");
-//load("__test/__test_flattening.js");
+//__testcase("__test/__test_subset.js");
+//__testcase("__test/__test_superset.js");
+//__testcase("__test/__test_sreduce.js");
+//__testcase("__test/__test_flattening.js");
 
 
 /* Containment Calculus */
-load("__test/__test_contract_subset.js");
+__testcase("__test/__test_contract_subset.js");
 
 
 /* Tries */
-load("__test/__test_pathtrie.js");
-load("__test/__test_pathtrie2.js");
+__testcase("__test/__test_pathtrie.js");
+__testcase("__test/__test_pathtrie2.js");
 
 var __end = new Date().getTime();
 
