@@ -14,6 +14,7 @@
  * $Rev$
  */
 
+
 function func(s) {
 	__sysout(this.secret);
 	this.x = 765;
