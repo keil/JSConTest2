@@ -165,6 +165,7 @@
 					   },
 					   /** (d_literal ^) ::= ^ if literal == ^, @ oterhwise */
 					   lderive: function(larg) {
+							   //return (larg==this) ? new __EmptySetLiteral() : new __EmptySetLiteral();
 							   return (larg==this) ? new __EmptyLiteral() : new __EmptySetLiteral();
 					   },
 					   /** (b_literal ^) ::= (d_literal ^) */
@@ -882,11 +883,11 @@
 						/** (C+C) ~ C */
 						if(contract0==contract1) return contract0;
 						/** ({}+C) ~ C */
-						else if(contract0==new __EmptySetContract()) return contrat1;
-						else if(contract1==new __EmptySetContract()) return contrat0;
+						else if(contract0==new __EmptySetLiteral()) return contract1;
+						else if(contract1==new __EmptySetLiteral()) return contract0;
 						/** (@+C) ~ C */
-						else if(contract0==new __AtContract()) return contrat1;
-						else if(contract1==new __AtContract()) return contrat0;
+						else if(contract0==new __AtLiteral()) return contract1;
+						else if(contract1==new __AtLiteral()) return contract0;
 
 						return __cache.c({
 								/** n(C0+C1) ::= n(C0) & n(C1) */
@@ -1016,11 +1017,11 @@
 						/** (C&C) ~ C */
 						if(contract0==contract1) return contract0;
 						/** ({}&C) ~ {} */
-						else if(contract0==new __EmptySetContract()) return new __EmptySetContract();
-						else if(contract1==new __EmptySetContract()) return new __EmptySetContract();
+						else if(contract0==new __EmptySetLiteral()) return new __EmptySetLiteral();
+						else if(contract1==new __EmptySetLiteral()) return new __EmptySetLiteral();
 						/** (@&C) ~ @ */
-						else if(contract0==new __AtContract()) return new __AtContract();
-						else if(contract1==new __AtContract()) return new __AtContract();
+						else if(contract0==new __AtLiteral()) return new __AtLiteral();
+						else if(contract1==new __AtLiteral()) return new __AtLiteral();
 
 						return __cache.c({
 								/** n(C0&C1) ::= n(C0) + n(C1) */
@@ -1191,7 +1192,9 @@
 							   //////////////////////////////////////////////////
 							   /** first(!C) ::= first(C) */
 							   first: function() {
-									   return contract.first();
+										return new Array(new __QMarkLiteral());
+									   // TODO
+									   //return contract.first();
 							   },
 							   /** (d_name !C) :== !(d_name C) */
 							   derive: function(name) {
@@ -1200,8 +1203,8 @@
 							   /** (d_literal !C) ::= !(b_literal C) */
 							   lderive: function(larg) {
 									   // TODO
-									   return (larg==new __QMarkLiteral()) ? new __NegContract(contract.cderive(larg)) : new __NegContract(contract.lderive(larg));
-									   //return new __NegContract(contract.lderive(larg));
+									   //return (larg==new __QMarkLiteral()) ? new __NegContract(contract.cderive(larg)) : new __NegContract(contract.lderive(larg));
+									   return new __NegContract(contract.lderive(larg));
 							   },
 							   // TODO
 							   /** (b_literal !C) ::= !(d_literal C) */
@@ -1229,9 +1232,12 @@
 									   else if(this.isUniversal()) return true;
 									   /** C <= C' |= false  | m(C) and !m(C') */
 									   //							   else if(!this.isUniversal() && arg.isUniversal()) return false;
+__sysout("dfasdfsdfg");
+__sysout(contract + ">" + arg + ":" + contract.isSuperSetOf(arg, new __CcContext()));
+				__sysout(contract + "<" + arg + ":" + arg.isSuperSetOf(contract, new __CcContext()));
 
 									   /** C <= !(C') |= false  | (C <= C') + (C >= C') */
-									   //  else if(contract.isSuperSetOf(arg, new __CcContext()) || arg.isSuperSetOf(contract, new __CcContext())) return false;
+									      if(contract.isSuperSetOf(arg, new __CcContext()) || arg.isSuperSetOf(contract, new __CcContext())) { __sysout("RETURN FALSE"); return false; } 
 
 									   // if(contract.isSuperSetOf(arg, new __CcContext()) || arg.isSuperSetOf(contract, new __CcContext())) return false;
 
