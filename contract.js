@@ -1214,7 +1214,7 @@
 							   /** first(!C) ::= first(C) */
 							   first: function() {
 									  // (1)
-									//	return new Array(new __QMarkLiteral());
+										return new Array(new __QMarkLiteral());
 									   // TODO
 									   return contract.first();
 							   },
