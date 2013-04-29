@@ -789,6 +789,11 @@
 					   },
 					   /** (d_literal C?) ::= (d_literal C) */
 					   lderive: function(larg) {
+
+
+							    if (larg==new __EmptyLiteral()) return new Array(this);
+
+
 							   var result = new Array();
 							   contract.lderive(larg).foreach(function(index,literal) {
 									   result.push(literal);
@@ -920,9 +925,12 @@
 					   /** (d_literal C*) ::= (d_literal C).C* */
 					   lderive: function(larg) {
 
+							   if (larg==new __EmptyLiteral()) return new Array(this);
+
+
 							   var result = new Array();
-							   contract.lderive(larg).foreach(function(index,literal) {
-									   result.push(literal);
+							   contract.lderive(larg).foreach(function(index, literal) {
+									   result.push(new __ConcatContract(literal, new __StarContract(contract)));
 							   });
 							   return result;
 
@@ -1233,7 +1241,7 @@
 
 									   set0.foreach(function(i0,c0) {
 											   set1.foreach(function(i1,c1) {
-													   result.push(new __OrContract(c0, c1));
+													   result.push(new __AndContract(c0, c1));
 											   });
 									   });
 									   return result;
@@ -1764,12 +1772,18 @@
 						 */
 						function unfold(E, F, first, ctx) {
 
+								__sysout("## isSuperSetOf: " + E + ">=" + F);
+
 								var result = true;
 
 								first.foreach(function(k, literal) {
 
 										var lderive_E = E.lderive(literal);
 										var lderive_F = F.lderive(literal);
+
+										__sysout("## first: " + first);
+										__sysout("## lderive_E: " + lderive_E);
+										__sysout("## lderive_F: " + lderive_F);
 
 										lderive_E.foreach(function(i,e) {
 												lderive_F.foreach(function(i,f) {
