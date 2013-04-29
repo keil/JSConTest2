@@ -78,6 +78,10 @@
 					   },
 					   /** (d_literal {}) ::= {} */
 					   lderive: function(larg) {
+								// TODO	
+							   /*if(larg==this) return new __EmptyLiteral();
+								else if (larg==new __EmptyLiteral()) return this;
+								else */
 							   return new __EmptySetLiteral();
 					   },
 					   /** (b_literal {}) ::= (d_literal {}) */
@@ -165,9 +169,12 @@
 					   },
 					   /** (d_literal ^) ::= ^ if literal == ^, @ oterhwise */
 					   lderive: function(larg) {
+							   /* if(larg==this) return new __EmptyLiteral();
+								else if (larg==new __EmptyLiteral()) return this;
+								else */
 							  // TODO (2)
-							   return (larg==this) ? new __EmptySetLiteral() : new __EmptySetLiteral();
-							   //return (larg==this) ? this : new __EmptySetLiteral();
+							   //return (larg==this) ? new __EmptySetLiteral() : new __EmptySetLiteral();
+							   return (larg==this) ? this : new __EmptySetLiteral();
 					   },
 					   /** (b_literal ^) ::= (d_literal ^) */
 					   cderive: function(larg) {
@@ -275,7 +282,10 @@
 					   },
 					   /** (d_literal @) ::= @ */
 					   lderive: function(larg) {
-							   return new __EmptySetLiteral();
+							   // TODO
+							   /*if(larg==this) return new __EmptyLiteral();
+								else if (larg==new __EmptyLiteral()) return this;
+								else*/ return new __EmptySetLiteral();
 					   },
 					   /** (b_literal @) ::= (d_literal @) */
 					   cderive: function(larg) {
@@ -377,7 +387,10 @@
 					   },
 					   /** (d_literal ?) ::= ? if literal=^, ^ otherwise */
 					   lderive: function(larg) {
-							   return  (larg==new __EmptyLiteral()) ? this:  new __EmptyLiteral();
+							   // TODO
+							   if(larg==this) return new __EmptyLiteral();
+								else if (larg==new __EmptyLiteral()) return this;
+								else return  (larg==new __EmptyLiteral()) ? this:  new __EmptyLiteral();
 					   },
 					   /** (b_literal ?) ::= ? if literal==^, {} if literal=={} or literal=@, ^ otherwise */
 					   cderive: function(larg) {
@@ -483,11 +496,20 @@
 					   },
 					   /** (d_literal varname) ::= varname if literal=^, ^ if literal==varname, {} oterhwise */
 					   lderive: function(larg) {
-							   return (larg==new __EmptyLiteral()) ? this: ((larg==this) ? new __EmptyLiteral() : new __EmptySetLiteral());
+							   // (X)
+
+							// TODO
+							   if(larg==this) return new __EmptyLiteral(); 
+								else if (larg==new __EmptyLiteral()) return  this;
+								else return (larg==new __EmptyLiteral()) ? this: ((larg==this) ? new __EmptyLiteral() : new __EmptySetLiteral());
 					   },
 					   // TODO
 					   /** (b_literal varname) ::= varname if literal=^, ^ if literal==varname or literal==?, {} oterhwise */
 					   cderive: function(larg) {
+								// TODO
+							   if(larg==this) return new __EmptyLiteral();
+								else if (larg==new __EmptyLiteral()) return this;
+								else 
 							   return (larg==new __EmptyLiteral()) ? this: ((larg==this || larg==new __QMarkLiteral()) ? new __EmptyLiteral() : new __EmptySetLiteral());
 					   },
 					   //////////////////////////////////////////////////
@@ -587,11 +609,19 @@
 					   },
 					   /** (d_literal RegEx) ::= RegEx if literal==^, ^ if literal==RegEx, {} oterhwise */
 					   lderive: function(larg) {
+								// TODO
+								if(larg==this) return new __EmptyLiteral();
+								else if (larg==new __EmptyLiteral()) return this;
+								else 
 							   return (larg==new __EmptyLiteral()) ? this: ((larg==this) ? new __EmptyLiteral() : new __EmptySetLiteral());
 					   },
 					   // TODO
 					   /** (d_literal RegEx) ::= RegEx if literal==^, ^ if literal==RegEx or literal==?, {} oterhwise */
 					   cderive: function(larg) {
+							   // TODO
+if(larg==this) return new __EmptyLiteral();
+								else if (larg==new __EmptyLiteral()) return this;
+								else 
 							   return (larg==new __EmptyLiteral()) ? this: ((larg==this || larg==new __QMarkLiteral()) ? new __EmptyLiteral() : new __EmptySetLiteral());
 					   },
 					   //////////////////////////////////////////////////
@@ -708,6 +738,9 @@
 					   /** (d_literal C?) ::= (d_literal C) */
 					   lderive: function(larg) {
 							   // TODO
+							   if(larg==this) return new __EmptyLiteral();
+								else if (larg==new __EmptyLiteral()) return this;
+								else 
 							   return  (larg==new __EmptyLiteral()) ? this: contract.lderive(larg);
 					   },
 					   /** (b_literal C?) ::= (d_literal C?) */
@@ -825,6 +858,9 @@
 					   /** (d_literal C*) ::= (d_literal C).C* */
 					   lderive: function(larg) {
 							   // TODO
+							   if(larg==this) return new __EmptyLiteral();
+								else if (larg==new __EmptyLiteral()) return this;
+								else 
 							   return (larg==new __EmptyLiteral()) ? this: new __ConcatContract(contract.lderive(larg), this);
 					   },
 					   /** (b_literal C*) ::= (d_literal {C*) */
@@ -850,11 +886,13 @@
 							   ccExp = new __CcExp(arg, this);
 							   if(ctx.contains(ccExp)) return true;
 // %%%
+
+ctx = ctx.bind(ccExp);
+
 							   /** otherwise */
 							   var thisContract = this;
 							   var result = true;
 							   arg.first().foreach(function(k, literal) {
-									   __sysout(thisContract.lderive(literal) + " > " + arg.lderive(literal));
 									   result = result && thisContract.lderive(literal).isSuperSetOf(arg.lderive(literal), ctx.bind(ccExp));
 							   });
 							   /** (d_literal C >= C') |= (d_literal C) >= (d_literal C') */
@@ -951,6 +989,9 @@
 							   },
 							   /** (d_literal C0+C1) ::= (d_literal C0) + (d_literal C1) */
 							   lderive: function(larg) {
+									   if(larg==this) return new __EmptyLiteral();
+								else if (larg==new __EmptyLiteral()) return this;
+								else 
 									   return new __OrContract(contract0.lderive(larg), contract1.lderive(larg));
 							   },
 							   /** (b_literal C0+C1) ::= (d_literal C0+C1) */
@@ -1094,6 +1135,9 @@
 							   },
 							   /** (d_literal C0&C1) ::= (d_literal C0) & (d_literal C1) */
 							   lderive: function(larg) {
+									   if(larg==this) return new __EmptyLiteral();
+								else if (larg==new __EmptyLiteral()) return this;
+								else 
 									   return new __AndContract(contract0.lderive(larg), contract1.lderive(larg));
 							   },
 							   /** (b_literal C0&C1) ::= (d_literal C0&C1) */
@@ -1214,19 +1258,27 @@
 							   /** first(!C) ::= first(C) */
 							   first: function() {
 									  // (1)
-										return new Array(new __QMarkLiteral());
+									  //
+									  
+										return new Array(new __QMarkLiteral()); //.concat(contract.first());
 									   // TODO
-									   return contract.first();
+									//   return contract.first();
 							   },
 							   /** (d_name !C) :== !(d_name C) */
 							   derive: function(name) {
+									   if(larg==this) return new __EmptyLiteral();
+								else if (larg==new __EmptyLiteral()) return this;
+								else 
 									   return new __NegContract(contract.derive(name));
 							   },
 							   /** (d_literal !C) ::= !(b_literal C) */
 							   lderive: function(larg) {
 									   // TODO
-									   //return (larg==new __QMarkLiteral()) ? new __NegContract(contract.cderive(larg)) : new __NegContract(contract.lderive(larg));
-									   return new __NegContract(contract.lderive(larg));
+									    if(larg==this) return new __EmptyLiteral();
+								else if (larg==new __EmptyLiteral()) return this;
+								else 
+									    return (larg==new __QMarkLiteral()) ? new __NegContract(contract.cderive(larg)) : new __NegContract(contract.lderive(larg));
+									   //return new __NegContract(contract.lderive(larg));
 							   },
 							   // TODO
 							   /** (b_literal !C) ::= !(d_literal C) */
@@ -1238,7 +1290,8 @@
 							   /** ctx |- C <= this */
 							   isSuperSetOf: function(arg, ctx) {
 
-__sysout(this + " >= " + arg);
+
+									   __sysout("IS SUPERSET OF: " + this + " >= " + arg);
 
 									   /** C <= C' |= true  | C=C' */
 									   if(arg==this) return true;
@@ -1267,20 +1320,42 @@ __sysout(this + " >= " + arg);
 									   // if(contract.isSuperSetOf(arg, new __CcContext()) || arg.isSuperSetOf(contract, new __CcContext())) return false;
 
 
-
+									  
 									   /** C <= C' |= true  | ctx(C <= C') */
-									   ccExp = new __CcExp(arg, this);
+									   var ccExp = new __CcExp(arg, this);
+ if(ctx.contains(ccExp)) __sysout("CACHE HIT: " + ccExp); else __sysout("CACHE MISS: " + ccExp);
+
 									   if(ctx.contains(ccExp)) return true;
 
 									   /** otherwise */
 									   var thisContract = this;
 									   var result = true;
-									   arg.first().foreach(function(k, literal) {
+
+
+
+									  	 
+								//	   arg.first().foreach(function(k, literal) {
+
+									   __sysout("FIRST: " + arg.first().concat(contract.first()));
+
+
+
+									   arg.first().concat(contract.first()).foreach(function(k, literal) {
+
+											   __sysout("DERIVE: " + literal + ":");
+
 											   //__sysout("DERIVE AFTER:" + literal);
 											   //result = result && thisContract.lderive(literal).isSuperSetOf(arg.cderive(literal), ctx.bind(ccExp));
-											   
+											  
+
+										//	  __sysout("BEGIN: ORIGINAL RUN"); 
 											   // ORIGINAL
-												result = result && thisContract.lderive(literal).isSuperSetOf(arg.lderive(literal), ctx.bind(ccExp));
+										//	if(result)
+										//
+											  result = result && thisContract.lderive(literal).isSuperSetOf(arg.lderive(literal), ctx.bind(ccExp));
+												
+												//if(!result) return result; // TODO termination
+										//		__sysout("END: ORIGINAL RUN");
 
 											 //  if(literal==new __QMarkLiteral()) {
 											  // 		result = result && thisContract.lderive(literal).isSuperSetOf(arg.lderive(literal), ctx.bind(ccExp));
@@ -1288,22 +1363,27 @@ __sysout(this + " >= " + arg);
 											  //
 
 											  // OK
-											 //  result = result && thisContract.lderive(literal).isSuperSetOf(arg.lderive(literal), ctx.bind(ccExp))
-											 //  && thisContract.cderive(literal).isSuperSetOf(arg.cderive(literal), ctx.bind(ccExp));
-											 //  ;
+										//	   result = result && thisContract.lderive(literal).isSuperSetOf(arg.lderive(literal), ctx.bind(ccExp))
+										//	   && thisContract.cderive(literal).isSuperSetOf(arg.cderive(literal), ctx.bind(ccExp));
+											  // ;
 											   
 
 									   });
 
 									    /** otherwise */
-									   contract.first().foreach(function(k, literal) {
+							//		   contract.first().foreach(function(k, literal) {
 											   //result = result && thisContract.lderive(literal).isSuperSetOf(arg.lderive(literal), ctx.bind(ccExp))
 											   //&& thisContract.cderive(literal).isSuperSetOf(arg.cderive(literal), ctx.bind(ccExp));
 											   //;
 											   //
-											   result = result && thisContract.lderive(literal).isSuperSetOf(arg.lderive(literal), ctx.bind(ccExp));											   
+									//		   __sysout("BEGIN: INVERSE RUN");
+									//		   if(result)
+									//		   result = result && thisContract.lderive(literal).isSuperSetOf(arg.lderive(literal), ctx.bind(ccExp));
+//if(!result) return result; // TODO termination											   
+									//		   __sysout("END: INVERSE RUN");
 
-									   });
+	
+							//		   });
 
 
 									   	// TEST
@@ -1417,6 +1497,11 @@ __sysout(this + " >= " + arg);
 							   },
 							   /** (d_literal C0.C1) ::= (d_literal C0).C1 + (d_literal C1) if v(C0), (d_literal C0).c1 otherwise */
 							   lderive: function(larg) {
+
+									   if(larg==this) return new __EmptyLiteral();
+								else if (larg==new __EmptyLiteral()) return this;
+								else 
+
 									   if(contract0.isNullable()) return new __OrContract(new __ConcatContract(contract0.lderive(larg), contract1), contract1.lderive(larg));
 									   else return new __ConcatContract(contract0.lderive(larg), contract1);
 							   },
@@ -1454,7 +1539,6 @@ __sysout(this + " >= " + arg);
 									   var thisContract = this;
 									   var result = true;
 									   arg.first().foreach(function(k, literal) {
-											   __sysout("CALL LDERIV with : " + literal);
 											   result = result && thisContract.lderive(literal).isSuperSetOf(arg.lderive(literal), ctx.bind(ccExp));
 									   });
 
@@ -1544,9 +1628,16 @@ __sysout(this + " >= " + arg);
 				 */
 				function __CcContext() {	
 						// cache array
-						var context = new Array();
+						var context = new StringMap();
+
+						var key = function(v) {
+							return ("\"" + v + "\"");		
+						}
 
 						return {
+
+								// TODO
+								values: context,
 
 								/* bind function
 								 * @param CC Expression
@@ -1556,7 +1647,7 @@ __sysout(this + " >= " + arg);
 										// clone context
 										var newCtx = new __CcContext();
 										context.foreach(function(k, v) {
-												newCtx.put(v)
+												newCtx.put(v);
 										});
 										// bind new CC Expression
 										if(!newCtx.contains(ccExp)) {
@@ -1570,8 +1661,7 @@ __sysout(this + " >= " + arg);
 										 * $return CC Expression
 										 */
 										put: function(ccExp) {
-												var key = ccExp.toString();
-												context["\"" + key + "\""] = ccExp;
+												context.set(ccExp.toString(), ccExp);
 												return ccExp;
 										},
 
@@ -1580,8 +1670,7 @@ __sysout(this + " >= " + arg);
 										 * $return CC Expression
 										 */
 										get: function(ccExp) {
-												var key = ccExp.toString();
-												return context["\"" + key + "\""];
+												return context.get(ccExp.toString());
 										},
 
 										/* contains
@@ -1589,8 +1678,7 @@ __sysout(this + " >= " + arg);
 										 * $return true, if ccExp in cache, false otherwise
 										 */
 										contains: function(ccExp) {
-												var key = ccExp.toString();
-												return (context["\"" + key + "\""]!==undefined) ? true : false;
+												return context.has(ccExp.toString());
 										}
 						}
 				};
