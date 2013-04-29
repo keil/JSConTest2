@@ -79,16 +79,16 @@
 					   /** (d_literal {}) ::= {} */
 					   lderive: function(larg) {
 							   return new Array(this);
-								// TODO	
+							   // TODO	
 							   /*if(larg==this) return new __EmptyLiteral();
-								else if (larg==new __EmptyLiteral()) return this;
-								else */
-							  //* return new __EmptySetLiteral();
+								 else if (larg==new __EmptyLiteral()) return this;
+								 else */
+							   //* return new __EmptySetLiteral();
 					   },
 					   /** (b_literal {}) ::= (d_literal {}) */
-//					   cderive: function(larg) {
-//							   return this.lderive(larg);
-//					   },
+					   //					   cderive: function(larg) {
+					   //							   return this.lderive(larg);
+					   //					   },
 					   //////////////////////////////////////////////////
 					   /** ctx |- C <= this */
 					   isSuperSetOf: function(arg, ctx) {
@@ -170,45 +170,58 @@
 					   },
 					   /** (d_literal ^) ::= ^ if literal == ^, @ oterhwise */
 					   lderive: function(larg) {
-								return (larg==this) ? new Array(this) : new Array(new __EmptySetLiteral());
+							   return (larg==this) ? new Array(this) : new Array(new __EmptySetLiteral());
 
 							   /* if(larg==this) return new __EmptyLiteral();
-								else if (larg==new __EmptyLiteral()) return this;
-								else */
-							  // TODO (2)
+								  else if (larg==new __EmptyLiteral()) return this;
+								  else */
+							   // TODO (2)
 							   //return (larg==this) ? new __EmptySetLiteral() : new __EmptySetLiteral();
 							   //** return (larg==this) ? this : new __EmptySetLiteral();
 					   },
 					   /** (b_literal ^) ::= (d_literal ^) */
-//					   cderive: function(larg) {
-//							   return this.lderive(larg);
-//					   },
+					   //					   cderive: function(larg) {
+					   //							   return this.lderive(larg);
+					   //					   },
 					   //////////////////////////////////////////////////
 					   /** ctx |- C <= this */
 					   isSuperSetOf: function(arg, ctx) {
 							   /** C <= C' |= true  | C=C' */
 							   if(arg==this) return true;
 							   /** C <= C' |= true  | n(C) */
-//							   else if (arg.isEmpty()) return true;
+							   //							   else if (arg.isEmpty()) return true;
 							   /** C <= C' |= true  | w(C) & !n(C') */
-//							   else if(arg.isBlank()) return true;
+							   //							   else if(arg.isBlank()) return true;
 
 							   /** otherwise */
-//							   else return false;
+							   //							   else return false;
 							   //
+
 							   /** C <= C' |= true  | ctx(C <= C') */
 							   ccExp = new __CcExp(arg, this);
 							   if(ctx.contains(ccExp)) return true;
-
 							   /** otherwise */
-							   var thisContract = this;
-							   var result = true;
-							   arg.first().foreach(function(k, literal) {
-							   	   result = result && thisContract.lderive(literal).isSuperSetOf(arg.lderive(literal), ctx.bind(ccExp));
-							   });
+								else return unfold(this, arg, arg.first(), ctx.bind(ccExp));
+
+//							   var thisContract = this;
+//							   var result = true;
+//							   arg.first().foreach(function(k, literal) {
+//
+//									   var E = thisContract.lderive(literal);
+//									   var F = arg.lderive(literal);
+//
+//									   E.foreach(function(Ei,Ev) {
+//											   F.foreach(function(Fi,Fv) {
+//													   result = result && Ev.isSuperSetOf(Fv, ctx.bind(ccExp));
+//											   });
+//									   });
+//
+//
+//									   result = result && thisContract.lderive(literal).isSuperSetOf(arg.lderive(literal), ctx.bind(ccExp));
+//							   });
 
 							   /** (d_literal C >= C') |= (d_literal C) >= (d_literal C') */
-							   return result;
+//							   return result;
 
 					   },
 					   /** ctx |- C >= this */
@@ -285,42 +298,45 @@
 					   },
 					   /** (d_literal @) ::= @ */
 					   lderive: function(larg) {
-								return new Array(new __EmptySetLiteral());
+							   return new Array(new __EmptySetLiteral());
 
 
 							   // TODO
 							   /*if(larg==this) return new __EmptyLiteral();
-								else if (larg==new __EmptyLiteral()) return this;
-								else*/ //** return new __EmptySetLiteral();
+								 else if (larg==new __EmptyLiteral()) return this;
+								 else*/ //** return new __EmptySetLiteral();
 					   },
 					   /** (b_literal @) ::= (d_literal @) */
-	//				   cderive: function(larg) {
-//							   return this.lderive(larg);
-//					   },
+					   //				   cderive: function(larg) {
+					   //							   return this.lderive(larg);
+					   //					   },
 					   //////////////////////////////////////////////////
 					   /** ctx |- C <= this */
 					   isSuperSetOf: function(arg, ctx) {
 							   /** C <= C' |= true  | C=C' */
 							   if(arg==this) return true;
 							   /** C <= C' |= true  | n(C) */
-//							   else if (arg.isEmpty()) return true;
+							   //							   else if (arg.isEmpty()) return true;
 
 							   /** otherwise */
-//							   else return false;
-//
-//							    /** C <= C' |= true  | ctx(C <= C') */
+							   //							   else return false;
+							   //
+							   //							    /** C <= C' |= true  | ctx(C <= C') */
 							   ccExp = new __CcExp(arg, this);
 							   if(ctx.contains(ccExp)) return true;
+								/** otherwise */
+								else return unfold(this, arg, arg.first(), ctx.bind(ccExp));
+
 
 							   /** otherwise */
-							   var thisContract = this;
-							   var result = true;
-							   arg.first().foreach(function(k, literal) {
-							   	   result = result && thisContract.lderive(literal).isSuperSetOf(arg.lderive(literal), ctx.bind(ccExp));
-							   });
+							  // var thisContract = this;
+							   //var result = true;
+							   //arg.first().foreach(function(k, literal) {
+						//			   result = result && thisContract.lderive(literal).isSuperSetOf(arg.lderive(literal), ctx.bind(ccExp));
+					//		   });
 
 							   /** (d_literal C >= C') |= (d_literal C) >= (d_literal C') */
-							   return result;
+					//		   return result;
 					   },
 					   /** ctx |- C >= this */
 					   isSubSetOf: function(arg, ctx) {
@@ -393,22 +409,22 @@
 					   },
 					   /** (d_literal ?) ::= ? if literal=^, ^ otherwise */
 					   lderive: function(larg) {
-								 // TODO
+							   // TODO
 							   if(larg==this) return new Array(new __EmptyLiteral());
-								else if (larg==new __EmptyLiteral()) return new Array(this);
-								else return  (larg==new __EmptyLiteral()) ? new Array(this):  new Array(new __EmptyLiteral());
-									// TODO, derive after empty set and .. co
+							   else if (larg==new __EmptyLiteral()) return new Array(this);
+							   else return  (larg==new __EmptyLiteral()) ? new Array(this):  new Array(new __EmptyLiteral());
+							   // TODO, derive after empty set and .. co
 
 
 							   // TODO
-							//**   if(larg==this) return new __EmptyLiteral();
-							//**	else if (larg==new __EmptyLiteral()) return this;
-							//**	else return  (larg==new __EmptyLiteral()) ? this:  new __EmptyLiteral();
+							   //**   if(larg==this) return new __EmptyLiteral();
+							   //**	else if (larg==new __EmptyLiteral()) return this;
+							   //**	else return  (larg==new __EmptyLiteral()) ? this:  new __EmptyLiteral();
 					   },
 					   /** (b_literal ?) ::= ? if literal==^, {} if literal=={} or literal=@, ^ otherwise */
-//					   cderive: function(larg) {
-//							   return (larg==new __EmptyLiteral()) ? this: ((larg==new __EmptySetLiteral() || larg==new __AtLiteral()) ? new __EmptySetLiteral(): new __EmptyLiteral());
-//					   },
+					   //					   cderive: function(larg) {
+					   //							   return (larg==new __EmptyLiteral()) ? this: ((larg==new __EmptySetLiteral() || larg==new __AtLiteral()) ? new __EmptySetLiteral(): new __EmptyLiteral());
+					   //					   },
 					   //////////////////////////////////////////////////
 					   /** ctx |- C <= this */
 					   isSuperSetOf: function(arg, ctx) {
@@ -417,9 +433,9 @@
 							   /** C <= C' |= false  | v(C) and ~v(C') */
 							   else if(arg.isNullable()) return false;
 							   /** C <= C' |= true  | n(C) */
-//							   else if (arg.isEmpty()) return true;
+							   //							   else if (arg.isEmpty()) return true;
 							   /** C <= C' |= true  | w(C) & !n(C') */
-//							   else if(arg.isBlank()) return true;
+							   //							   else if(arg.isBlank()) return true;
 							   //	   /** C <= C' |= false  | m(C) and !m(C') */
 							   //	   else if(arg.isUniversal()) return false;
 
@@ -429,14 +445,19 @@
 							   /** C <= C' |= true  | ctx(C <= C') */
 							   ccExp = new __CcExp(arg, this);
 							   if(ctx.contains(ccExp)) return true;
+								/** otherwise */
+								else return unfold(this, arg, arg.first(), ctx.bind(ccExp));
+
+						
+						
 							   /** otherwise */
-							   var thisContract = this;
-							   var result = true;
-							   arg.first().foreach(function(k, literal) {
-									   result = result && thisContract.lderive(literal).isSuperSetOf(arg.lderive(literal), ctx.bind(ccExp));
-							   });
+//							   var thisContract = this;
+//							   var result = true;
+//							   arg.first().foreach(function(k, literal) {
+//									   result = result && thisContract.lderive(literal).isSuperSetOf(arg.lderive(literal), ctx.bind(ccExp));
+//							   });
 							   /** (d_literal C >= C') |= (d_literal C) >= (d_literal C') */
-							   return result;
+//							   return result;
 					   },
 					   /** ctx |- C >= this */
 					   isSubSetOf: function(arg, ctx) {
@@ -509,35 +530,35 @@
 					   },
 					   /** (d_literal varname) ::= varname if literal=^, ^ if literal==varname, {} oterhwise */
 					   lderive: function(larg) {
-							    if(larg==this) return new Array(new __EmptyLiteral()); 
-								else if (larg==new __EmptyLiteral()) return new Array(this);
-								else if(larg==new __QMarkLiteral()) return new Array(new __EmptyLiteral(), new __EmptySetLiteral());
-								else return new Array(new __EmptySetLiteral());
-								//else return (larg==new __EmptyLiteral()) ? this: ((larg==this) ? new __EmptyLiteral() : new __EmptySetLiteral());
+							   if(larg==this) return new Array(new __EmptyLiteral()); 
+							   else if (larg==new __EmptyLiteral()) return new Array(this);
+							   else if(larg==new __QMarkLiteral()) return new Array(new __EmptyLiteral(), new __EmptySetLiteral());
+							   else return new Array(new __EmptySetLiteral());
+							   //else return (larg==new __EmptyLiteral()) ? this: ((larg==this) ? new __EmptyLiteral() : new __EmptySetLiteral());
 
-							// TODO
-						//**	   if(larg==this) return new __EmptyLiteral(); 
-						//**		else if (larg==new __EmptyLiteral()) return  this;
-						//**		else return (larg==new __EmptyLiteral()) ? this: ((larg==this) ? new __EmptyLiteral() : new __EmptySetLiteral());
+							   // TODO
+							   //**	   if(larg==this) return new __EmptyLiteral(); 
+							   //**		else if (larg==new __EmptyLiteral()) return  this;
+							   //**		else return (larg==new __EmptyLiteral()) ? this: ((larg==this) ? new __EmptyLiteral() : new __EmptySetLiteral());
 					   },
 					   // TODO
 					   /** (b_literal varname) ::= varname if literal=^, ^ if literal==varname or literal==?, {} oterhwise */
-//					   cderive: function(larg) {
-//								// TODO
-//							   if(larg==this) return new __EmptyLiteral();
-//								else if (larg==new __EmptyLiteral()) return this;
-//								else 
-//							   return (larg==new __EmptyLiteral()) ? this: ((larg==this || larg==new __QMarkLiteral()) ? new __EmptyLiteral() : new __EmptySetLiteral());
-//					   },
+					   //					   cderive: function(larg) {
+					   //								// TODO
+					   //							   if(larg==this) return new __EmptyLiteral();
+					   //								else if (larg==new __EmptyLiteral()) return this;
+					   //								else 
+					   //							   return (larg==new __EmptyLiteral()) ? this: ((larg==this || larg==new __QMarkLiteral()) ? new __EmptyLiteral() : new __EmptySetLiteral());
+					   //					   },
 					   //////////////////////////////////////////////////
 					   /** ctx |- C <= this */
 					   isSuperSetOf: function(arg, ctx) {
 							   /** C <= C' |= true  | C=C' */
 							   if(arg==this) return true;
 							   /** C <= C' |= true  | n(C) */
-//							   else if (arg.isEmpty()) return true;
+							   //							   else if (arg.isEmpty()) return true;
 							   /** C <= C' |= true  | w(C) & !n(C') */
-//							   else if(arg.isBlank()) return true;
+							   //							   else if(arg.isBlank()) return true;
 
 							   /** otherwise */
 							   // else return false;
@@ -545,14 +566,18 @@
 							   /** C <= C' |= true  | ctx(C <= C') */
 							   ccExp = new __CcExp(arg, this);
 							   if(ctx.contains(ccExp)) return true;
-							   /** otherwise */
-							   var thisContract = this;
-							   var result = true;
-							   arg.first().foreach(function(k, literal) {
-									   result = result && thisContract.lderive(literal).isSuperSetOf(arg.lderive(literal), ctx.bind(ccExp));
-							   });
-							   /** (d_literal C >= C') |= (d_literal C) >= (d_literal C') */
-							   return result;
+								/** otherwise */
+								else return unfold(this, arg, arg.first(), ctx.bind(ccExp));
+
+		
+//							   /** otherwise */
+//							   var thisContract = this;
+///							   var result = true;
+//							   arg.first().foreach(function(k, literal) {
+//									   result = result && thisContract.lderive(literal).isSuperSetOf(arg.lderive(literal), ctx.bind(ccExp));
+//							   });
+//							   /** (d_literal C >= C') |= (d_literal C) >= (d_literal C') */
+//							   return result;
 
 					   },
 					   /** ctx |- C >= this */
@@ -626,28 +651,28 @@
 					   },
 					   /** (d_literal RegEx) ::= RegEx if literal==^, ^ if literal==RegEx, {} oterhwise */
 					   lderive: function(larg) {
-								
+
 							   if(larg==this) return new Array(new __EmptyLiteral()); 
-								else if (larg==new __EmptyLiteral()) return new Array(this);
-								else if(larg==new __QMarkLiteral()) return new Array(new __EmptyLiteral(), new __EmptySetLiteral());
-								else return new Array(new __EmptySetLiteral());
+							   else if (larg==new __EmptyLiteral()) return new Array(this);
+							   else if(larg==new __QMarkLiteral()) return new Array(new __EmptyLiteral(), new __EmptySetLiteral());
+							   else return new Array(new __EmptySetLiteral());
 
 
-								// TODO
-							//**	if(larg==this) return new __EmptyLiteral();
-							//**	else if (larg==new __EmptyLiteral()) return this;
-							//**	else 
-							 //**  return (larg==new __EmptyLiteral()) ? this: ((larg==this) ? new __EmptyLiteral() : new __EmptySetLiteral());
+							   // TODO
+							   //**	if(larg==this) return new __EmptyLiteral();
+							   //**	else if (larg==new __EmptyLiteral()) return this;
+							   //**	else 
+							   //**  return (larg==new __EmptyLiteral()) ? this: ((larg==this) ? new __EmptyLiteral() : new __EmptySetLiteral());
 					   },
 					   // TODO
 					   /** (d_literal RegEx) ::= RegEx if literal==^, ^ if literal==RegEx or literal==?, {} oterhwise */
-//					   cderive: function(larg) {
-//							   // TODO
-//if(larg==this) return new __EmptyLiteral();
-//								else if (larg==new __EmptyLiteral()) return this;
-//								else 
-//							   return (larg==new __EmptyLiteral()) ? this: ((larg==this || larg==new __QMarkLiteral()) ? new __EmptyLiteral() : new __EmptySetLiteral());
-//					   },
+					   //					   cderive: function(larg) {
+					   //							   // TODO
+					   //if(larg==this) return new __EmptyLiteral();
+					   //								else if (larg==new __EmptyLiteral()) return this;
+					   //								else 
+					   //							   return (larg==new __EmptyLiteral()) ? this: ((larg==this || larg==new __QMarkLiteral()) ? new __EmptyLiteral() : new __EmptySetLiteral());
+					   //					   },
 					   //////////////////////////////////////////////////
 					   /** ctx |- C <= this */
 					   isSuperSetOf: function(arg, ctx) {
@@ -665,14 +690,17 @@
 							   /** C <= C' |= true  | ctx(C <= C') */
 							   ccExp = new __CcExp(arg, this);
 							   if(ctx.contains(ccExp)) return true;
+								/** otherwise */
+								else return unfold(this, arg, arg.first(), ctx.bind(ccExp));
+
 							   /** otherwise */
-							   var thisContract = this;
-							   var result = true;
-							   arg.first().foreach(function(k, literal) {
-									   result = result && thisContract.lderive(literal).isSuperSetOf(arg.lderive(literal), ctx.bind(ccExp));
-							   });
-							   /** (d_literal C >= C') |= (d_literal C) >= (d_literal C') */
-							   return result;
+							   //var thisContract = this;
+							   //var result = true;
+							   //arg.first().foreach(function(k, literal) {
+							//		   result = result && thisContract.lderive(literal).isSuperSetOf(arg.lderive(literal), ctx.bind(ccExp));
+							 //  });
+							  // /** (d_literal C >= C') |= (d_literal C) >= (d_literal C') */
+							  // return result;
 
 
 					   },
@@ -761,49 +789,52 @@
 					   },
 					   /** (d_literal C?) ::= (d_literal C) */
 					   lderive: function(larg) {
-								var reault = new Array();
-								contract.lderive(larg).foreach(function(index,literal) {
-									results.push(literal);
-								});
-								return result;
-					
-					
+							   var result = new Array();
+							   contract.lderive(larg).foreach(function(index,literal) {
+									   result.push(literal);
+							   });
+							   return result;
+
+
 							   // TODO
-							  // if(larg==this) return new __EmptyLiteral();
-							//	else if (larg==new __EmptyLiteral()) return this;
-						//		else 
-					//		   return  (larg==new __EmptyLiteral()) ? this: contract.lderive(larg);
+							   // if(larg==this) return new __EmptyLiteral();
+							   //	else if (larg==new __EmptyLiteral()) return this;
+							   //		else 
+							   //		   return  (larg==new __EmptyLiteral()) ? this: contract.lderive(larg);
 					   },
 					   /** (b_literal C?) ::= (d_literal C?) */
-//					   cderive: function(larg) {
-//							   return this.lderive(larg);
-//					   },
+					   //					   cderive: function(larg) {
+					   //							   return this.lderive(larg);
+					   //					   },
 					   //////////////////////////////////////////////////
 					   /** ctx |- C <= this */
 					   isSuperSetOf: function(arg, ctx) {
 							   /** C <= C' |= true  | C=C' */
 							   if(arg==this) return true;
 							   /** ^ <= C' |= true  | v(C') */
-//							   else if((arg==new __EmptyLiteral())) return true;
+							   //							   else if((arg==new __EmptyLiteral())) return true;
 							   /** C <= C' |= true  | n(C) */
-//							   else if (arg.isEmpty()) return true;
+							   //							   else if (arg.isEmpty()) return true;
 							   /** C <= C' |= true  | w(C) & !n(C') */
-//							   else if(arg.isBlank()) return true;
+							   //							   else if(arg.isBlank()) return true;
 							   /** C <= C' |= true  | m(C') */
-//							   else if(this.isUniversal()) return true;
+							   //							   else if(this.isUniversal()) return true;
 
 							   /** C <= C' |= true  | ctx(C <= C') */
 							   ccExp = new __CcExp(arg, this);
 							   if(ctx.contains(ccExp)) return true;
+							   /** otherwise */
+								else return unfold(this, arg, arg.first(), ctx.bind(ccExp));
+
 
 							   /** otherwise */
-							   var thisContract = this;
-							   var result = true;
-							   arg.first().foreach(function(k, literal) {
-									   result = result && thisContract.lderive(literal).isSuperSetOf(arg.lderive(literal), ctx.bind(ccExp));
-							   });
+//							   var thisContract = this;
+//							   var result = true;
+//							   arg.first().foreach(function(k, literal) {
+//									   result = result && thisContract.lderive(literal).isSuperSetOf(arg.lderive(literal), ctx.bind(ccExp));
+//							   });
 							   /** (d_literal C >= C') |= (d_literal C) >= (d_literal C') */
-							   return result;
+//							   return result;
 					   },
 					   /** ctx |- C >= this */
 					   isSubSetOf: function(arg, ctx) {
@@ -889,54 +920,56 @@
 					   /** (d_literal C*) ::= (d_literal C).C* */
 					   lderive: function(larg) {
 
-							   var reault = new Array();
-								contract.lderive(larg).foreach(function(index,literal) {
-									results.push(literal);
-								});
-								return result;
+							   var result = new Array();
+							   contract.lderive(larg).foreach(function(index,literal) {
+									   result.push(literal);
+							   });
+							   return result;
 
 
 
 							   // TODO
-							//**   if(larg==this) return new __EmptyLiteral();
-							//**	else if (larg==new __EmptyLiteral()) return this;
-							//**	else 
-							 //**  return (larg==new __EmptyLiteral()) ? this: new __ConcatContract(contract.lderive(larg), this);
+							   //**   if(larg==this) return new __EmptyLiteral();
+							   //**	else if (larg==new __EmptyLiteral()) return this;
+							   //**	else 
+							   //**  return (larg==new __EmptyLiteral()) ? this: new __ConcatContract(contract.lderive(larg), this);
 					   },
 					   /** (b_literal C*) ::= (d_literal {C*) */
-//					   cderive: function(larg) {
-//							   return this.lderive(larg);
-//					   },
+					   //					   cderive: function(larg) {
+					   //							   return this.lderive(larg);
+					   //					   },
 					   //////////////////////////////////////////////////
 					   /** ctx |- C <= this */
 					   isSuperSetOf: function(arg, ctx) {
 							   /** C <= C' |= true  | C=C' */
 							   if(arg==this) return true;
 							   /** ^ <= C' |= true  | v(C') */
-//							   else if((arg==new __EmptyLiteral())) return true;
+							   //							   else if((arg==new __EmptyLiteral())) return true;
 							   /** C <= C' |= true  | n(C) */
-//							   else if(arg.isEmpty()) return true;
+							   //							   else if(arg.isEmpty()) return true;
 							   /** C <= C' |= true  | w(C) & !n(C') */
-//							   else if(arg.isBlank()) return true;
+							   //							   else if(arg.isBlank()) return true;
 
 							   /** C <= C' |= true  | m(C') */
-//							   else if(this.isUniversal()) return true;
-//__sysout(arg);
+							   //							   else if(this.isUniversal()) return true;
+							   //__sysout(arg);
 							   /** C <= C' |= true  | ctx(C <= C') */
 							   ccExp = new __CcExp(arg, this);
 							   if(ctx.contains(ccExp)) return true;
-// %%%
+							   /** otherwise */
+								else return unfold(this, arg, arg.first(), ctx.bind(ccExp));
 
-ctx = ctx.bind(ccExp);
+
+//							   ctx = ctx.bind(ccExp);
 
 							   /** otherwise */
-							   var thisContract = this;
-							   var result = true;
-							   arg.first().foreach(function(k, literal) {
-									   result = result && thisContract.lderive(literal).isSuperSetOf(arg.lderive(literal), ctx.bind(ccExp));
-							   });
+//							   var thisContract = this;
+//							   var result = true;
+//							   arg.first().foreach(function(k, literal) {
+//									   result = result && thisContract.lderive(literal).isSuperSetOf(arg.lderive(literal), ctx.bind(ccExp));
+//							   });
 							   /** (d_literal C >= C') |= (d_literal C) >= (d_literal C') */
-							   return result;
+//							   return result;
 					   },
 					   /** ctx |- C >= this */
 					   isSubSetOf: function(arg, ctx) {
@@ -1030,60 +1063,64 @@ ctx = ctx.bind(ccExp);
 							   /** (d_literal C0+C1) ::= (d_literal C0) + (d_literal C1) */
 							   lderive: function(larg) {
 
-								 var reault = new Array();
-								var set0 = contract0.lderive(larg);
-								var set1 = contract1.lderive(larg);
+									   var result = new Array();
+									   var set0 = contract0.lderive(larg);
+									   var set1 = contract1.lderive(larg);
 
-								set0.foreach(function(i0,c0) {
-										set1.foreach(function(i1,c1) {
-												results.push(new __OrContract(c0, c1));
-										});
-								});
-								return result;
+									   set0.foreach(function(i0,c0) {
+											   set1.foreach(function(i1,c1) {
+													   result.push(new __OrContract(c0, c1));
+											   });
+									   });
+									   return result;
 
 
 
-				//					   if(larg==this) return new __EmptyLiteral();
-			//					else if (larg==new __EmptyLiteral()) return this;
-		//						else 
-	//								   return new __OrContract(contract0.lderive(larg), contract1.lderive(larg));
+									   //					   if(larg==this) return new __EmptyLiteral();
+									   //					else if (larg==new __EmptyLiteral()) return this;
+									   //						else 
+									   //								   return new __OrContract(contract0.lderive(larg), contract1.lderive(larg));
 							   },
 							   /** (b_literal C0+C1) ::= (d_literal C0+C1) */
-//							   cderive: function(larg) {
-//									   return this.lderive(larg);
-//							   },
+							   //							   cderive: function(larg) {
+							   //									   return this.lderive(larg);
+							   //							   },
 							   //////////////////////////////////////////////////
 							   /** ctx |- C <= this */
 							   isSuperSetOf: function(arg, ctx) {
 									   /** C <= C' |= true  | C=C' */
 									   if(arg==this) return true;
 									   /** ^ <= C' |= true  | v(C') */
-//									   else if((arg==new __EmptyLiteral()) && this.isNullable()) return true;
+									   //									   else if((arg==new __EmptyLiteral()) && this.isNullable()) return true;
 									   /** C <= C' |= false  | v(C) and ~v(C') */
-//									   else if(arg.isNullable() && !this.isNullable()) return false;
+									   //									   else if(arg.isNullable() && !this.isNullable()) return false;
 									   /** C <= C' |= true  | n(C) */
-//									   else if(arg.isEmpty()) return true;
+									   //									   else if(arg.isEmpty()) return true;
 									   /** C <= C' |= true  | w(C) & !n(C') */
-//									   else if(arg.isBlank()) return true;
+									   //									   else if(arg.isBlank()) return true;
 									   /** C <= C' |= true  | n(C) and !n(C') */
 									   //							   else if(!arg.isEmpty() && this.isEmpty()) return false;
 
 									   /** C <= C' |= true  | m(C') */
-//									   else if(this.isUniversal()) return true;
+									   //									   else if(this.isUniversal()) return true;
 									   /** C <= C' |= false  | m(C) and !m(C') */
 									   //							   else if(!this.isUniversal() && arg.isUniversal()) return false;
 
 									   /** C <= C' |= true  | ctx(C <= C') */
 									   ccExp = new __CcExp(arg, this);
 									   if(ctx.contains(ccExp)) return true;
+										/** otherwise */
+										else return unfold(this, arg, arg.first(), ctx.bind(ccExp));
+
+
 									   /** otherwise */
-									   var thisContract = this;
-									   var result = true;
-									   arg.first().foreach(function(k, literal) {
-											   result = result && thisContract.lderive(literal).isSuperSetOf(arg.lderive(literal), ctx.bind(ccExp));
-									   });
+		//							   var thisContract = this;
+		//							   var result = true;
+		//							   arg.first().foreach(function(k, literal) {
+		//									   result = result && thisContract.lderive(literal).isSuperSetOf(arg.lderive(literal), ctx.bind(ccExp));
+		//							   });
 									   /** (d_literal C >= C') |= (d_literal C) >= (d_literal C') */
-									   return result;
+		//							   return result;
 							   },
 							   /** ctx |- C >= this */
 							   isSubSetOf: function(arg, ctx) {
@@ -1190,63 +1227,66 @@ ctx = ctx.bind(ccExp);
 							   /** (d_literal C0&C1) ::= (d_literal C0) & (d_literal C1) */
 							   lderive: function(larg) {
 
-									   	 var reault = new Array();
-								var set0 = contract0.lderive(larg);
-								var set1 = contract1.lderive(larg);
+									   var result = new Array();
+									   var set0 = contract0.lderive(larg);
+									   var set1 = contract1.lderive(larg);
 
-								set0.foreach(function(i0,c0) {
-										set1.foreach(function(i1,c1) {
-												results.push(new __OrContract(c0, c1));
-										});
-								});
-								return result;
+									   set0.foreach(function(i0,c0) {
+											   set1.foreach(function(i1,c1) {
+													   result.push(new __OrContract(c0, c1));
+											   });
+									   });
+									   return result;
 
 
 
-						//			   if(larg==this) return new __EmptyLiteral();
-					//			else if (larg==new __EmptyLiteral()) return this;
-				//				else 
-			//						   return new __AndContract(contract0.lderive(larg), contract1.lderive(larg));
+									   //			   if(larg==this) return new __EmptyLiteral();
+									   //			else if (larg==new __EmptyLiteral()) return this;
+									   //				else 
+									   //						   return new __AndContract(contract0.lderive(larg), contract1.lderive(larg));
 							   },
 							   /** (b_literal C0&C1) ::= (d_literal C0&C1) */
-//							   cderive: function(larg) {
-//									   return this.lderive(larg);
-//							   },
+							   //							   cderive: function(larg) {
+							   //									   return this.lderive(larg);
+							   //							   },
 							   //////////////////////////////////////////////////
 							   /** ctx |- C <= this */
 							   isSuperSetOf: function(arg, ctx) {
 									   /** C <= C' |= true  | C=C' */
 									   if(arg==this) return true;
 									   /** ^ <= C' |= true  | v(C') */
-//									   else if((arg==new __EmptyLiteral()) && this.isNullable()) return true;
+									   //									   else if((arg==new __EmptyLiteral()) && this.isNullable()) return true;
 									   /** C <= C' |= false  | v(C) and ~v(C') */
 									   else if(arg.isNullable() && !this.isNullable()) return false;
 									   /** C <= C' |= true  | n(C) */
-//									   else if (arg.isEmpty()) return true;
+									   //									   else if (arg.isEmpty()) return true;
 									   /** C <= C' |= true  | w(C) & !n(C') */
-//									   else if(arg.isBlank()) return true;
+									   //									   else if(arg.isBlank()) return true;
 									   /** C <= C' |= true  | n(C) and !n(C') */
 									   //							   else if(!arg.isEmpty() && this.isEmpty()) return false;
 
 									   /** C <= C' |= true  | m(C') */
-//									   else if(this.isUniversal()) return true;
+									   //									   else if(this.isUniversal()) return true;
 									   /** C <= C' |= false  | m(C) and !m(C') */
 									   //							   else if(!this.isUniversal() && arg.isUniversal()) return false;
 
 									   /** C <= C' |= true  | ctx(C <= C') */
 									   ccExp = new __CcExp(arg, this);
 									   if(ctx.contains(ccExp)) return true;
+									   /** otherwise */
+								else return unfold(this, arg, arg.first(), ctx.bind(ccExp));
+
 
 									   /** otherwise */
-									   var thisContract = this;
-									   var result = true;
+//									   var thisContract = this;
+//									   var result = true;
 
-									   arg.first().foreach(function(k, literal) {
-											   result = result && thisContract.lderive(literal).isSuperSetOf(arg.lderive(literal), ctx.bind(ccExp));
-									   });
+//									   arg.first().foreach(function(k, literal) {
+//											   result = result && thisContract.lderive(literal).isSuperSetOf(arg.lderive(literal), ctx.bind(ccExp));
+//									   });
 
 									   /** (d_literal C >= C') |= (d_literal C) >= (d_literal C') */
-									   return result;
+//									   return result;
 							   },
 							   /** ctx |- C >= this */
 							   isSubSetOf: function(arg, ctx) {
@@ -1325,46 +1365,46 @@ ctx = ctx.bind(ccExp);
 							   //////////////////////////////////////////////////
 							   /** first(!C) ::= first(C) */
 							   first: function() {
-									  // (1)
-									  //
-									  
-										return new Array(new __QMarkLiteral()); //.concat(contract.first());
+									   // (1)
+									   //
+
+									   return new Array(new __QMarkLiteral()); //.concat(contract.first());
 									   // TODO
-									//   return contract.first();
+									   //   return contract.first();
 							   },
 							   /** (d_name !C) :== !(d_name C) */
 							   derive: function(name) {
 									   if(larg==this) return new __EmptyLiteral();
-								else if (larg==new __EmptyLiteral()) return this;
-								else 
-									   return new __NegContract(contract.derive(name));
+									   else if (larg==new __EmptyLiteral()) return this;
+									   else 
+											   return new __NegContract(contract.derive(name));
 							   },
 							   /** (d_literal !C) ::= !(b_literal C) */
 							   lderive: function(larg) {
 
-									   	   	 var reault = new Array();
+									   var result = new Array();
 
-								contract.lderive(larg).foreach(function(i,c) {
-										results.push(new __NegContract(c));
-								});
-								return result;
+									   contract.lderive(larg).foreach(function(i,c) {
+											   result.push(new __NegContract(c));
+									   });
+									   return result;
 
 
 
 
 									   // TODO
-			//						    if(larg==this) return new __EmptyLiteral();
-		//						else if (larg==new __EmptyLiteral()) return this;
-	//							else 
-//									    return (larg==new __QMarkLiteral()) ? new __NegContract(contract.cderive(larg)) : new __NegContract(contract.lderive(larg));
+									   //						    if(larg==this) return new __EmptyLiteral();
+									   //						else if (larg==new __EmptyLiteral()) return this;
+									   //							else 
+									   //									    return (larg==new __QMarkLiteral()) ? new __NegContract(contract.cderive(larg)) : new __NegContract(contract.lderive(larg));
 									   //return new __NegContract(contract.lderive(larg));
 							   },
 							   // TODO
 							   /** (b_literal !C) ::= !(d_literal C) */
-//							   cderive: function(larg) {
-//									   return (larg==new __QMarkLiteral()) ? new __NegContract(contract.lderive(larg)) :  new __NegContract(contract.cderive(larg));
-//									   //return this.lderive(larg);
-//							   },
+							   //							   cderive: function(larg) {
+							   //									   return (larg==new __QMarkLiteral()) ? new __NegContract(contract.lderive(larg)) :  new __NegContract(contract.cderive(larg));
+							   //									   //return this.lderive(larg);
+							   //							   },
 							   //////////////////////////////////////////////////
 							   /** ctx |- C <= this */
 							   isSuperSetOf: function(arg, ctx) {
@@ -1374,107 +1414,110 @@ ctx = ctx.bind(ccExp);
 
 									   /** C <= C' |= true  | C=C' */
 									   if(arg==this) return true;
-//									   /** ^ <= C' |= true  | v(C') */
-//									   else if((arg==new __EmptyLiteral()) && this.isNullable()) return true;
-//									   /** C <= C' |= false  | v(C) and ~v(C') */
+									   //									   /** ^ <= C' |= true  | v(C') */
+									   //									   else if((arg==new __EmptyLiteral()) && this.isNullable()) return true;
+									   //									   /** C <= C' |= false  | v(C) and ~v(C') */
 									   else if(arg.isNullable() && !this.isNullable()) return false;
-//									   /** C <= C' |= true  | n(C) */
-//									   else if(arg.isEmpty()) return true;
-//									   /** C <= C' |= true  | w(C) & !n(C') */
-//									   else if(arg.isBlank()) return true;
+									   //									   /** C <= C' |= true  | n(C) */
+									   //									   else if(arg.isEmpty()) return true;
+									   //									   /** C <= C' |= true  | w(C) & !n(C') */
+									   //									   else if(arg.isBlank()) return true;
 									   /** C <= C' |= true  | n(C) and !n(C') */
 									   //   else if(!arg.isEmpty() && this.isEmpty()) return false;
 
 									   /** C <= C' |= true  | m(C') */
-//									   else if(this.isUniversal()) return true;
+									   //									   else if(this.isUniversal()) return true;
 									   /** C <= C' |= false  | m(C) and !m(C') */
 									   //							   else if(!this.isUniversal() && arg.isUniversal()) return false;
-//__sysout("dfasdfsdfg");
-//__sysout(contract + ">" + arg + ":" + contract.isSuperSetOf(arg, new __CcContext()));
-//				__sysout(contract + "<" + arg + ":" + arg.isSuperSetOf(contract, new __CcContext()));
+									   //__sysout("dfasdfsdfg");
+									   //__sysout(contract + ">" + arg + ":" + contract.isSuperSetOf(arg, new __CcContext()));
+									   //				__sysout(contract + "<" + arg + ":" + arg.isSuperSetOf(contract, new __CcContext()));
 
 									   /** C <= !(C') |= false  | (C <= C') + (C >= C') */
-//									      if(contract.isSuperSetOf(arg, new __CcContext()) || arg.isSuperSetOf(contract, new __CcContext())) { __sysout("RETURN FALSE"); return false; } 
+									   //									      if(contract.isSuperSetOf(arg, new __CcContext()) || arg.isSuperSetOf(contract, new __CcContext())) { __sysout("RETURN FALSE"); return false; } 
 
 									   // if(contract.isSuperSetOf(arg, new __CcContext()) || arg.isSuperSetOf(contract, new __CcContext())) return false;
 
 
-									  
+
 									   /** C <= C' |= true  | ctx(C <= C') */
 									   var ccExp = new __CcExp(arg, this);
- if(ctx.contains(ccExp)) __sysout("CACHE HIT: " + ccExp); else __sysout("CACHE MISS: " + ccExp);
-
 									   if(ctx.contains(ccExp)) return true;
+									   /** otherwise */
+								else return unfold(this, arg, arg.first(), ctx.bind(ccExp));
+
+								// TODO use inverse set!
+
 
 									   /** otherwise */
-									   var thisContract = this;
-									   var result = true;
+//									   var thisContract = this;
+//									   var result = true;
 
 
 
-									  	 
-								//	   arg.first().foreach(function(k, literal) {
 
-									   __sysout("FIRST: " + arg.first().concat(contract.first()));
+									   //	   arg.first().foreach(function(k, literal) {
+
+						//			   __sysout("FIRST: " + arg.first().concat(contract.first()));
 
 
 
-									   arg.first().concat(contract.first()).foreach(function(k, literal) {
+						//			   arg.first().concat(contract.first()).foreach(function(k, literal) {
 
-											   __sysout("DERIVE: " + literal + ":");
+						//					   __sysout("DERIVE: " + literal + ":");
 
 											   //__sysout("DERIVE AFTER:" + literal);
 											   //result = result && thisContract.lderive(literal).isSuperSetOf(arg.cderive(literal), ctx.bind(ccExp));
-											  
 
-										//	  __sysout("BEGIN: ORIGINAL RUN"); 
+
+											   //	  __sysout("BEGIN: ORIGINAL RUN"); 
 											   // ORIGINAL
-										//	if(result)
-										//
-											  result = result && thisContract.lderive(literal).isSuperSetOf(arg.lderive(literal), ctx.bind(ccExp));
-												
-												//if(!result) return result; // TODO termination
-										//		__sysout("END: ORIGINAL RUN");
-
-											 //  if(literal==new __QMarkLiteral()) {
-											  // 		result = result && thisContract.lderive(literal).isSuperSetOf(arg.lderive(literal), ctx.bind(ccExp));
-											  // }
-											  //
-
-											  // OK
-										//	   result = result && thisContract.lderive(literal).isSuperSetOf(arg.lderive(literal), ctx.bind(ccExp))
-										//	   && thisContract.cderive(literal).isSuperSetOf(arg.cderive(literal), ctx.bind(ccExp));
-											  // ;
-											   
-
-									   });
-
-									    /** otherwise */
-							//		   contract.first().foreach(function(k, literal) {
-											   //result = result && thisContract.lderive(literal).isSuperSetOf(arg.lderive(literal), ctx.bind(ccExp))
-											   //&& thisContract.cderive(literal).isSuperSetOf(arg.cderive(literal), ctx.bind(ccExp));
-											   //;
+											   //	if(result)
 											   //
-									//		   __sysout("BEGIN: INVERSE RUN");
-									//		   if(result)
-									//		   result = result && thisContract.lderive(literal).isSuperSetOf(arg.lderive(literal), ctx.bind(ccExp));
-//if(!result) return result; // TODO termination											   
-									//		   __sysout("END: INVERSE RUN");
+						//					   result = result && thisContract.lderive(literal).isSuperSetOf(arg.lderive(literal), ctx.bind(ccExp));
 
-	
-							//		   });
+											   //if(!result) return result; // TODO termination
+											   //		__sysout("END: ORIGINAL RUN");
+
+											   //  if(literal==new __QMarkLiteral()) {
+											   // 		result = result && thisContract.lderive(literal).isSuperSetOf(arg.lderive(literal), ctx.bind(ccExp));
+											   // }
+											   //
+
+											   // OK
+											   //	   result = result && thisContract.lderive(literal).isSuperSetOf(arg.lderive(literal), ctx.bind(ccExp))
+											   //	   && thisContract.cderive(literal).isSuperSetOf(arg.cderive(literal), ctx.bind(ccExp));
+											   // ;
 
 
-									   	// TEST
-								//		arg.first().foreach(function(k, literal) {
-								//			   result = result && thisContract.lderive(literal).isSuperSetOf(arg.lderive(literal), ctx.bind(ccExp));
-								//	   });
+						//			   });
+
+									   /** otherwise */
+									   //		   contract.first().foreach(function(k, literal) {
+									   //result = result && thisContract.lderive(literal).isSuperSetOf(arg.lderive(literal), ctx.bind(ccExp))
+									   //&& thisContract.cderive(literal).isSuperSetOf(arg.cderive(literal), ctx.bind(ccExp));
+									   //;
+									   //
+									   //		   __sysout("BEGIN: INVERSE RUN");
+									   //		   if(result)
+									   //		   result = result && thisContract.lderive(literal).isSuperSetOf(arg.lderive(literal), ctx.bind(ccExp));
+									   //if(!result) return result; // TODO termination											   
+									   //		   __sysout("END: INVERSE RUN");
+
+
+									   //		   });
+
+
+									   // TEST
+									   //		arg.first().foreach(function(k, literal) {
+									   //			   result = result && thisContract.lderive(literal).isSuperSetOf(arg.lderive(literal), ctx.bind(ccExp));
+									   //	   });
 
 
 
 
 									   /** (d_literal C >= C') |= (d_literal C) >= (d_literal C') */
-									   return result;
+								//	   return result;
 							   },
 							   /** ctx |- C >= this */
 							   isSubSetOf: function(arg, ctx) {
@@ -1505,362 +1548,399 @@ ctx = ctx.bind(ccExp);
 							   toString: function() {
 									   return "!(" + contract.toString() + ")" ;
 							   }
-						});
-				}
+							   });
+						}
 
 
 
-				//////////////////////////////////////////////////
-				// CONTRACT
-				//////////////////////////////////////////////////
+						//////////////////////////////////////////////////
+						// CONTRACT
+						//////////////////////////////////////////////////
 
 
-				/**
-				 * C.C Contract (concatenation)
-				 */
-				function __ConcatContract(contract0, contract1) {
-						// NORMALIZATION
-						/** (^.C) ~ C */
-						if(contract0 == new __EmptyLiteral()) return contract1;
-						/** ({}.C) ~ C */
-						if(contract0 == new __EmptySetLiteral()) return new __EmptySetLiteral();
-						/** (@.C) ~ C */
-						if(contract0 == new __AtLiteral()) return new __AtLiteral();
+						/**
+						 * C.C Contract (concatenation)
+						 */
+						function __ConcatContract(contract0, contract1) {
+								// NORMALIZATION
+								/** (^.C) ~ C */
+								if(contract0 == new __EmptyLiteral()) return contract1;
+								/** ({}.C) ~ C */
+								if(contract0 == new __EmptySetLiteral()) return new __EmptySetLiteral();
+								/** (@.C) ~ C */
+								if(contract0 == new __AtLiteral()) return new __AtLiteral();
 
-						return __cache.c({
-								/** n(C0.C1) ::= n(C0) */
-								isEmpty: function() {
-										return contract0.isEmpty() || contract1.isEmpty();
-								},
-							   /** w(C0.C1) ::= w(C0) & w(C1) */
-							   isBlank: function() {
-									   return contract0.isBlank();
-							   },
-							   /** v(C0.C1) :== v(C0) & v(C1) */
-							   isNullable: function() {
-									   return (contract0.isNullable() && contract1.isNullable());
-							   },
-							   /** m(C0.C1) ::= false */
-							   isIndifferent: function() {
-									   if(contract0.isNullable()) return contract1.isIndifferent();
-									   else return contract0.isIndifferent();
-							   },
-							   /** m*(C0.C1) ::= false */
-							   isUniversal: function() {
-									   return (contract0.isUniversal() && contract1.isNullable())
-											   || (contract1.isUniversal() && contract0.isNullable())
-											   || (contract0.isUniversal() && contract1.isUniversal());
-							   },
-							   //////////////////////////////////////////////////
-							   /** r(C0.C1) :== r(C0)+r(C1) if v(C0), r(C0) otherwise */
-							   isReadable: function(name) {
-									   if(contract0.isNullable()) return (contract0.isReadable(name) || contract1.isReadable(name))
-									   else return contract0.isReadable(name);
-							   },
-							   /** r(C0.C1) :== w(C1) if v(C0), w(C0) if v(C1,) false otherwise */
-							   isWriteable: function(name) {
-									   if(contract0.isNullable()) return contract1.isWriteable(name);
-									   else if(contract1.isNullable()) return contract0.isWriteable(name);
-									   else return false;
-							   },
-							   //////////////////////////////////////////////////
-							   /** first(C0.C1) ::= first(C1) if v(C0), first(C0) otherwise */
-							   first: function() {
-									   if(contract0.isNullable()) return contract1.first();
-									   else return contract0.first();
-							   },
-							   /** (d_name C0.C1) :== (d_name C0).C1 + (d_name C1) if v(C0), (d_name C0).c1 otherwise */
-							   derive: function(name) {
-									   if(contract0.isNullable()) return new __OrContract(__ConcatContract(contract0.derive(name), contract1), contract1.derive(name));
-									   else return new __ConcatContract(contract0.derive(name), contract1);
-							   },
-							   /** (d_literal C0.C1) ::= (d_literal C0).C1 + (d_literal C1) if v(C0), (d_literal C0).c1 otherwise */
-							   lderive: function(larg) {
+								return __cache.c({
+										/** n(C0.C1) ::= n(C0) */
+										isEmpty: function() {
+												return contract0.isEmpty() || contract1.isEmpty();
+										},
+									   /** w(C0.C1) ::= w(C0) & w(C1) */
+									   isBlank: function() {
+											   return contract0.isBlank();
+									   },
+									   /** v(C0.C1) :== v(C0) & v(C1) */
+									   isNullable: function() {
+											   return (contract0.isNullable() && contract1.isNullable());
+									   },
+									   /** m(C0.C1) ::= false */
+									   isIndifferent: function() {
+											   if(contract0.isNullable()) return contract1.isIndifferent();
+											   else return contract0.isIndifferent();
+									   },
+									   /** m*(C0.C1) ::= false */
+									   isUniversal: function() {
+											   return (contract0.isUniversal() && contract1.isNullable())
+													   || (contract1.isUniversal() && contract0.isNullable())
+													   || (contract0.isUniversal() && contract1.isUniversal());
+									   },
+									   //////////////////////////////////////////////////
+									   /** r(C0.C1) :== r(C0)+r(C1) if v(C0), r(C0) otherwise */
+									   isReadable: function(name) {
+											   if(contract0.isNullable()) return (contract0.isReadable(name) || contract1.isReadable(name))
+											   else return contract0.isReadable(name);
+									   },
+									   /** r(C0.C1) :== w(C1) if v(C0), w(C0) if v(C1,) false otherwise */
+									   isWriteable: function(name) {
+											   if(contract0.isNullable()) return contract1.isWriteable(name);
+											   else if(contract1.isNullable()) return contract0.isWriteable(name);
+											   else return false;
+									   },
+									   //////////////////////////////////////////////////
+									   /** first(C0.C1) ::= first(C1) if v(C0), first(C0) otherwise */
+									   first: function() {
+											   if(contract0.isNullable()) return contract1.first();
+											   else return contract0.first();
+									   },
+									   /** (d_name C0.C1) :== (d_name C0).C1 + (d_name C1) if v(C0), (d_name C0).c1 otherwise */
+									   derive: function(name) {
+											   if(contract0.isNullable()) return new __OrContract(__ConcatContract(contract0.derive(name), contract1), contract1.derive(name));
+											   else return new __ConcatContract(contract0.derive(name), contract1);
+									   },
+									   /** (d_literal C0.C1) ::= (d_literal C0).C1 + (d_literal C1) if v(C0), (d_literal C0).c1 otherwise */
+									   lderive: function(larg) {
 
 
-									   	 var reault = new Array();
+											   var result = new Array();
 
-										contract0.lderive(larg).foreach(function(i0,c0) {
-											
-												 if(contract0.isNullable()) {
-														 contract1.lderive(larg).foreach(function(i1,c1) {													 
-															 new __OrContract(new __ConcatContract(c0, contract1), c1);
-														 });
-												 }
-									  			 else results.push(new __ConcatContract(c0, contract1));
+											   contract0.lderive(larg).foreach(function(i0,c0) {
+
+													   if(contract0.isNullable()) {
+															   contract1.lderive(larg).foreach(function(i1,c1) {													 
+																	   new __OrContract(new __ConcatContract(c0, contract1), c1);
+															   });
+													   }
+													   else result.push(new __ConcatContract(c0, contract1));
+											   });
+											   return result;
+
+
+
+
+											   //						   if(larg==this) return new __EmptyLiteral();
+											   //						else if (larg==new __EmptyLiteral()) return this;
+											   //							else 
+											   //
+											   //								   if(contract0.isNullable()) return new __OrContract(new __ConcatContract(contract0.lderive(larg), contract1), contract1.lderive(larg));
+											   //								   else return new __ConcatContract(contract0.lderive(larg), contract1);
+									   },
+									   /** (b_literal C0.C1) ::= (d_literal C0.C1) */
+									   //							   cderive: function(larg) {
+									   //									   return this.lderive(larg);
+									   //							   },
+									   //////////////////////////////////////////////////
+									   /** ctx |- C <= this */
+									   isSuperSetOf: function(arg, ctx) {
+											   /** C <= C' |= true  | C=C' */
+											   if(arg==this) return true;
+											   /** ^ <= C' |= true  | v(C') */
+											   //  else if((arg==new __EmptyLiteral()) && this.isNullable()) return true;
+											   /** C <= C' |= false  | v(C) and ~v(C') */
+											   else if(arg.isNullable() && !this.isNullable()) return false;
+											   /** C <= C' |= true  | n(C) */
+											   //  else if(arg.isEmpty()) return true;
+											   /** C <= C' |= true  | w(C) & !n(C') */
+											   //  else if(arg.isBlank()) return true;
+											   /** C <= C' |= true  | n(C) and !n(C') */
+											   //							   else if(!arg.isEmpty() && this.isEmpty()) return false;
+
+											   /** C <= C' |= true  | m(C') */
+											   //  else if(this.isUniversal()) return true;
+
+											   /** C <= C' |= false  | m(C) and !m(C') */
+											   //							   else if(!this.isUniversal() && arg.isUniversal()) return false;
+
+											   /** C <= C' |= true  | ctx(C <= C') */
+											   ccExp = new __CcExp(arg, this);
+											   if(ctx.contains(ccExp)) return true;
+											   /** otherwise */
+												else return unfold(this, arg, arg.first(), ctx.bind(ccExp));
+
+
+											   /** otherwise */
+				//							   var thisContract = this;
+				//							   var result = true;
+				//							   arg.first().foreach(function(k, literal) {
+				//									   result = result && thisContract.lderive(literal).isSuperSetOf(arg.lderive(literal), ctx.bind(ccExp));
+				//							   });
+
+
+
+
+											   /** (d_literal C >= C') |= (d_literal C) >= (d_literal C') */
+									//		   return result;
+									   },
+									   /** ctx |- C >= this */
+									   isSubSetOf: function(arg, ctx) {
+											   return arg.isSuperSetOf(this, ctx);
+									   },
+									   //////////////////////////////////////////////////
+									   /** reduce C.C' */
+									   reduce: function() {
+											   /** (C.C') ~ {} | n(C) */
+											   if(contract0.isEmpty()) return new __EmptySetLiteral();
+											   /** (C.C') ~ {} | w(C) */
+											   else if(contract0.isBlank()) return new __AtLiteral();
+											   /** reduce C.C' ::= (reduce C).(reduce C') */
+											   else return new __ConcatContract(contract0.reduce(), contract1.reduce());
+									   },
+									   //////////////////////////////////////////////////
+									   /** Dump
+										* @return string
+										*/
+									   dump: function() {
+											   return  " " + contract0.dump() + " . " +  contract1.dump() +  " ";
+									   },
+									   /** To String
+										* @return string
+										*/
+									   toString: function() {
+											   return contract0.toString() + "." + contract1.toString();
+									   }
+								});
+						}
+
+
+
+						//////////////////////////////////////////////////
+						// APC . Contract
+						//////////////////////////////////////////////////
+						APC.Contract = {};
+
+						APC.Contract.EmptySetLiteral	= __EmptySetLiteral;
+						APC.Contract.EmptyLiteral		= __EmptyLiteral;
+
+						APC.Contract.AtLiteral			= __AtLiteral;
+						APC.Contract.QMarkLiteral		= __QMarkLiteral;
+						APC.Contract.NameLiteral		= __NameLiteral;
+						APC.Contract.RegExLiteral		= __RegExLiteral;
+
+						APC.Contract.QMarkContract		= __QMarkContract;
+						APC.Contract.StarContract		= __StarContract;
+						APC.Contract.OrContract			= __OrContract;
+						APC.Contract.AndContract		= __AndContract;
+						APC.Contract.NegContract		= __NegContract;
+						APC.Contract.ConcatContract		= __ConcatContract;
+
+
+
+
+
+						//////////////////////////////////////////////////
+						//  CONTAINMENT CALCULUS
+						//  context and expressions
+						//////////////////////////////////////////////////
+
+
+						/** UNFOLD
+						 * @param
+						 * E >= F ::= lderive_{c \in firstc(E)} (E>=F)
+						 * {e>=f | e \in lderive_{c}(E), e \in lderive_{c}(F)}
+						 * @param E super-contract
+						 * @param F sub-contract
+						 * @param first set of first literals
+						 * @param ctx containment context 
+						 * @return true|false
+						 */
+						function unfold(E, F, first, ctx) {
+
+								var result = true;
+
+								first.foreach(function(k, literal) {
+
+										var lderive_E = E.lderive(literal);
+										var lderive_F = F.lderive(literal);
+
+										lderive_E.foreach(function(i,e) {
+												lderive_F.foreach(function(i,f) {
+														result = result && e.isSuperSetOf(f, ctx);
+														if(!result) return result; // TODO short break
+												});
+												if(!result) return result; // TODO short break
 										});
-										return result;
+										if(!result) return result; // TODO short break
+								});
+								return result;
+						}
 
 
 
-
-			//						   if(larg==this) return new __EmptyLiteral();
-		//						else if (larg==new __EmptyLiteral()) return this;
-	//							else 
-//
-	//								   if(contract0.isNullable()) return new __OrContract(new __ConcatContract(contract0.lderive(larg), contract1), contract1.lderive(larg));
-	//								   else return new __ConcatContract(contract0.lderive(larg), contract1);
-							   },
-							   /** (b_literal C0.C1) ::= (d_literal C0.C1) */
-//							   cderive: function(larg) {
-//									   return this.lderive(larg);
-//							   },
-							   //////////////////////////////////////////////////
-							   /** ctx |- C <= this */
-							   isSuperSetOf: function(arg, ctx) {
-									   /** C <= C' |= true  | C=C' */
-									   if(arg==this) return true;
-									   /** ^ <= C' |= true  | v(C') */
-									 //  else if((arg==new __EmptyLiteral()) && this.isNullable()) return true;
-									   /** C <= C' |= false  | v(C) and ~v(C') */
-									   else if(arg.isNullable() && !this.isNullable()) return false;
-									   /** C <= C' |= true  | n(C) */
-									 //  else if(arg.isEmpty()) return true;
-									   /** C <= C' |= true  | w(C) & !n(C') */
-									 //  else if(arg.isBlank()) return true;
-									   /** C <= C' |= true  | n(C) and !n(C') */
-									   //							   else if(!arg.isEmpty() && this.isEmpty()) return false;
-
-									   /** C <= C' |= true  | m(C') */
-									 //  else if(this.isUniversal()) return true;
-
-									   /** C <= C' |= false  | m(C) and !m(C') */
-									   //							   else if(!this.isUniversal() && arg.isUniversal()) return false;
-
-									   /** C <= C' |= true  | ctx(C <= C') */
-									   ccExp = new __CcExp(arg, this);
-									   if(ctx.contains(ccExp)) return true;
-
-									   /** otherwise */
-									   var thisContract = this;
-									   var result = true;
-									   arg.first().foreach(function(k, literal) {
-											   result = result && thisContract.lderive(literal).isSuperSetOf(arg.lderive(literal), ctx.bind(ccExp));
-									   });
-
-
-
-
-									   /** (d_literal C >= C') |= (d_literal C) >= (d_literal C') */
-									   return result;
-							   },
-							   /** ctx |- C >= this */
-							   isSubSetOf: function(arg, ctx) {
-									   return arg.isSuperSetOf(this, ctx);
-							   },
-							   //////////////////////////////////////////////////
-							   /** reduce C.C' */
-							   reduce: function() {
-									   /** (C.C') ~ {} | n(C) */
-									   if(contract0.isEmpty()) return new __EmptySetLiteral();
-									   /** (C.C') ~ {} | w(C) */
-									   else if(contract0.isBlank()) return new __AtLiteral();
-									   /** reduce C.C' ::= (reduce C).(reduce C') */
-									   else return new __ConcatContract(contract0.reduce(), contract1.reduce());
-							   },
-							   //////////////////////////////////////////////////
-							   /** Dump
-								* @return string
-								*/
-							   dump: function() {
-									   return  " " + contract0.dump() + " . " +  contract1.dump() +  " ";
-							   },
-							   /** To String
-								* @return string
-								*/
-							   toString: function() {
-									   return contract0.toString() + "." + contract1.toString();
-							   }
-						});
-				}
-
-
-
-				//////////////////////////////////////////////////
-				// APC . Contract
-				//////////////////////////////////////////////////
-				APC.Contract = {};
-
-				APC.Contract.EmptySetLiteral	= __EmptySetLiteral;
-				APC.Contract.EmptyLiteral		= __EmptyLiteral;
-
-				APC.Contract.AtLiteral			= __AtLiteral;
-				APC.Contract.QMarkLiteral		= __QMarkLiteral;
-				APC.Contract.NameLiteral		= __NameLiteral;
-				APC.Contract.RegExLiteral		= __RegExLiteral;
-
-				APC.Contract.QMarkContract		= __QMarkContract;
-				APC.Contract.StarContract		= __StarContract;
-				APC.Contract.OrContract			= __OrContract;
-				APC.Contract.AndContract		= __AndContract;
-				APC.Contract.NegContract		= __NegContract;
-				APC.Contract.ConcatContract		= __ConcatContract;
-
-
-
-
-
-				//////////////////////////////////////////////////
-				//  CONTAINMENT CALCULUS
-				//  context and expressions
-				//////////////////////////////////////////////////
-
-				/** Containment Calculus
-				 * Expression: C0 <= C1
-				 */
-				function __CcExp(contract0, contract1) {
-						return {
-								/** To String
-								 * @return string
-								 */
-								toString: function() {
-										return contract0.toString() + "<=" + contract1.toString();
+						/** Containment Calculus
+						 * Expression: C0 <= C1
+						 */
+						function __CcExp(contract0, contract1) {
+								return {
+										/** To String
+										 * @return string
+										 */
+										toString: function() {
+												return contract0.toString() + "<=" + contract1.toString();
+										}
 								}
 						}
-				}
 
-				/** Containment Calculus
-				 * Context: {} | <Context, Expression>
-				 */
-				function __CcContext() {	
-						// cache array
-						var context = new StringMap();
+						/** Containment Calculus
+						 * Context: {} | <Context, Expression>
+						 */
+						function __CcContext() {	
+								// cache array
+								var context = new StringMap();
 
-						var key = function(v) {
-							return ("\"" + v + "\"");		
+								var key = function(v) {
+										return ("\"" + v + "\"");		
+								}
+
+								return {
+
+										// TODO
+										values: context,
+
+												/* bind function
+												 * @param CC Expression
+												 * @return <CC Context, CC Expression>
+												 */
+												bind: function(ccExp) {
+														// clone context
+														var newCtx = new __CcContext();
+														context.foreach(function(k, v) {
+																newCtx.put(v);
+														});
+														// bind new CC Expression
+														if(!newCtx.contains(ccExp)) {
+																newCtx.put(ccExp);
+														}
+														return newCtx;
+												},
+
+												/* put
+												 * @param ccExp CC Expression
+												 * $return CC Expression
+												 */
+												put: function(ccExp) {
+														context.set(ccExp.toString(), ccExp);
+														return ccExp;
+												},
+
+												/* get
+												 * @param ccExp CC Expression
+												 * $return CC Expression
+												 */
+												get: function(ccExp) {
+														return context.get(ccExp.toString());
+												},
+
+												/* contains
+												 * @param ccExp CC Expression
+												 * $return true, if ccExp in cache, false otherwise
+												 */
+												contains: function(ccExp) {
+														return context.has(ccExp.toString());
+												}
+								}
+						};
+
+
+
+						//////////////////////////////////////////////////
+						// APC . Contract
+						//////////////////////////////////////////////////
+						APC.Contract.Containment = {};
+						APC.Contract.Containment.Expression = __CcExp;
+						APC.Contract.Containment.Context = __CcContext;
+
+
+
+
+
+						//////////////////////////////////////////////////
+						//  CONTRACT CACHE
+						//  cache for access permission contracts
+						//////////////////////////////////////////////////
+
+						/** Path Cache 
+						*/
+						function __ContractCache() {
+								// cache array
+								var cache = new StringMap();
+
+								return {
+
+										/* cache function
+										 * @param contract access permission contract
+										 * @return access permission contract
+										 */
+										c: function(contract) {
+												if(this.contains(contract.toString())) {
+														return this.get(contract.toString());
+												} else {
+														return this.put(contract.toString(), contract);
+												}
+										},
+
+												/* put
+												 * @param key cache key
+												 * @param value cahe value
+												 * $return value
+												 */
+												put: function(key, value) {
+														cache.set(key, value);
+														return value;
+												},
+
+												/* get
+												 * @param key cache key
+												 * $return value
+												 */
+												get: function(key) {
+														return cache.get(key);
+												},
+
+												/* contains
+												 * @param key cache key
+												 * $return true, if key in cache, false otherwise
+												 */
+												contains: function(key) {
+														return cache.has(key);
+												},
+
+												/* clear cache
+												*/
+												clear: function() {
+														cache = new StringMap();
+												}
+								}
 						}
 
-						return {
-
-								// TODO
-								values: context,
-
-								/* bind function
-								 * @param CC Expression
-								 * @return <CC Context, CC Expression>
-								 */
-								bind: function(ccExp) {
-										// clone context
-										var newCtx = new __CcContext();
-										context.foreach(function(k, v) {
-												newCtx.put(v);
-										});
-										// bind new CC Expression
-										if(!newCtx.contains(ccExp)) {
-												newCtx.put(ccExp);
-										}
-										return newCtx;
-								},
-
-										/* put
-										 * @param ccExp CC Expression
-										 * $return CC Expression
-										 */
-										put: function(ccExp) {
-												context.set(ccExp.toString(), ccExp);
-												return ccExp;
-										},
-
-										/* get
-										 * @param ccExp CC Expression
-										 * $return CC Expression
-										 */
-										get: function(ccExp) {
-												return context.get(ccExp.toString());
-										},
-
-										/* contains
-										 * @param ccExp CC Expression
-										 * $return true, if ccExp in cache, false otherwise
-										 */
-										contains: function(ccExp) {
-												return context.has(ccExp.toString());
-										}
-						}
-				};
+						// current path cache
+						var __cache = new __ContractCache();
 
 
 
-				//////////////////////////////////////////////////
-				// APC . Contract
-				//////////////////////////////////////////////////
-				APC.Contract.Containment = {};
-				APC.Contract.Containment.Expression = __CcExp;
-				APC.Contract.Containment.Context = __CcContext;
+						//////////////////////////////////////////////////
+						// APC . Contract
+						//////////////////////////////////////////////////
+						APC.Contract.Cache = __cache;
 
 
 
-
-
-				//////////////////////////////////////////////////
-				//  CONTRACT CACHE
-				//  cache for access permission contracts
-				//////////////////////////////////////////////////
-
-				/** Path Cache 
-				*/
-				function __ContractCache() {
-						// cache array
-						var cache = new StringMap();
-
-						return {
-
-								/* cache function
-								 * @param contract access permission contract
-								 * @return access permission contract
-								 */
-								c: function(contract) {
-										if(this.contains(contract.toString())) {
-												return this.get(contract.toString());
-										} else {
-												return this.put(contract.toString(), contract);
-										}
-								},
-
-										/* put
-										 * @param key cache key
-										 * @param value cahe value
-										 * $return value
-										 */
-										put: function(key, value) {
-												cache.set(key, value);
-												return value;
-										},
-
-										/* get
-										 * @param key cache key
-										 * $return value
-										 */
-										get: function(key) {
-												return cache.get(key);
-										},
-
-										/* contains
-										 * @param key cache key
-										 * $return true, if key in cache, false otherwise
-										 */
-										contains: function(key) {
-												return cache.has(key);
-										},
-
-										/* clear cache
-										*/
-										clear: function() {
-												cache = new StringMap();
-										}
-						}
-				}
-
-				// current path cache
-				var __cache = new __ContractCache();
-
-
-
-				//////////////////////////////////////////////////
-				// APC . Contract
-				//////////////////////////////////////////////////
-				APC.Contract.Cache = __cache;
-
-
-
-		})(__APC);
+				})(__APC);
