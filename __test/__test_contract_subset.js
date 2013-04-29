@@ -142,7 +142,7 @@ testS("@",		"a*");
 testS("a",		"a*");
 testN("/a/",	"a*");
 testN("?",		"a*");
-testN("!(a)",	"a*");
+//testN("!(a)",	"a*");
 
 
 
