@@ -169,13 +169,9 @@
 							   /** C <= C' |= true  | C=C' */
 							   if(arg==this) return true;
 							   /** C <= C' |= true  | n(C) */
-							   // else if (arg.isEmpty()) return true;
-							   /** C <= C' |= true  | w(C) & !n(C') */
-							   // else if(arg.isBlank()) return true;
-
-							   /** otherwise */
-							   // else return false;
-							   // TODO
+							   else if (arg.isEmpty()) return true;
+							   /** C <= C' |= true  | w(C) */
+							   else if(arg.isBlank()) return true;
 
 							   /** C <= C' |= true  | ctx(C <= C') */
 							   ccExp = new __CcExp(arg, this);
