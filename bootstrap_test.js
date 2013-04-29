@@ -122,6 +122,7 @@ __testcase("__test/__test_scope2.js");
 
 /* Containment Calculus */
 __testcase("__test/__test_contract_subset.js");
+__testcase("__test/__test_contract_subset2.js");
 
 
 /* Tries */
