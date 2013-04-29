@@ -78,16 +78,17 @@
 					   },
 					   /** (d_literal {}) ::= {} */
 					   lderive: function(larg) {
+							   return new Array(this);
 								// TODO	
 							   /*if(larg==this) return new __EmptyLiteral();
 								else if (larg==new __EmptyLiteral()) return this;
 								else */
-							   return new __EmptySetLiteral();
+							  //* return new __EmptySetLiteral();
 					   },
 					   /** (b_literal {}) ::= (d_literal {}) */
-					   cderive: function(larg) {
-							   return this.lderive(larg);
-					   },
+//					   cderive: function(larg) {
+//							   return this.lderive(larg);
+//					   },
 					   //////////////////////////////////////////////////
 					   /** ctx |- C <= this */
 					   isSuperSetOf: function(arg, ctx) {
@@ -169,17 +170,19 @@
 					   },
 					   /** (d_literal ^) ::= ^ if literal == ^, @ oterhwise */
 					   lderive: function(larg) {
+								return (larg==this) ? new Array(this) : new Array(new __EmptySetLiteral());
+
 							   /* if(larg==this) return new __EmptyLiteral();
 								else if (larg==new __EmptyLiteral()) return this;
 								else */
 							  // TODO (2)
 							   //return (larg==this) ? new __EmptySetLiteral() : new __EmptySetLiteral();
-							   return (larg==this) ? this : new __EmptySetLiteral();
+							   //** return (larg==this) ? this : new __EmptySetLiteral();
 					   },
 					   /** (b_literal ^) ::= (d_literal ^) */
-					   cderive: function(larg) {
-							   return this.lderive(larg);
-					   },
+//					   cderive: function(larg) {
+//							   return this.lderive(larg);
+//					   },
 					   //////////////////////////////////////////////////
 					   /** ctx |- C <= this */
 					   isSuperSetOf: function(arg, ctx) {
@@ -282,15 +285,18 @@
 					   },
 					   /** (d_literal @) ::= @ */
 					   lderive: function(larg) {
+								return new Array(new __EmptySetLiteral());
+
+
 							   // TODO
 							   /*if(larg==this) return new __EmptyLiteral();
 								else if (larg==new __EmptyLiteral()) return this;
-								else*/ return new __EmptySetLiteral();
+								else*/ //** return new __EmptySetLiteral();
 					   },
 					   /** (b_literal @) ::= (d_literal @) */
-					   cderive: function(larg) {
-							   return this.lderive(larg);
-					   },
+	//				   cderive: function(larg) {
+//							   return this.lderive(larg);
+//					   },
 					   //////////////////////////////////////////////////
 					   /** ctx |- C <= this */
 					   isSuperSetOf: function(arg, ctx) {
@@ -387,15 +393,22 @@
 					   },
 					   /** (d_literal ?) ::= ? if literal=^, ^ otherwise */
 					   lderive: function(larg) {
+								 // TODO
+							   if(larg==this) return new Array(new __EmptyLiteral());
+								else if (larg==new __EmptyLiteral()) return new Array(this);
+								else return  (larg==new __EmptyLiteral()) ? new Array(this):  new Array(new __EmptyLiteral());
+									// TODO, derive after empty set and .. co
+
+
 							   // TODO
-							   if(larg==this) return new __EmptyLiteral();
-								else if (larg==new __EmptyLiteral()) return this;
-								else return  (larg==new __EmptyLiteral()) ? this:  new __EmptyLiteral();
+							//**   if(larg==this) return new __EmptyLiteral();
+							//**	else if (larg==new __EmptyLiteral()) return this;
+							//**	else return  (larg==new __EmptyLiteral()) ? this:  new __EmptyLiteral();
 					   },
 					   /** (b_literal ?) ::= ? if literal==^, {} if literal=={} or literal=@, ^ otherwise */
-					   cderive: function(larg) {
-							   return (larg==new __EmptyLiteral()) ? this: ((larg==new __EmptySetLiteral() || larg==new __AtLiteral()) ? new __EmptySetLiteral(): new __EmptyLiteral());
-					   },
+//					   cderive: function(larg) {
+//							   return (larg==new __EmptyLiteral()) ? this: ((larg==new __EmptySetLiteral() || larg==new __AtLiteral()) ? new __EmptySetLiteral(): new __EmptyLiteral());
+//					   },
 					   //////////////////////////////////////////////////
 					   /** ctx |- C <= this */
 					   isSuperSetOf: function(arg, ctx) {
@@ -496,22 +509,26 @@
 					   },
 					   /** (d_literal varname) ::= varname if literal=^, ^ if literal==varname, {} oterhwise */
 					   lderive: function(larg) {
-							   // (X)
+							    if(larg==this) return new Array(new __EmptyLiteral()); 
+								else if (larg==new __EmptyLiteral()) return new Array(this);
+								else if(larg==new __QMarkLiteral()) return new Array(new __EmptyLiteral(), new __EmptySetLiteral());
+								else return new Array(new __EmptySetLiteral());
+								//else return (larg==new __EmptyLiteral()) ? this: ((larg==this) ? new __EmptyLiteral() : new __EmptySetLiteral());
 
 							// TODO
-							   if(larg==this) return new __EmptyLiteral(); 
-								else if (larg==new __EmptyLiteral()) return  this;
-								else return (larg==new __EmptyLiteral()) ? this: ((larg==this) ? new __EmptyLiteral() : new __EmptySetLiteral());
+						//**	   if(larg==this) return new __EmptyLiteral(); 
+						//**		else if (larg==new __EmptyLiteral()) return  this;
+						//**		else return (larg==new __EmptyLiteral()) ? this: ((larg==this) ? new __EmptyLiteral() : new __EmptySetLiteral());
 					   },
 					   // TODO
 					   /** (b_literal varname) ::= varname if literal=^, ^ if literal==varname or literal==?, {} oterhwise */
-					   cderive: function(larg) {
-								// TODO
-							   if(larg==this) return new __EmptyLiteral();
-								else if (larg==new __EmptyLiteral()) return this;
-								else 
-							   return (larg==new __EmptyLiteral()) ? this: ((larg==this || larg==new __QMarkLiteral()) ? new __EmptyLiteral() : new __EmptySetLiteral());
-					   },
+//					   cderive: function(larg) {
+//								// TODO
+//							   if(larg==this) return new __EmptyLiteral();
+//								else if (larg==new __EmptyLiteral()) return this;
+//								else 
+//							   return (larg==new __EmptyLiteral()) ? this: ((larg==this || larg==new __QMarkLiteral()) ? new __EmptyLiteral() : new __EmptySetLiteral());
+//					   },
 					   //////////////////////////////////////////////////
 					   /** ctx |- C <= this */
 					   isSuperSetOf: function(arg, ctx) {
@@ -609,21 +626,28 @@
 					   },
 					   /** (d_literal RegEx) ::= RegEx if literal==^, ^ if literal==RegEx, {} oterhwise */
 					   lderive: function(larg) {
+								
+							   if(larg==this) return new Array(new __EmptyLiteral()); 
+								else if (larg==new __EmptyLiteral()) return new Array(this);
+								else if(larg==new __QMarkLiteral()) return new Array(new __EmptyLiteral(), new __EmptySetLiteral());
+								else return new Array(new __EmptySetLiteral());
+
+
 								// TODO
-								if(larg==this) return new __EmptyLiteral();
-								else if (larg==new __EmptyLiteral()) return this;
-								else 
-							   return (larg==new __EmptyLiteral()) ? this: ((larg==this) ? new __EmptyLiteral() : new __EmptySetLiteral());
+							//**	if(larg==this) return new __EmptyLiteral();
+							//**	else if (larg==new __EmptyLiteral()) return this;
+							//**	else 
+							 //**  return (larg==new __EmptyLiteral()) ? this: ((larg==this) ? new __EmptyLiteral() : new __EmptySetLiteral());
 					   },
 					   // TODO
 					   /** (d_literal RegEx) ::= RegEx if literal==^, ^ if literal==RegEx or literal==?, {} oterhwise */
-					   cderive: function(larg) {
-							   // TODO
-if(larg==this) return new __EmptyLiteral();
-								else if (larg==new __EmptyLiteral()) return this;
-								else 
-							   return (larg==new __EmptyLiteral()) ? this: ((larg==this || larg==new __QMarkLiteral()) ? new __EmptyLiteral() : new __EmptySetLiteral());
-					   },
+//					   cderive: function(larg) {
+//							   // TODO
+//if(larg==this) return new __EmptyLiteral();
+//								else if (larg==new __EmptyLiteral()) return this;
+//								else 
+//							   return (larg==new __EmptyLiteral()) ? this: ((larg==this || larg==new __QMarkLiteral()) ? new __EmptyLiteral() : new __EmptySetLiteral());
+//					   },
 					   //////////////////////////////////////////////////
 					   /** ctx |- C <= this */
 					   isSuperSetOf: function(arg, ctx) {
@@ -737,16 +761,23 @@ if(larg==this) return new __EmptyLiteral();
 					   },
 					   /** (d_literal C?) ::= (d_literal C) */
 					   lderive: function(larg) {
+								var reault = new Array();
+								contract.lderive(larg).foreach(function(index,literal) {
+									results.push(literal);
+								});
+								return result;
+					
+					
 							   // TODO
-							   if(larg==this) return new __EmptyLiteral();
-								else if (larg==new __EmptyLiteral()) return this;
-								else 
-							   return  (larg==new __EmptyLiteral()) ? this: contract.lderive(larg);
+							  // if(larg==this) return new __EmptyLiteral();
+							//	else if (larg==new __EmptyLiteral()) return this;
+						//		else 
+					//		   return  (larg==new __EmptyLiteral()) ? this: contract.lderive(larg);
 					   },
 					   /** (b_literal C?) ::= (d_literal C?) */
-					   cderive: function(larg) {
-							   return this.lderive(larg);
-					   },
+//					   cderive: function(larg) {
+//							   return this.lderive(larg);
+//					   },
 					   //////////////////////////////////////////////////
 					   /** ctx |- C <= this */
 					   isSuperSetOf: function(arg, ctx) {
@@ -857,16 +888,25 @@ if(larg==this) return new __EmptyLiteral();
 					   },
 					   /** (d_literal C*) ::= (d_literal C).C* */
 					   lderive: function(larg) {
+
+							   var reault = new Array();
+								contract.lderive(larg).foreach(function(index,literal) {
+									results.push(literal);
+								});
+								return result;
+
+
+
 							   // TODO
-							   if(larg==this) return new __EmptyLiteral();
-								else if (larg==new __EmptyLiteral()) return this;
-								else 
-							   return (larg==new __EmptyLiteral()) ? this: new __ConcatContract(contract.lderive(larg), this);
+							//**   if(larg==this) return new __EmptyLiteral();
+							//**	else if (larg==new __EmptyLiteral()) return this;
+							//**	else 
+							 //**  return (larg==new __EmptyLiteral()) ? this: new __ConcatContract(contract.lderive(larg), this);
 					   },
 					   /** (b_literal C*) ::= (d_literal {C*) */
-					   cderive: function(larg) {
-							   return this.lderive(larg);
-					   },
+//					   cderive: function(larg) {
+//							   return this.lderive(larg);
+//					   },
 					   //////////////////////////////////////////////////
 					   /** ctx |- C <= this */
 					   isSuperSetOf: function(arg, ctx) {
@@ -989,15 +1029,29 @@ ctx = ctx.bind(ccExp);
 							   },
 							   /** (d_literal C0+C1) ::= (d_literal C0) + (d_literal C1) */
 							   lderive: function(larg) {
-									   if(larg==this) return new __EmptyLiteral();
-								else if (larg==new __EmptyLiteral()) return this;
-								else 
-									   return new __OrContract(contract0.lderive(larg), contract1.lderive(larg));
+
+								 var reault = new Array();
+								var set0 = contract0.lderive(larg);
+								var set1 = contract1.lderive(larg);
+
+								set0.foreach(function(i0,c0) {
+										set1.foreach(function(i1,c1) {
+												results.push(new __OrContract(c0, c1));
+										});
+								});
+								return result;
+
+
+
+				//					   if(larg==this) return new __EmptyLiteral();
+			//					else if (larg==new __EmptyLiteral()) return this;
+		//						else 
+	//								   return new __OrContract(contract0.lderive(larg), contract1.lderive(larg));
 							   },
 							   /** (b_literal C0+C1) ::= (d_literal C0+C1) */
-							   cderive: function(larg) {
-									   return this.lderive(larg);
-							   },
+//							   cderive: function(larg) {
+//									   return this.lderive(larg);
+//							   },
 							   //////////////////////////////////////////////////
 							   /** ctx |- C <= this */
 							   isSuperSetOf: function(arg, ctx) {
@@ -1135,15 +1189,29 @@ ctx = ctx.bind(ccExp);
 							   },
 							   /** (d_literal C0&C1) ::= (d_literal C0) & (d_literal C1) */
 							   lderive: function(larg) {
-									   if(larg==this) return new __EmptyLiteral();
-								else if (larg==new __EmptyLiteral()) return this;
-								else 
-									   return new __AndContract(contract0.lderive(larg), contract1.lderive(larg));
+
+									   	 var reault = new Array();
+								var set0 = contract0.lderive(larg);
+								var set1 = contract1.lderive(larg);
+
+								set0.foreach(function(i0,c0) {
+										set1.foreach(function(i1,c1) {
+												results.push(new __OrContract(c0, c1));
+										});
+								});
+								return result;
+
+
+
+						//			   if(larg==this) return new __EmptyLiteral();
+					//			else if (larg==new __EmptyLiteral()) return this;
+				//				else 
+			//						   return new __AndContract(contract0.lderive(larg), contract1.lderive(larg));
 							   },
 							   /** (b_literal C0&C1) ::= (d_literal C0&C1) */
-							   cderive: function(larg) {
-									   return this.lderive(larg);
-							   },
+//							   cderive: function(larg) {
+//									   return this.lderive(larg);
+//							   },
 							   //////////////////////////////////////////////////
 							   /** ctx |- C <= this */
 							   isSuperSetOf: function(arg, ctx) {
@@ -1273,19 +1341,30 @@ ctx = ctx.bind(ccExp);
 							   },
 							   /** (d_literal !C) ::= !(b_literal C) */
 							   lderive: function(larg) {
+
+									   	   	 var reault = new Array();
+
+								contract.lderive(larg).foreach(function(i,c) {
+										results.push(new __NegContract(c));
+								});
+								return result;
+
+
+
+
 									   // TODO
-									    if(larg==this) return new __EmptyLiteral();
-								else if (larg==new __EmptyLiteral()) return this;
-								else 
-									    return (larg==new __QMarkLiteral()) ? new __NegContract(contract.cderive(larg)) : new __NegContract(contract.lderive(larg));
+			//						    if(larg==this) return new __EmptyLiteral();
+		//						else if (larg==new __EmptyLiteral()) return this;
+	//							else 
+//									    return (larg==new __QMarkLiteral()) ? new __NegContract(contract.cderive(larg)) : new __NegContract(contract.lderive(larg));
 									   //return new __NegContract(contract.lderive(larg));
 							   },
 							   // TODO
 							   /** (b_literal !C) ::= !(d_literal C) */
-							   cderive: function(larg) {
-									   return (larg==new __QMarkLiteral()) ? new __NegContract(contract.lderive(larg)) :  new __NegContract(contract.cderive(larg));
-									   //return this.lderive(larg);
-							   },
+//							   cderive: function(larg) {
+//									   return (larg==new __QMarkLiteral()) ? new __NegContract(contract.lderive(larg)) :  new __NegContract(contract.cderive(larg));
+//									   //return this.lderive(larg);
+//							   },
 							   //////////////////////////////////////////////////
 							   /** ctx |- C <= this */
 							   isSuperSetOf: function(arg, ctx) {
@@ -1498,17 +1577,34 @@ ctx = ctx.bind(ccExp);
 							   /** (d_literal C0.C1) ::= (d_literal C0).C1 + (d_literal C1) if v(C0), (d_literal C0).c1 otherwise */
 							   lderive: function(larg) {
 
-									   if(larg==this) return new __EmptyLiteral();
-								else if (larg==new __EmptyLiteral()) return this;
-								else 
 
-									   if(contract0.isNullable()) return new __OrContract(new __ConcatContract(contract0.lderive(larg), contract1), contract1.lderive(larg));
-									   else return new __ConcatContract(contract0.lderive(larg), contract1);
+									   	 var reault = new Array();
+
+										contract0.lderive(larg).foreach(function(i0,c0) {
+											
+												 if(contract0.isNullable()) {
+														 contract1.lderive(larg).foreach(function(i1,c1) {													 
+															 new __OrContract(new __ConcatContract(c0, contract1), c1);
+														 });
+												 }
+									  			 else results.push(new __ConcatContract(c0, contract1));
+										});
+										return result;
+
+
+
+
+			//						   if(larg==this) return new __EmptyLiteral();
+		//						else if (larg==new __EmptyLiteral()) return this;
+	//							else 
+//
+	//								   if(contract0.isNullable()) return new __OrContract(new __ConcatContract(contract0.lderive(larg), contract1), contract1.lderive(larg));
+	//								   else return new __ConcatContract(contract0.lderive(larg), contract1);
 							   },
 							   /** (b_literal C0.C1) ::= (d_literal C0.C1) */
-							   cderive: function(larg) {
-									   return this.lderive(larg);
-							   },
+//							   cderive: function(larg) {
+//									   return this.lderive(larg);
+//							   },
 							   //////////////////////////////////////////////////
 							   /** ctx |- C <= this */
 							   isSuperSetOf: function(arg, ctx) {
