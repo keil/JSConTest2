@@ -365,6 +365,7 @@
 							   // else if(arg.isBlank()) return true;
 							   //	   /** C <= C' |= false  | m(C) and !m(C') */
 							   //	   else if(arg.isUniversal()) return false;
+							   // TODO
 
 							   /** otherwise */
 							   // else return false;
@@ -374,17 +375,7 @@
 							   if(ctx.contains(ccExp)) return true;
 								/** otherwise */
 								else return unfold(this, arg, arg.first(), ctx.bind(ccExp));
-
-						
-						
-							   /** otherwise */
-//							   var thisContract = this;
-//							   var result = true;
-//							   arg.first().foreach(function(k, literal) {
-//									   result = result && thisContract.lderive(literal).isSuperSetOf(arg.lderive(literal), ctx.bind(ccExp));
-//							   });
-							   /** (d_literal C >= C') |= (d_literal C) >= (d_literal C') */
-//							   return result;
+	
 					   },
 					   /** ctx |- C >= this */
 					   isSubSetOf: function(arg, ctx) {
@@ -455,7 +446,7 @@
 					   derive: function(name) {
 							   return (name == varname) ? new __EmptyLiteral() : new __EmptySetLiteral();
 					   },
-					   /** (d_literal varname) ::= varname if literal=^, ^ if literal==varname, {} oterhwise */
+					   /** (d_literal varname) ::= varname if literal=^, ^ if literal==varname, ^,{} if liteal==?, {} oterhwise */
 					   lderive: function(larg) {
 							   if(larg==this) return new Array(new __EmptyLiteral()); 
 							   else if (larg==new __EmptyLiteral()) return new Array(this);
@@ -468,29 +459,19 @@
 							   /** C <= C' |= true  | C=C' */
 							   if(arg==this) return true;
 							   /** C <= C' |= true  | n(C) */
-							   //							   else if (arg.isEmpty()) return true;
+							   // else if (arg.isEmpty()) return true;
 							   /** C <= C' |= true  | w(C) & !n(C') */
-							   //							   else if(arg.isBlank()) return true;
+							   // else if(arg.isBlank()) return true;
 
 							   /** otherwise */
 							   // else return false;
+							   // TODO
 
 							   /** C <= C' |= true  | ctx(C <= C') */
 							   ccExp = new __CcExp(arg, this);
 							   if(ctx.contains(ccExp)) return true;
-								/** otherwise */
-								else return unfold(this, arg, arg.first(), ctx.bind(ccExp));
-
-		
-//							   /** otherwise */
-//							   var thisContract = this;
-///							   var result = true;
-//							   arg.first().foreach(function(k, literal) {
-//									   result = result && thisContract.lderive(literal).isSuperSetOf(arg.lderive(literal), ctx.bind(ccExp));
-//							   });
-//							   /** (d_literal C >= C') |= (d_literal C) >= (d_literal C') */
-//							   return result;
-
+							   /** otherwise */
+							   else return unfold(this, arg, arg.first(), ctx.bind(ccExp));
 					   },
 					   /** ctx |- C >= this */
 					   isSubSetOf: function(arg, ctx) {
@@ -561,9 +542,8 @@
 					   derive: function(name) {
 							   return (new RegExp(regex)).test(name) ? new __EmptyLiteral() : new __EmptySetLiteral();
 					   },
-					   /** (d_literal RegEx) ::= RegEx if literal==^, ^ if literal==RegEx, {} oterhwise */
+					   /** (d_literal RegEx) ::= RegEx if literal==^, ^ if literal==RegEx,  ^,{} if liteal==?, {} oterhwise */
 					   lderive: function(larg) {
-
 							   if(larg==this) return new Array(new __EmptyLiteral()); 
 							   else if (larg==new __EmptyLiteral()) return new Array(this);
 							   else if(larg==new __QMarkLiteral()) return new Array(new __EmptyLiteral(), new __EmptySetLiteral());
@@ -575,30 +555,19 @@
 							   /** C <= C' |= true  | C=C' */
 							   if(arg==this) return true;
 							   /** C <= C' |= true  | n(C) */
-							   //							   else if (arg.isEmpty()) return true;
+							   //else if (arg.isEmpty()) return true;
 							   /** C <= C' |= true  | w(C) & !n(C') */
-							   //							   else if(arg.isBlank()) return true;
+							   //else if(arg.isBlank()) return true;
 
 							   /** otherwise */
 							   //else return false;
-							   //
+							   // TODO
 
 							   /** C <= C' |= true  | ctx(C <= C') */
 							   ccExp = new __CcExp(arg, this);
 							   if(ctx.contains(ccExp)) return true;
-								/** otherwise */
-								else return unfold(this, arg, arg.first(), ctx.bind(ccExp));
-
 							   /** otherwise */
-							   //var thisContract = this;
-							   //var result = true;
-							   //arg.first().foreach(function(k, literal) {
-							//		   result = result && thisContract.lderive(literal).isSuperSetOf(arg.lderive(literal), ctx.bind(ccExp));
-							 //  });
-							  // /** (d_literal C >= C') |= (d_literal C) >= (d_literal C') */
-							  // return result;
-
-
+							   else return unfold(this, arg, arg.first(), ctx.bind(ccExp));
 					   },
 					   /** ctx |- C >= this */
 					   isSubSetOf: function(arg, ctx) {
@@ -683,7 +652,7 @@
 					   derive: function(name) {
 							   return  contract.derive(name);
 					   },
-					   /** (d_literal C?) ::= (d_literal C) */
+					   /** (d_literal C?) ::= (d_literal C)? */
 					   lderive: function(larg) {
 							   /** (d_^ C?) ::= C? */
 							   if (larg==new __EmptyLiteral()) return new Array(this);
@@ -713,16 +682,6 @@
 							   if(ctx.contains(ccExp)) return true;
 							   /** otherwise */
 								else return unfold(this, arg, arg.first(), ctx.bind(ccExp));
-
-
-							   /** otherwise */
-//							   var thisContract = this;
-//							   var result = true;
-//							   arg.first().foreach(function(k, literal) {
-//									   result = result && thisContract.lderive(literal).isSuperSetOf(arg.lderive(literal), ctx.bind(ccExp));
-//							   });
-							   /** (d_literal C >= C') |= (d_literal C) >= (d_literal C') */
-//							   return result;
 					   },
 					   /** ctx |- C >= this */
 					   isSubSetOf: function(arg, ctx) {
@@ -836,18 +795,6 @@
 							   if(ctx.contains(ccExp)) return true;
 							   /** otherwise */
 								else return unfold(this, arg, arg.first(), ctx.bind(ccExp));
-
-
-//							   ctx = ctx.bind(ccExp);
-
-							   /** otherwise */
-//							   var thisContract = this;
-//							   var result = true;
-//							   arg.first().foreach(function(k, literal) {
-//									   result = result && thisContract.lderive(literal).isSuperSetOf(arg.lderive(literal), ctx.bind(ccExp));
-//							   });
-							   /** (d_literal C >= C') |= (d_literal C) >= (d_literal C') */
-//							   return result;
 					   },
 					   /** ctx |- C >= this */
 					   isSubSetOf: function(arg, ctx) {
@@ -978,18 +925,8 @@
 									   /** C <= C' |= true  | ctx(C <= C') */
 									   ccExp = new __CcExp(arg, this);
 									   if(ctx.contains(ccExp)) return true;
-										/** otherwise */
-										else return unfold(this, arg, arg.first(), ctx.bind(ccExp));
-
-
 									   /** otherwise */
-		//							   var thisContract = this;
-		//							   var result = true;
-		//							   arg.first().foreach(function(k, literal) {
-		//									   result = result && thisContract.lderive(literal).isSuperSetOf(arg.lderive(literal), ctx.bind(ccExp));
-		//							   });
-									   /** (d_literal C >= C') |= (d_literal C) >= (d_literal C') */
-		//							   return result;
+									   else return unfold(this, arg, arg.first(), ctx.bind(ccExp));
 							   },
 							   /** ctx |- C >= this */
 							   isSubSetOf: function(arg, ctx) {
@@ -1135,18 +1072,6 @@
 									   if(ctx.contains(ccExp)) return true;
 									   /** otherwise */
 								else return unfold(this, arg, arg.first(), ctx.bind(ccExp));
-
-
-									   /** otherwise */
-//									   var thisContract = this;
-//									   var result = true;
-
-//									   arg.first().foreach(function(k, literal) {
-//											   result = result && thisContract.lderive(literal).isSuperSetOf(arg.lderive(literal), ctx.bind(ccExp));
-//									   });
-
-									   /** (d_literal C >= C') |= (d_literal C) >= (d_literal C') */
-//									   return result;
 							   },
 							   /** ctx |- C >= this */
 							   isSubSetOf: function(arg, ctx) {
@@ -1225,12 +1150,7 @@
 							   //////////////////////////////////////////////////
 							   /** first(!C) ::= first(C) */
 							   first: function() {
-									   // (1)
-									   //
-
-									   return new Array(new __QMarkLiteral()); //.concat(contract.first());
-									   // TODO
-									   //   return contract.first();
+									   return new Array(new __QMarkLiteral()); 
 							   },
 							   /** (d_name !C) :== !(d_name C) */
 							   derive: function(name) {
@@ -1251,9 +1171,6 @@
 							   //////////////////////////////////////////////////
 							   /** ctx |- C <= this */
 							   isSuperSetOf: function(arg, ctx) {
-
-
-
 									   /** C <= C' |= true  | C=C' */
 									   if(arg==this) return true;
 									   //									   /** ^ <= C' |= true  | v(C') */
@@ -1287,79 +1204,6 @@
 									   if(ctx.contains(ccExp)) return true;
 									   /** otherwise */
 								else return unfold(this, arg, arg.first(), ctx.bind(ccExp));
-
-								// TODO use inverse set!
-
-
-									   /** otherwise */
-//									   var thisContract = this;
-//									   var result = true;
-
-
-
-
-									   //	   arg.first().foreach(function(k, literal) {
-
-						//			   __sysout("FIRST: " + arg.first().concat(contract.first()));
-
-
-
-						//			   arg.first().concat(contract.first()).foreach(function(k, literal) {
-
-						//					   __sysout("DERIVE: " + literal + ":");
-
-											   //__sysout("DERIVE AFTER:" + literal);
-											   //result = result && thisContract.lderive(literal).isSuperSetOf(arg.cderive(literal), ctx.bind(ccExp));
-
-
-											   //	  __sysout("BEGIN: ORIGINAL RUN"); 
-											   // ORIGINAL
-											   //	if(result)
-											   //
-						//					   result = result && thisContract.lderive(literal).isSuperSetOf(arg.lderive(literal), ctx.bind(ccExp));
-
-											   //if(!result) return result; // TODO termination
-											   //		__sysout("END: ORIGINAL RUN");
-
-											   //  if(literal==new __QMarkLiteral()) {
-											   // 		result = result && thisContract.lderive(literal).isSuperSetOf(arg.lderive(literal), ctx.bind(ccExp));
-											   // }
-											   //
-
-											   // OK
-											   //	   result = result && thisContract.lderive(literal).isSuperSetOf(arg.lderive(literal), ctx.bind(ccExp))
-											   //	   && thisContract.cderive(literal).isSuperSetOf(arg.cderive(literal), ctx.bind(ccExp));
-											   // ;
-
-
-						//			   });
-
-									   /** otherwise */
-									   //		   contract.first().foreach(function(k, literal) {
-									   //result = result && thisContract.lderive(literal).isSuperSetOf(arg.lderive(literal), ctx.bind(ccExp))
-									   //&& thisContract.cderive(literal).isSuperSetOf(arg.cderive(literal), ctx.bind(ccExp));
-									   //;
-									   //
-									   //		   __sysout("BEGIN: INVERSE RUN");
-									   //		   if(result)
-									   //		   result = result && thisContract.lderive(literal).isSuperSetOf(arg.lderive(literal), ctx.bind(ccExp));
-									   //if(!result) return result; // TODO termination											   
-									   //		   __sysout("END: INVERSE RUN");
-
-
-									   //		   });
-
-
-									   // TEST
-									   //		arg.first().foreach(function(k, literal) {
-									   //			   result = result && thisContract.lderive(literal).isSuperSetOf(arg.lderive(literal), ctx.bind(ccExp));
-									   //	   });
-
-
-
-
-									   /** (d_literal C >= C') |= (d_literal C) >= (d_literal C') */
-								//	   return result;
 							   },
 							   /** ctx |- C >= this */
 							   isSubSetOf: function(arg, ctx) {
@@ -1465,9 +1309,7 @@
 											   if (larg==new __EmptyLiteral()) return new Array(this);
 
 											   var result = new Array();
-
 											   contract0.lderive(larg).foreach(function(i0,c0) {
-
 													   if(contract0.isNullable()) {
 															   contract1.lderive(larg).foreach(function(i1,c1) {													 
 																	   new __OrContract(new __ConcatContract(c0, contract1), c1);
@@ -1504,20 +1346,6 @@
 											   if(ctx.contains(ccExp)) return true;
 											   /** otherwise */
 												else return unfold(this, arg, arg.first(), ctx.bind(ccExp));
-
-
-											   /** otherwise */
-				//							   var thisContract = this;
-				//							   var result = true;
-				//							   arg.first().foreach(function(k, literal) {
-				//									   result = result && thisContract.lderive(literal).isSuperSetOf(arg.lderive(literal), ctx.bind(ccExp));
-				//							   });
-
-
-
-
-											   /** (d_literal C >= C') |= (d_literal C) >= (d_literal C') */
-									//		   return result;
 									   },
 									   /** ctx |- C >= this */
 									   isSubSetOf: function(arg, ctx) {
