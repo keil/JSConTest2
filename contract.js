@@ -1003,7 +1003,7 @@
 							   else if(arg.isBlank()) return true;
 							   /** C <= C' |= true  | m(C') */
 							   else if(this.isUniversal()) return true;
-							   
+
 							   /** C <= C' |= true  | ctx(C <= C') */
 							   ccExp = new __CcExp(arg, this);
 							   if(ctx.contains(ccExp)) return true;
@@ -1337,13 +1337,7 @@
 						if(verbose) __sysout("## lderive_E: " + lderive_E);
 						if(verbose) __sysout("## lderive_F: " + lderive_F);
 
-						lderive_E.foreach(function(i,e) {
-								lderive_F.foreach(function(i,f) {
-										result = result && e.isSuperSetOf(f, ctx);
-										if(!result) return result; // break
-								});
-								if(!result) return result; // break
-						});
+						result = result && lderive_E.isSuperSetOf(lderive_F, ctx);
 						if(!result) return result; // break
 				});
 				return result;
