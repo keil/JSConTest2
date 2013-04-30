@@ -169,9 +169,9 @@
 							   /** C <= C' |= true  | C=C' */
 							   if(arg==this) return true;
 							   /** C <= C' |= true  | n(C) */
-							   //else if (arg.isEmpty()) return true;
+							   else if (arg.isEmpty()) return true;
 							   /** C <= C' |= true  | w(C) */
-							   //else if(arg.isBlank()) return true;
+							   else if(arg.isBlank()) return true;
 
 							   /** C <= C' |= true  | ctx(C <= C') */
 							   ccExp = new __CcExp(arg, this);
@@ -262,7 +262,7 @@
 							   /** C <= C' |= true  | C=C' */
 							   if(arg==this) return true;
 							   /** C <= C' |= true  | n(C) */
-							   //else if (arg.isEmpty()) return true;
+							   else if (arg.isEmpty()) return true;
 
 							   /** C <= C' |= true  | ctx(C <= C') */
 							   ccExp = new __CcExp(arg, this);
@@ -350,13 +350,13 @@
 							   /** C <= C' |= true  | C=C' */
 							   if(arg==this) return true;
 							   /** C <= C' |= false  | v(C) and ~v(C') */
-							   //else if(arg.isNullable()) return false;
+							   else if(arg.isNullable()) return false;
 							   /** C <= C' |= true  | n(C) */
-							   //else if (arg.isEmpty()) return true;
+							   else if (arg.isEmpty()) return true;
 							   /** C <= C' |= true  | w(C) & !n(C') */
-							   //else if(arg.isBlank()) return true;
+							   else if(arg.isBlank()) return true;
 							   /** C <= C' |= false  | m(C) and !m(C') */
-							   //else if(arg.isUniversal()) return false;
+							   else if(arg.isUniversal()) return false;
 
 							   /** C <= C' |= true  | ctx(C <= C') */
 							   ccExp = new __CcExp(arg, this);
@@ -438,7 +438,6 @@
 					   lderive: function(larg) {
 							   if(larg==this) return new Array(new __EmptyLiteral()); 
 							   else if (larg==new __EmptyLiteral()) return new Array(this);
-							   //else if(larg==new __QMarkLiteral()) return new Array(new __EmptyLiteral(), new __EmptySetLiteral()); // TODO
 							   else if(larg==new __QMarkLiteral()) return new Array(new __EmptySetLiteral());
 							   else return new Array(new __EmptySetLiteral());
 					   },
@@ -448,9 +447,9 @@
 							   /** C <= C' |= true  | C=C' */
 							   if(arg==this) return true;
 							   /** C <= C' |= true  | n(C) */
-							   //else if (arg.isEmpty()) return true;
+							   else if (arg.isEmpty()) return true;
 							   /** C <= C' |= true  | w(C) & !n(C') */
-							   //else if(arg.isBlank()) return true;
+							   else if(arg.isBlank()) return true;
 
 							   /** C <= C' |= true  | ctx(C <= C') */
 							   ccExp = new __CcExp(arg, this);
@@ -531,7 +530,6 @@
 					   lderive: function(larg) {
 							   if(larg==this) return new Array(new __EmptyLiteral()); 
 							   else if (larg==new __EmptyLiteral()) return new Array(this);
-							   //else if(larg==new __QMarkLiteral()) return new Array(new __EmptyLiteral(), new __EmptySetLiteral()); TODO
 							   else if(larg==new __QMarkLiteral()) return new Array(new __EmptySetLiteral());
 							   else return new Array(new __EmptySetLiteral());
 					   },
@@ -541,9 +539,9 @@
 							   /** C <= C' |= true  | C=C' */
 							   if(arg==this) return true;
 							   /** C <= C' |= true  | n(C) */
-							   //else if (arg.isEmpty()) return true;
+							   else if (arg.isEmpty()) return true;
 							   /** C <= C' |= true  | w(C) & !n(C') */
-							   //else if(arg.isBlank()) return true;
+							   else if(arg.isBlank()) return true;
 
 							   /** C <= C' |= true  | ctx(C <= C') */
 							   ccExp = new __CcExp(arg, this);
@@ -651,13 +649,13 @@
 							   /** C <= C' |= true  | C=C' */
 							   if(arg==this) return true;
 							   /** ^ <= C' |= true  | v(C') */
-							   //else if((arg==new __EmptyLiteral())) return true;
+							   else if((arg==new __EmptyLiteral())) return true;
 							   /** C <= C' |= true  | n(C) */
-							   //else if (arg.isEmpty()) return true;
+							   else if (arg.isEmpty()) return true;
 							   /** C <= C' |= true  | w(C) & !n(C') */
-							   //else if(arg.isBlank()) return true;
+							   else if(arg.isBlank()) return true;
 							   /** C <= C' |= true  | m(C') */
-							   //else if(this.isUniversal()) return true;
+							   else if(this.isUniversal()) return true;
 
 							   /** C <= C' |= true  | ctx(C <= C') */
 							   ccExp = new __CcExp(arg, this);
@@ -763,13 +761,13 @@
 							   /** C <= C' |= true  | C=C' */
 							   if(arg==this) return true;
 							   /** ^ <= C' |= true  | v(C') */
-							   //else if((arg==new __EmptyLiteral())) return true;
+							   else if((arg==new __EmptyLiteral())) return true;
 							   /** C <= C' |= true  | n(C) */
-							   //else if(arg.isEmpty()) return true;
+							   else if(arg.isEmpty()) return true;
 							   /** C <= C' |= true  | w(C) & !n(C') */
-							   //else if(arg.isBlank()) return true;
+							   else if(arg.isBlank()) return true;
 							   /** C <= C' |= true  | m(C') */
-							   //else if(this.isUniversal()) return true;
+							   else if(this.isUniversal()) return true;
 
 							   /** C <= C' |= true  | ctx(C <= C') */
 							   ccExp = new __CcExp(arg, this);
@@ -888,16 +886,15 @@
 							   /** C <= C' |= true  | C=C' */
 							   if(arg==this) return true;
 							   /** ^ <= C' |= true  | v(C') */
-							   //else if((arg==new __EmptyLiteral()) && this.isNullable()) return true;
+							   else if((arg==new __EmptyLiteral()) && this.isNullable()) return true;
 							   /** C <= C' |= false  | v(C) and ~v(C') */
 							   else if(arg.isNullable() && !this.isNullable()) return false;
 							   /** C <= C' |= true  | n(C) */
-							   //else if(arg.isEmpty()) return true;
+							   else if(arg.isEmpty()) return true;
 							   /** C <= C' |= true  | w(C) & !n(C') */
-							   //else if(arg.isBlank()) return true;
-
+							   else if(arg.isBlank()) return true;
 							   /** C <= C' |= true  | m(C') */
-							   //else if(this.isUniversal()) return true;
+							   else if(this.isUniversal()) return true;
 
 							   /** C <= C' |= true  | ctx(C <= C') */
 							   ccExp = new __CcExp(arg, this);
@@ -1029,16 +1026,15 @@
 							   /** C <= C' |= true  | C=C' */
 							   if(arg==this) return true;
 							   /** ^ <= C' |= true  | v(C') */
-							   //else if((arg==new __EmptyLiteral()) && this.isNullable()) return true;
+							   else if((arg==new __EmptyLiteral()) && this.isNullable()) return true;
 							   /** C <= C' |= false  | v(C) and ~v(C') */
 							   else if(arg.isNullable() && !this.isNullable()) return false;
 							   /** C <= C' |= true  | n(C) */
-							   //else if (arg.isEmpty()) return true;
+							   else if (arg.isEmpty()) return true;
 							   /** C <= C' |= true  | w(C) & !n(C') */
-							   //else if(arg.isBlank()) return true;
-							   
+							   else if(arg.isBlank()) return true;
 							   /** C <= C' |= true  | m(C') */
-							   //else if(this.isUniversal()) return true;
+							   else if(this.isUniversal()) return true;
 							   
 							   /** C <= C' |= true  | ctx(C <= C') */
 							   ccExp = new __CcExp(arg, this);
@@ -1089,7 +1085,6 @@
 				return __cache.c({
 						/** n(!C) ::= m(C) + m*(C) */
 						isEmpty: function() {
-								// TODO
 								// negation only effects to literals
 								//return (contract.isUniversal() || contract.isIndifferent());
 								return false;
@@ -1147,23 +1142,21 @@
 							   /** C <= C' |= true  | C=C' */
 							   if(arg==this) return true;
 							   /** ^ <= C' |= true  | v(C') */
-							   //else if((arg==new __EmptyLiteral()) && this.isNullable()) return true;
+							   else if((arg==new __EmptyLiteral()) && this.isNullable()) return true;
 							   /** C <= C' |= false  | v(C) and ~v(C') */
 							   else if(arg.isNullable() && !this.isNullable()) return false;
 							   /** C <= C' |= true  | n(C) */
-							   //else if(arg.isEmpty()) return true;
+							   else if(arg.isEmpty()) return true;
 							   /** C <= C' |= true  | w(C) & !n(C') */
-							   //else if(arg.isBlank()) return true;
-							   
+							   else if(arg.isBlank()) return true;
 							   /** C <= C' |= true  | m(C') */
-							   //else if(this.isUniversal()) return true;
+							   else if(this.isUniversal()) return true;
 							   /** C <= C' |= false  | m(C) and !m(C') */
 
 							   /** C <= C' |= true  | ctx(C <= C') */
 							   var ccExp = new __CcExp(arg, this);
 							   if(ctx.contains(ccExp)) return true;
 							   /** otherwise */
-							   //else return unfold(this, arg, arg.first(), ctx.bind(ccExp)); TODO
 							   else return unfold(this, arg, contract.first(), ctx.bind(ccExp)) && unfold(this, arg, arg.first(), ctx.bind(ccExp));;
 					   },
 					   /** ctx |- C >= this */
@@ -1286,16 +1279,15 @@
 							   /** C <= C' |= true  | C=C' */
 							   if(arg==this) return true;
 							   /** ^ <= C' |= true  | v(C') */
-							   //else if((arg==new __EmptyLiteral()) && this.isNullable()) return true;
+							   else if((arg==new __EmptyLiteral()) && this.isNullable()) return true;
 							   /** C <= C' |= false  | v(C) and ~v(C') */
 							   else if(arg.isNullable() && !this.isNullable()) return false;
 							   /** C <= C' |= true  | n(C) */
-							   //else if(arg.isEmpty()) return true;
+							   else if(arg.isEmpty()) return true;
 							   /** C <= C' |= true  | w(C) & !n(C') */
-							   //else if(arg.isBlank()) return true;
-
+							   else if(arg.isBlank()) return true;
 							   /** C <= C' |= true  | m(C') */
-							   //else if(this.isUniversal()) return true;
+							   else if(this.isUniversal()) return true;
 
 							   /** C <= C' |= true  | ctx(C <= C') */
 							   ccExp = new __CcExp(arg, this);
@@ -1378,7 +1370,7 @@
 		function unfold(E, F, first, ctx) {
 
 				// verbose - true, print output: false, do not print the output
-				var verbose  = true;
+				var verbose  = false;
 				if(verbose) __sysout("## isSuperSetOf: " + E + ">=" + F);
 
 				var result = true;
