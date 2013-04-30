@@ -1378,7 +1378,9 @@
 		 */
 		function unfold(E, F, first, ctx) {
 
-				__sysout("## isSuperSetOf: " + E + ">=" + F);
+				// verbose - true, print output: false, do not print the output
+				var verbose  = false;
+				if(verbose) __sysout("## isSuperSetOf: " + E + ">=" + F);
 
 				var result = true;
 
@@ -1387,9 +1389,9 @@
 						var lderive_E = E.lderive(literal);
 						var lderive_F = F.lderive(literal);
 
-						__sysout("## first: " + first);
-						__sysout("## lderive_E: " + lderive_E);
-						__sysout("## lderive_F: " + lderive_F);
+						if(verbose) __sysout("## first: " + first);
+						if(verbose) __sysout("## lderive_E: " + lderive_E);
+						if(verbose) __sysout("## lderive_F: " + lderive_F);
 
 						lderive_E.foreach(function(i,e) {
 								lderive_F.foreach(function(i,f) {
