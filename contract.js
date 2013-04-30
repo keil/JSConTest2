@@ -78,7 +78,7 @@
 					   },
 					   /** (d_literal {}) ::= {} */
 					   lderive: function(larg) {
-							   return new Array(this);
+							   return this;
 					   },
 					   //////////////////////////////////////////////////
 					   /** ctx |- C <= this */
@@ -161,7 +161,7 @@
 					   },
 					   /** (d_literal ^) ::= ^ if literal == ^, @ oterhwise */
 					   lderive: function(larg) {
-							   return (larg==this) ? new Array(this) : new Array(new __EmptySetLiteral());
+							   return (larg==this) ? this : new __EmptySetLiteral();
 					   },
 					   //////////////////////////////////////////////////
 					   /** ctx |- C <= this */
@@ -254,7 +254,7 @@
 					   },
 					   /** (d_literal @) ::= @ */
 					   lderive: function(larg) {
-							   return new Array(new __EmptySetLiteral());
+							   return new __EmptySetLiteral();
 					   },
 					   //////////////////////////////////////////////////
 					   /** ctx |- C <= this */
@@ -341,8 +341,8 @@
 					   },
 					   /** (d_literal ?) ::= ? if literal=^, ^ otherwise */
 					   lderive: function(larg) {
-							   if (larg==new __EmptyLiteral()) return new Array(this);
-							   else return new Array(new __EmptyLiteral());
+							   if (larg==new __EmptyLiteral()) return this;
+							   else return new __EmptyLiteral();
 					   },
 					   //////////////////////////////////////////////////
 					   /** ctx |- C <= this */
@@ -436,10 +436,9 @@
 					   },
 					   /** (d_literal varname) ::= varname if literal=^, ^ if literal==varname, ^,{} if liteal==?, {} oterhwise */
 					   lderive: function(larg) {
-							   if(larg==this) return new Array(new __EmptyLiteral()); 
-							   else if (larg==new __EmptyLiteral()) return new Array(this);
-							   else if(larg==new __QMarkLiteral()) return new Array(new __EmptySetLiteral());
-							   else return new Array(new __EmptySetLiteral());
+							   if(larg==this) return new __EmptyLiteral(); 
+							   else if (larg==new __EmptyLiteral()) return this;
+							   else return new __EmptySetLiteral();
 					   },
 					   //////////////////////////////////////////////////
 					   /** ctx |- C <= this */
@@ -528,10 +527,9 @@
 					   },
 					   /** (d_literal RegEx) ::= RegEx if literal==^, ^ if literal==RegEx,  ^,{} if liteal==?, {} oterhwise */
 					   lderive: function(larg) {
-							   if(larg==this) return new Array(new __EmptyLiteral()); 
-							   else if (larg==new __EmptyLiteral()) return new Array(this);
-							   else if(larg==new __QMarkLiteral()) return new Array(new __EmptySetLiteral());
-							   else return new Array(new __EmptySetLiteral());
+							   if(larg==this) return new __EmptyLiteral(); 
+							   else if (larg==new __EmptyLiteral()) return this;
+							   else return new __EmptySetLiteral();
 					   },
 					   //////////////////////////////////////////////////
 					   /** ctx |- C <= this */
@@ -635,13 +633,8 @@
 					   /** (d_literal C?) ::= (d_literal C)? */
 					   lderive: function(larg) {
 							   /** (d_^ C?) ::= C? */
-							   if (larg==new __EmptyLiteral()) return new Array(this);
-
-							   var result = new Array();
-							   contract.lderive(larg).foreach(function(index,literal) {
-									   result.push(literal);
-							   });
-							   return result;
+							   if (larg==new __EmptyLiteral()) return this;
+							   else return contract.lderive(larg);
 					   },
 					   //////////////////////////////////////////////////
 					   /** ctx |- C <= this */
@@ -747,13 +740,8 @@
 					   /** (d_literal C*) ::= (d_literal C).C* */
 					   lderive: function(larg) {
 							   /** (d_^ C*) ::= C* */
-							   if (larg==new __EmptyLiteral()) return new Array(this);
-
-							   var result = new Array();
-							   contract.lderive(larg).foreach(function(index, literal) {
-									   result.push(new __ConcatContract(literal, new __StarContract(contract)));
-							   });
-							   return result;
+							   if (larg==new __EmptyLiteral()) return this;
+							   else return new __ConcatContract(contract.lderive(larg), new __StarContract(contract));
 					   },
 					   //////////////////////////////////////////////////
 					   /** ctx |- C <= this */
@@ -867,18 +855,8 @@
 					   /** (d_literal C0+C1) ::= (d_literal C0) + (d_literal C1) */
 					   lderive: function(larg) {
 							   /** (d_^ C?) ::= C? */
-							   if (larg==new __EmptyLiteral()) return new Array(this);
-
-							   var result = new Array();
-							   var set0 = contract0.lderive(larg);
-							   var set1 = contract1.lderive(larg);
-
-							   set0.foreach(function(i0,c0) {
-									   set1.foreach(function(i1,c1) {
-											   result.push(new __OrContract(c0, c1));
-									   });
-							   });
-							   return result;
+							   if (larg==new __EmptyLiteral()) return this;
+							   else return new __OrContract(contract0.lderive(larg), contract1.lderive(larg))
 					   },
 					   //////////////////////////////////////////////////
 					   /** ctx |- C <= this */
@@ -1007,18 +985,8 @@
 					   /** (d_literal C0&C1) ::= (d_literal C0) & (d_literal C1) */
 					   lderive: function(larg) {
 							   /** (d_^ C?) ::= C? */
-							   if (larg==new __EmptyLiteral()) return new Array(this);
-
-							   var result = new Array();
-							   var set0 = contract0.lderive(larg);
-							   var set1 = contract1.lderive(larg);
-
-							   set0.foreach(function(i0,c0) {
-									   set1.foreach(function(i1,c1) {
-											   result.push(new __AndContract(c0, c1));
-									   });
-							   });
-							   return result;
+							   if (larg==new __EmptyLiteral()) return this;
+							   else return new __AndContract(contract0.lderive(larg), contract1.lderive(larg))
 					   },
 					   //////////////////////////////////////////////////
 					   /** ctx |- C <= this */
@@ -1127,14 +1095,8 @@
 					   /** (d_literal !C) ::= !(b_literal C) */
 					   lderive: function(larg) {
 							   /** (d_^ C?) ::= C? */
-							   if (larg==new __EmptyLiteral()) return new Array(this);
-
-							   var result = new Array();
-
-							   contract.lderive(larg).foreach(function(i,c) {
-									   result.push(new __NegContract(c));
-							   });
-							   return result;
+							   if (larg==new __EmptyLiteral()) return this;
+							   else return new __NegContract(contract.lderive(larg));
 					   },
 					   //////////////////////////////////////////////////
 					   /** ctx |- C <= this */
@@ -1260,18 +1222,9 @@
 					   /** (d_literal C0.C1) ::= (d_literal C0).C1 + (d_literal C1) if v(C0), (d_literal C0).c1 otherwise */
 					   lderive: function(larg) {
 							   /** (d_^ C?) ::= C? */
-							   if (larg==new __EmptyLiteral()) return new Array(this);
-
-							   var result = new Array();
-							   contract0.lderive(larg).foreach(function(i0,c0) {
-									   if(contract0.isNullable()) {
-											   contract1.lderive(larg).foreach(function(i1,c1) {													 
-													   new __OrContract(new __ConcatContract(c0, contract1), c1);
-											   });
-									   }
-									   else result.push(new __ConcatContract(c0, contract1));
-							   });
-							   return result;
+							   if (larg==new __EmptyLiteral()) return this;
+							   else if(contract0.isNullable()) return new new __OrContract(new __ConcatContract(contract0.lderive(larg), contract1), contract1.lderive(larg));
+							   else return new __ConcatContract(contract0.lderive(larg), contract1);
 					   },
 					   //////////////////////////////////////////////////
 					   /** ctx |- C <= this */
