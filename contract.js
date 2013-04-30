@@ -1158,10 +1158,6 @@
 							   /** C <= C' |= true  | m(C') */
 							   //else if(this.isUniversal()) return true;
 							   /** C <= C' |= false  | m(C) and !m(C') */
-							   
-							   /** C <= !(C') |= false  | (C <= C') + (C >= C') */
-							   //if(contract.isSuperSetOf(arg, new __CcContext()) || arg.isSuperSetOf(contract, new __CcContext())) return false;
-							   //if(contract.isSuperSetOf(arg, new __CcContext()) || arg.isSubSetOf(contract, new __CcContext())) return false;
 
 							   /** C <= C' |= true  | ctx(C <= C') */
 							   var ccExp = new __CcExp(arg, this);
