@@ -254,7 +254,9 @@
 					   },
 					   /** (d_literal @) ::= @ */
 					   lderive: function(larg) {
-							   return new __EmptySetLiteral();
+							   if(larg==new __EmptyLiteral()) return this;
+							   else if(larg==this) return new __EmptyLiteral();
+							   else return new __EmptySetLiteral();
 					   },
 					   //////////////////////////////////////////////////
 					   /** ctx |- C <= this */
