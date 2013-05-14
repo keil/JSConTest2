@@ -626,7 +626,7 @@
 					   //////////////////////////////////////////////////
 					   /** first(C?) ::= first(C) */
 					   first: function() {
-							   return contract.first();
+							   return contract.first().concat(new Array(new __EmptyLiteral()));
 					   },
 					   /** (d_name C?) ::= (d_name C) */
 					   derive: function(name) {
@@ -733,7 +733,7 @@
 					   //////////////////////////////////////////////////
 					   /** first(C*) ::= first(C) */
 					   first: function() {
-							   return contract.first();
+							   return contract.first().concat(new Array(new __EmptyLiteral()));
 					   },
 					   /** (d_name C*) ::= (d_name C).C* */
 					   derive: function(name) {
@@ -1121,7 +1121,7 @@
 							   var ccExp = new __CcExp(arg, this);
 							   if(ctx.contains(ccExp)) return true;
 							   /** otherwise */
-							   else return unfold(this, arg, contract.first(), ctx.bind(ccExp)) && unfold(this, arg, arg.first(), ctx.bind(ccExp));;
+							   else return unfold(this, arg, contract.first(), ctx.bind(ccExp)) && unfold(this, arg, arg.first(), ctx.bind(ccExp));
 					   },
 					   /** ctx |- C >= this */
 					   isSubSetOf: function(arg, ctx) {
@@ -1213,7 +1213,7 @@
 					   //////////////////////////////////////////////////
 					   /** first(C0.C1) ::= first(C1) if v(C0), first(C0) otherwise */
 					   first: function() {
-							   if(contract0.isNullable()) return contract1.first();
+							   if(contract0.isNullable()) return  contract0.first().concat(contract1.first());
 							   else return contract0.first();
 					   },
 					   /** (d_name C0.C1) :== (d_name C0).C1 + (d_name C1) if v(C0), (d_name C0).c1 otherwise */
