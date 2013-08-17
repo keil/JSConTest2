@@ -73,7 +73,116 @@ load("__lib/__lib_apache_assert.js");
 //load("__test/__test_.js");
 //
 ///* Containment Calculus */
-load("__test/__test_contract_subset.js");
-load("__test/__test_contract_subset2.js");
+//load("__test/__test_contract_subset.js");
+//load("__test/__test_contract_subset2.js");
 
-quit();
+g = function(x) {
+//x.a=654;
+//x.a;
+//
+}
+
+h = __APC.permitArgs("arguments.0.@", g);
+t = h({a:'4711'});
+
+/*
+function Object() {
+		this.freeze = function() {};
+	//	this.email setter = chaputureObject;
+	//	this.__defineSetter__
+	this.__defineSetter__("email", chaputureObject); 
+	//return new Object().__defineSetter__("email", chaputureObject);
+}
+(new Object()).freeze(); 
+function chaputureObject(value) {
+		__sysout("###" + value);
+}
+*/
+
+/*
+with({Object:__APC.permit("?", Object)}) {
+	function chaputureObject(value) {
+			__sysout("### " + value);
+		}
+
+	Object.sdasd = 765;
+		//Object.xprototype.__defineSetter__('user', chaputureObject);
+}
+
+var test = new Object();
+test.user = "chacha";
+*/
+
+/*
+Object.prototype.__defineSetter__('user', chaputureObject);
+
+function chaputureObject(value) {
+		__sysout("### " + value);
+}
+
+
+var test = new Object();
+test.user = "chacha";
+*/
+
+var mail = {};
+(function(){
+ mail.test = "chacha";
+ chacha = "love";
+})(mail);
+
+__sysout("@" + mail.test);
+//__sysout("@" + mail.chacha);
+
+var mail = (function() {
+
+		var test = "chahca";
+		return this;
+
+})();
+
+
+
+__look();
+
+
+__testcase("__test/__test_contract_subset2.js");
+
+
+
+/* normal */
+var obj = {a:{}, b:{}};
+obj.a = obj.b;
+
+var result = (obj.a == obj.b) ? true: false; // true
+__sysout(result);
+
+/* proxy */
+var obj = __APC.permit("(a+b)", {a:{}, b:{}}, "obj");
+obj.a = obj.b;
+
+var result = (obj.a == obj.b) ? true: false; // false
+__sysout(result);
+
+
+var obj = {};
+
+var p1 = new Proxy(obj, {});
+var p2 = new Proxy(obj, {});
+
+var result = (p1 == p2) ? true: false; // false
+__sysout("#" + result);
+
+var result = (p1 === p2) ? true: false; // false
+__sysout("#" + result);
+
+
+var obj = {};
+__sysout("RESULT: " +  obj==new Proxy(obj, {}));
+__sysout("RESULT: " +  obj===new Proxy(obj, {}));
+
+
+
+//
+//
+//quit();

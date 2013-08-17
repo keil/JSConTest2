@@ -53,7 +53,7 @@
 						getOwnPropertyDescriptor: function(target, name) {
 								/* Trace Path *************************************** */
 								var trace = trie.append(new APC.TracePath.TraceProperty(name));
-								APC.Access.Logger.put(APC.Access.Type.READ, trace.paths);
+								APC.Access.Logger.put(APC.Access.Type.READ, trace);
 
 								/* Access Permission Contract *********************** */
 								if(contract.isReadable(name)) {
@@ -61,7 +61,7 @@
 										if (desc !== undefined) desc.value = __createMembrane(desc, contract.derive(name), trace);
 										return desc;
 								} else {
-										APC.Violation.Logger.put(APC.Violation.Type.READ, trace.paths);
+										APC.Violation.Logger.put(APC.Violation.Type.READ, trace);
 										var desc = (APC.Config.EvaluationMode == APC.Evaluation.Mode.OBSERVER) ? Object.getOwnPropertyDescriptor(target, name) : undefined;
 										if (desc !== undefined) desc.value = __createMembrane(desc.value, contract.derive(name), trace);
 										return desc;
@@ -90,13 +90,13 @@
 						defineProperty: function(target, name, desc) {
 								/* Trace Path *************************************** */
 								var trace = trie.append(new APC.TracePath.TraceProperty(name));
-								APC.Access.Logger.put(APC.Access.Type.WRITE, trace.paths);
+								APC.Access.Logger.put(APC.Access.Type.WRITE, trace);
 
 								/* Access Permission Contract *********************** */
 								if(contract.isWriteable(name)) {
 										return Object.defineProperty(target, name, desc);
 								} else {
-										APC.Violation.Logger.put(APC.Violation.Type.WRITE, trace.paths);
+										APC.Violation.Logger.put(APC.Violation.Type.WRITE, trace);
 										return (APC.Config.EvaluationMode == APC.Evaluation.Mode.OBSERVER) ? Object.defineProperty(target, name, desc) : false;
 								}
 						},
@@ -108,13 +108,13 @@
 						deleteProperty: function(target, name) {
 								/* Trace Path *************************************** */
 								var trace = trie.append(new APC.TracePath.TraceProperty(name));
-								APC.Access.Logger.put(APC.Access.Type.WRITE, trace.paths);
+								APC.Access.Logger.put(APC.Access.Type.WRITE, trace);
 
 								/* Access Permission Contract *********************** */
 								if(contract.isWriteable(name)) {
 										return delete target[name];
 								} else {
-										APC.Violation.Logger.put(APC.Violation.Type.WRITE, trace.paths);
+										APC.Violation.Logger.put(APC.Violation.Type.WRITE, trace);
 										return (APC.Config.EvaluationMode == APC.Evaluation.Mode.OBSERVER) ? delete target[name] : false;
 								}
 						},
@@ -186,13 +186,13 @@
 						get: function(target, name, receiver) {
 								/* Trace Path *************************************** */
 								var trace = trie.append(new APC.TracePath.TraceProperty(name));
-								APC.Access.Logger.put(APC.Access.Type.READ, trace.paths);
+								APC.Access.Logger.put(APC.Access.Type.READ, trace);
 
 								/* Access Permission Contract *********************** */
 								if(contract.isReadable(name)) {
 										return __createMembrane(target[name], contract.derive(name), trace);
 								} else {
-										APC.Violation.Logger.put(APC.Violation.Type.READ, trace.paths);
+										APC.Violation.Logger.put(APC.Violation.Type.READ, trace);
 										return (APC.Config.EvaluationMode == APC.Evaluation.Mode.OBSERVER) ? __createMembrane(target[name], contract.derive(name), trace) : undefined;
 								}
 						},
@@ -206,13 +206,13 @@
 						set: function(target, name, value, receiver) {
 								/* Trace Path *************************************** */
 								var trace = trie.append(new APC.TracePath.TraceProperty(name));
-								APC.Access.Logger.put(APC.Access.Type.WRITE, trace.paths);
+								APC.Access.Logger.put(APC.Access.Type.WRITE, trace);
 
 								/* Access Permission Contract *********************** */
 								if(contract.isWriteable(name)) {
 										return target[name] = value;
 								} else {
-										APC.Violation.Logger.put(APC.Violation.Type.WRITE, trace.paths);
+										APC.Violation.Logger.put(APC.Violation.Type.WRITE, trace);
 										return (APC.Config.EvaluationMode == APC.Evaluation.Mode.OBSERVER) ? target[name] = value : false;
 								}
 						},

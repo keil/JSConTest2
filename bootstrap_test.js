@@ -126,8 +126,8 @@ __testcase("__test/__test_contract_subset2.js");
 
 
 /* Tries */
-__testcase("__test/__test_pathtrie.js");
-__testcase("__test/__test_pathtrie2.js");
+//__testcase("__test/__test_pathtrie.js");
+//__testcase("__test/__test_pathtrie2.js");
 
 var __end = new Date().getTime();
 

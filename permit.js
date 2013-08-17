@@ -68,7 +68,7 @@
 
 				// trie
 				var trie = new APC.TracePath.PathTrie();
-				trie = trie.append(objname);
+				trie = trie.append(name);
 
 				// parse contracts
 				contract = APC.Parser.parse(string);

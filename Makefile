@@ -9,3 +9,6 @@ envjs:
 
 cs:
 	../js/src/shell/js -f bootstrap_cases.js -i
+
+js:
+	../js/src/shell/js -f bootstrap.js -i

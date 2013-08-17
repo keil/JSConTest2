@@ -81,4 +81,14 @@ testN("a", "");
 
 
 
+testN("!(a)", "?");
+//
+testS("/a/", "!(/b/)");
+
+testN("a*", "a");
+testN("a?", "a");
+
+testN("(a+!(a))", "(a+!(b))");
+
+testN("!(a)", "a*");
 
