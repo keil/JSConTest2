@@ -1,6 +1,11 @@
-The MIT License (MIT)
+JSConTest2: Efficient Access Analysis Using JavaScript Proxies
+http://proglang.informatik.uni-freiburg.de/jscontest2/
 
-Copyright (c) 2014 Roman Matthias Keil
+Copyright (c) 2014, Proglang, University of Freiburg.
+http://proglang.informatik.uni-freiburg.de/
+
+Author Matthias Keil
+http://www.informatik.uni-freiburg.de/~keilr/
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
