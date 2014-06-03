@@ -70,7 +70,10 @@
 					   //////////////////////////////////////////////////
 					   /** first({}) ::= {} */
 					   first: function() {
-							   return new Array(this);
+							  // return new Array(this);
+							  // CHANGED, no need of returning this
+							  // EmptySet can be moved to contract! 
+							  return new Array();
 					   },
 					   /** (d_name {}) ::= {} */
 					   derive: function(name) {
